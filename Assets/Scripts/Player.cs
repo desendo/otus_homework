@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -7,7 +6,7 @@ public class Player : MonoBehaviour
     private IEnumerator _changeLaneCoroutine;
     private PlayerController _playerController;
 
-    private void OnCollisionEnter(Collision other)
+    private void OnCollisionEnter()
     {
         _playerController.PlayerHit();
     }

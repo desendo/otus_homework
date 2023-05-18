@@ -23,7 +23,6 @@ public class GameStartController : ITick, IGameStartListener
         OnCountDownStarted?.Invoke();
         _timer = _seconds;
     }
-
     public void Tick(float dt)
     {
         if(_gameStarted || !_countDownStarted)
@@ -33,7 +32,6 @@ public class GameStartController : ITick, IGameStartListener
         OnCountDownLeft?.Invoke(_timer);
         if(_timer <= 0f)
             _gameStateManager.StartGame();
-
     }
 
     public void OnGameStart()

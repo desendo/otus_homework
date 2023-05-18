@@ -7,7 +7,6 @@ public class Enemy : MonoBehaviour
     private Action<Enemy> _onEnemyDestroy;
 
 
-
     public void Initialize(Vector3 velocity, Action<Enemy> onEnemyDestroy)
     {
         _onEnemyDestroy = onEnemyDestroy;
@@ -21,10 +20,10 @@ public class Enemy : MonoBehaviour
 
     public void Move(float dt)
     {
-        transform.position += _velocity * Time.deltaTime;
+        transform.position += _velocity * dt;
     }
 
-    private void OnCollisionEnter(Collision other)
+    private void OnCollisionEnter()
     {
         GameObject.Destroy(gameObject);
     }

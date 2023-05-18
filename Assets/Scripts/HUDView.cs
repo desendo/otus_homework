@@ -9,6 +9,7 @@ public class HUDView : MonoBehaviour
     [SerializeField] private GameObject _gameFinishedContainer;
     [SerializeField] private GameObject _gamePausedContainer;
     [SerializeField] private TextMeshProUGUI _counter;
+
     private GameStateManager _gameStateManager;
 
     public void Initialize(GameStateManager gameStateManager, GameStartController gameStartController)
