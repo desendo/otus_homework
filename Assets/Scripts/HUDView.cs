@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,12 +11,7 @@ public class HUDView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _counter;
     private GameStateManager _gameStateManager;
 
-    public void DoReset()
-    {
-
-    }
-
-    public void Initialize(GameStateManager gameStateManager)
+    public void Initialize(GameStateManager gameStateManager, GameStartController gameStartController)
     {
         _gameFinishedContainer.gameObject.SetActive(false);
 
@@ -25,35 +19,24 @@ public class HUDView : MonoBehaviour
         _gameStateManager.OnGameEnd += OnGameEnd;
         _gameStateManager.OnGameStarted += OnGameStarted;
         _gameStateManager.OnGameIsPaused += OnGamePaused;
-        _pauseButton.onClick.RemoveAllListeners();
-        _pauseButton.onClick.AddListener(() => {
-        {
-            _gameStateManager.TogglePause();
-        }});
-        _startGameButton.onClick.RemoveAllListeners();
-        _startGameButton.onClick.AddListener(() => {
-        {
-            var startCountDown = StartCountDown();
-            StartCoroutine(startCountDown);
-        }});
+        gameStartController.OnCountDownStarted += OnCountDownStarted;
+        gameStartController.OnCountDownLeft += OnCountDownLeft;
+
+        _pauseButton.onClick.AddListener(_gameStateManager.TogglePause);
+        _startGameButton.onClick.AddListener(gameStartController.StartCountDown);
     }
 
-    private IEnumerator StartCountDown()
+    private void OnCountDownLeft(float obj)
+    {
+        _counter.text = Mathf.CeilToInt(obj).ToString();
+
+    }
+
+    private void OnCountDownStarted()
     {
         _startGameButton.gameObject.SetActive(false);
-        _counter.text = "3";
-        _counter.gameObject.SetActive(true);
-        yield return new WaitForSeconds(1);
-
-        _counter.text = "2";
-        yield return new WaitForSeconds(1);
-
-        _counter.text = "1";
-        yield return new WaitForSeconds(1);
-
-        _gameStateManager.StartGame();
-        yield return null;
     }
+
 
     private void OnGameStarted()
     {

@@ -28,12 +28,15 @@ public class GameContext : MonoBehaviour
 
         Add(new EnemyManager(_enemySpawnPoints, _enemySpawnDelay, _enemyMoveSpeed, _enemyPrefab));
 
+        var gameStartController = new GameStartController(gameStateManager);
+        Add(gameStartController);
+
         var playerController = new PlayerController(_playerPositions, _playerChangeLaneSpeed);
         Add(playerController);
 
         var gameFinishController = new GameFinishController(gameStateManager, playerController);
 
-        _hudView.Initialize(gameStateManager);
+        _hudView.Initialize(gameStateManager, gameStartController);
         _player.Initialize(playerController);
 
 
