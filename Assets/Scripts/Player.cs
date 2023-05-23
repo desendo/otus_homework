@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -6,15 +7,15 @@ public class Player : MonoBehaviour
     private IEnumerator _changeLaneCoroutine;
     private PlayerController _playerController;
 
-    private void OnCollisionEnter()
+    private void OnCollisionEnter(Collision other)
     {
-        _playerController.PlayerHit();
+        _playerController.PlayerCollision(other.collider.GetComponent<WorldObjectBase>());
     }
 
     public void Initialize(PlayerController playerController)
     {
         _playerController = playerController;
-        playerController.OnLaneChanged+= PlayerMoveControllerOnOnLaneChanged;
+        _playerController.OnLaneChanged += PlayerMoveControllerOnOnLaneChanged;
     }
 
     private void PlayerMoveControllerOnOnLaneChanged(Vector3 obj)
@@ -38,5 +39,10 @@ public class Player : MonoBehaviour
         }
 
         yield return null;
+    }
+
+    private void OnDestroy()
+    {
+        _playerController.OnLaneChanged -= PlayerMoveControllerOnOnLaneChanged;
     }
 }

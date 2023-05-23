@@ -1,24 +1,25 @@
 ﻿using System;
 
-public class GameStateManager
+public class GameStateService
 {
-
     public event Action OnGameStarted;
-    public event Action OnGameEnd;
+    public event Action OnGameFinished;
+    public event Action OnGameReady;
     public event Action<bool> OnGameIsPaused;
 
     private bool _isPaused = false;
-    public void StartGame()
+
+    public void SetGameStarted()
     {
         OnGameStarted?.Invoke();
     }
+    public void SetGameReady()
+    {
+        OnGameReady?.Invoke();
+    }
     public void FinishGame()
     {
-        OnGameEnd?.Invoke();
-    }
-    public void SetGamePaused(bool isPaused)
-    {
-        OnGameIsPaused?.Invoke(isPaused);
+        OnGameFinished?.Invoke();
     }
 
     public void TogglePause()

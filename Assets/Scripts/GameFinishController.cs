@@ -1,7 +1,7 @@
 ﻿public class GameFinishController
 {
-    public GameFinishController(GameStateManager gameStateManager, PlayerController playerController)
+    public GameFinishController(GameStateService gameStateService, PlayerController playerController)
     {
-        playerController.OnHit += gameStateManager.FinishGame;
+        playerController.OnHit += gameStateService.FinishGame;
     }
 }

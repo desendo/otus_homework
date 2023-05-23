@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class PlayerController : IGameStartListener, IGameEndListener, IPauseListener, ITick
+public class PlayerController : IGameStartListener, IGameFinishListener, IPauseListener, ITick, IGameReadyListener
 {
     public event Action<Vector3> OnLaneChanged;
+    public event Action<int> OnScore;
     public event Action OnHit;
 
+    public int Score => _score;
     private readonly List<Transform> _positionAnchors;
     private int _currentAnchorIndex;
     private bool _gameStarted;
     private bool _gamePaused;
+    private int _score;
     private readonly float _playerChangeLaneSpeed;
 
     public PlayerController(List<Transform> positionAnchors, float playerChangeLaneSpeed)
@@ -19,16 +22,21 @@ public class PlayerController : IGameStartListener, IGameEndListener, IPauseList
         _positionAnchors = positionAnchors;
         _playerChangeLaneSpeed = playerChangeLaneSpeed;
     }
-
-
-    public void OnGameStart()
+    public void OnGameReady()
     {
-        _gameStarted = true;
+        _score = 0;
+        OnScore?.Invoke(_score);
         _currentAnchorIndex = 1;
         OnLaneChanged?.Invoke(_positionAnchors[_currentAnchorIndex].position);
     }
 
-    public void OnGameEnd()
+    public void OnGameStart()
+    {
+        _gameStarted = true;
+
+    }
+
+    public void OnGameFinish()
     {
         _gameStarted = false;
     }
@@ -62,13 +70,25 @@ public class PlayerController : IGameStartListener, IGameEndListener, IPauseList
     }
 
 
-    public void PlayerHit()
+    public void PlayerCollision(WorldObjectBase worldObjectBase)
     {
-        OnHit?.Invoke();
+        if (worldObjectBase != null)
+        {
+            if(worldObjectBase.Type == WorldObjectBase.ObjType.Enemy)
+                OnHit?.Invoke();
+            else if (worldObjectBase.Type == WorldObjectBase.ObjType.Coin)
+            {
+                _score++;
+                OnScore?.Invoke(_score);
+            }
+        }
+
     }
 
     public float GetLaneChangeSpeed()
     {
         return _playerChangeLaneSpeed;
     }
+
+
 }

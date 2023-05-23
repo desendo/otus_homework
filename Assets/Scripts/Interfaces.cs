@@ -1,16 +1,23 @@
-﻿public interface IGameStartListener
+﻿public interface IGameListener
+{
+}
+public interface IGameStartListener : IGameListener
 {
     void OnGameStart();
 }
-public interface IGameEndListener
+public interface IGameReadyListener : IGameListener
 {
-    void OnGameEnd();
+    void OnGameReady();
 }
-public interface IPauseListener
+public interface IGameFinishListener : IGameListener
+{
+    void OnGameFinish();
+}
+public interface IPauseListener : IGameListener
 {
     void OnPaused(bool isPaused);
 }
-public interface ITick
+public interface ITick : IGameListener
 {
     void Tick(float dt);
 }

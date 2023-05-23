@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 8026971521757371305}
   - component: {fileID: 6813992300966013440}
   - component: {fileID: 771626405797300172}
-  - component: {fileID: 7448054603101092786}
   - component: {fileID: 1917392549991232120}
+  - component: {fileID: 6200996505165196569}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -99,18 +99,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7448054603101092786
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2607105940383099541}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02e5109931814d7fb717989657b4e0f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &1917392549991232120
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -127,3 +115,16 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &6200996505165196569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2607105940383099541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5ce526acc1c5b748be9c2bf7dab6e3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _objType: 0
