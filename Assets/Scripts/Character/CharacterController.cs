@@ -1,6 +1,8 @@
+using Bullets;
+using GameManager;
 using UnityEngine;
 
-namespace ShootEmUp
+namespace Character
 {
     public sealed class CharacterController : IStartGame, IFinishGame, IFixedUpdate
     {
@@ -50,11 +52,11 @@ namespace ShootEmUp
             _bulletSystem.FlyBulletByArgs(new BulletSystem.Args
             {
                 isPlayer = true,
-                physicsLayer = (int) _bulletConfig.physicsLayer,
-                color = _bulletConfig.color,
-                damage = _bulletConfig.damage,
+                physicsLayer = (int) _bulletConfig._physicsLayer,
+                color = _bulletConfig._color,
+                damage = _bulletConfig._damage,
                 position = weapon.Position,
-                velocity = weapon.Rotation * Vector3.up * _bulletConfig.speed
+                velocity = weapon.Rotation * Vector3.up * _bulletConfig._speed
             });
         }
 

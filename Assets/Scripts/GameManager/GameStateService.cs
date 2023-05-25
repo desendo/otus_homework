@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ShootEmUp
+namespace GameManager
 {
     public class GameStateService
     {

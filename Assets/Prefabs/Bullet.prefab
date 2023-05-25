@@ -117,7 +117,7 @@ CircleCollider2D:
   m_GameObject: {fileID: 2743036428890533592}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: f67d3e1d2314a034f9fd13294a473b39, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -136,5 +136,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4f04ddcf68e44c1b95a5d6ea04d1a4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rigidbody2D: {fileID: 3555983760417175357}
-  spriteRenderer: {fileID: 407317769854222589}
+  _rigidbody2D: {fileID: 3555983760417175357}
+  _spriteRenderer: {fileID: 407317769854222589}

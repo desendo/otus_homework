@@ -1,18 +1,18 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using Bullets;
+using Common;
 using UnityEngine;
 
-namespace ShootEmUp
+namespace Enemy
 {
     public sealed class EnemyManager : IStartGame, IFinishGame, IUpdate
     {
-
-        public event Action<int> OnEnemiesKilled; 
+        public event Action<int> OnEnemiesKilled;
         private readonly EnemyPool _enemyPool;
         private readonly BulletSystem _bulletSystem;
         private readonly EnemyPositions _enemyPositions;
-        private readonly Character _character;
+        private readonly Character.Character _character;
 
         private readonly HashSet<Enemy> _activeEnemies = new HashSet<Enemy>();
         private float _delay;
@@ -21,7 +21,7 @@ namespace ShootEmUp
         private int _killedEnemies = 0;
         public int KilledEnemies => _killedEnemies;
 
-        public EnemyManager(EnemyPool enemyPool, BulletSystem bulletSystem, EnemyPositions enemyPositions, Character character)
+        public EnemyManager(EnemyPool enemyPool, BulletSystem bulletSystem, EnemyPositions enemyPositions, Character.Character character)
         {
             _enemyPool = enemyPool;
             _bulletSystem = bulletSystem;

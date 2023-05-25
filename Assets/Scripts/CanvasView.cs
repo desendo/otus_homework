@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using DependencyInjection;
-using ShootEmUp;
+using Enemy;
+using GameManager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,9 +13,8 @@ public class CanvasView : MonoBehaviour
 
 
     [Inject]
-    public void Construct(Character character, GameStateService gameStateManager, EnemyManager enemyManager)
+    public void Construct(Character.Character character, GameStateService gameStateManager, EnemyManager enemyManager)
     {
-
         _startButton.onClick.AddListener(gameStateManager.SetGameStarted);
         gameStateManager.OnGameStart += () =>
         {
@@ -37,12 +35,11 @@ public class CanvasView : MonoBehaviour
 
     private void EnemyManagerOnOnEnemiesKilled(int obj)
     {
-        _score.text = "SCORE:" + obj.ToString();
-
+        _score.text = "SCORE:" + obj;
     }
 
     private void OnHitPointsComponentOnHpLeft(int x)
     {
-        _life.text = "HP:" + x.ToString();
+        _life.text = "HP:" + x;
     }
 }

@@ -1,8 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
+using Components;
+using Enemy.Agents;
 using UnityEngine;
 
-namespace ShootEmUp
+namespace Enemy
 {
     public class Enemy : MonoBehaviour
     {

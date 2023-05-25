@@ -1,17 +1,14 @@
 using System;
 using UnityEngine;
 
-namespace ShootEmUp
+namespace Bullets
 {
     public sealed class Bullet : MonoBehaviour
     {
-        [SerializeField] private new Rigidbody2D rigidbody2D;
-
-        [SerializeField] private SpriteRenderer spriteRenderer;
-
-        [NonSerialized] public int damage;
-
-        [NonSerialized] public bool isPlayer;
+        [SerializeField] private new Rigidbody2D _rigidbody2D;
+        [SerializeField] private SpriteRenderer _spriteRenderer;
+        public int Damage { get; set; }
+        public bool IsPlayer { get; set; }
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
@@ -22,7 +19,7 @@ namespace ShootEmUp
 
         public void SetVelocity(Vector2 velocity)
         {
-            rigidbody2D.velocity = velocity;
+            _rigidbody2D.velocity = velocity;
         }
 
         public void SetPhysicsLayer(int physicsLayer)
@@ -37,7 +34,7 @@ namespace ShootEmUp
 
         public void SetColor(Color color)
         {
-            spriteRenderer.color = color;
+            _spriteRenderer.color = color;
         }
     }
 }

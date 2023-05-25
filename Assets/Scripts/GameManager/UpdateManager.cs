@@ -2,7 +2,7 @@
 using DependencyInjection;
 using UnityEngine;
 
-namespace ShootEmUp
+namespace GameManager
 {
     public class UpdateManager : MonoBehaviour
     {

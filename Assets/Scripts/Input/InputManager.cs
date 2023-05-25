@@ -1,14 +1,15 @@
 using UnityEngine;
+using CharacterController = Character.CharacterController;
 
-namespace ShootEmUp
+namespace Input
 {
     public sealed class InputManager : IStartGame, IFinishGame, IFixedUpdate, IUpdate
     {
-        private readonly Character _character;
+        private readonly Character.Character _character;
         private readonly CharacterController _characterController;
         private bool _gameStarted = false;
         private float HorizontalDirection { get; set; }
-        public InputManager(Character character, CharacterController characterController)
+        public InputManager(Character.Character character, CharacterController characterController)
         {
             _character = character;
             _characterController = characterController;
@@ -19,11 +20,11 @@ namespace ShootEmUp
             if(!_gameStarted)
                 return;
 
-            if (Input.GetKeyDown(KeyCode.Space)) _characterController._fireRequired = true;
+            if (UnityEngine.Input.GetKeyDown(KeyCode.Space)) _characterController._fireRequired = true;
 
-            if (Input.GetKey(KeyCode.LeftArrow))
+            if (UnityEngine.Input.GetKey(KeyCode.LeftArrow))
                 HorizontalDirection = -1;
-            else if (Input.GetKey(KeyCode.RightArrow))
+            else if (UnityEngine.Input.GetKey(KeyCode.RightArrow))
                 HorizontalDirection = 1;
             else
                 HorizontalDirection = 0;

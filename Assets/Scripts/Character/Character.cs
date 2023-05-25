@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Components;
 using UnityEngine;
 
-namespace ShootEmUp
+namespace Character
 {
     public class Character : MonoBehaviour
     {

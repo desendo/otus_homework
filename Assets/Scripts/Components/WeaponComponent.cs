@@ -1,13 +1,13 @@
 using UnityEngine;
 
-namespace ShootEmUp
+namespace Components
 {
     public sealed class WeaponComponent : MonoBehaviour
     {
-        [SerializeField] private Transform firePoint;
+        [SerializeField] private Transform _firePoint;
 
-        public Vector2 Position => firePoint.position;
+        public Vector2 Position => _firePoint.position;
 
-        public Quaternion Rotation => firePoint.rotation;
+        public Quaternion Rotation => _firePoint.rotation;
     }
 }

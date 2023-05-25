@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ShootEmUp
+namespace GameManager
 {
     public sealed class GameStateManager
     {
