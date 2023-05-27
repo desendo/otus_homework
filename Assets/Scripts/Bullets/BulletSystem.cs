@@ -8,11 +8,11 @@ namespace Bullets
     public sealed class BulletSystem : MonoBehaviour, IStartGame
     {
         [SerializeField] private int _initialCount = 50;
-
         [SerializeField] private Transform _container;
         [SerializeField] private Bullet _prefab;
         [SerializeField] private Transform _worldTransform;
         [SerializeField] private LevelBounds _levelBounds;
+
         private readonly HashSet<Bullet> _activeBullets = new HashSet<Bullet>();
         private readonly Queue<Bullet> _bulletPool = new Queue<Bullet>();
         private readonly List<Bullet> _cache = new List<Bullet>();
@@ -25,6 +25,7 @@ namespace Bullets
                 _bulletPool.Enqueue(bullet);
             }
         }
+
         public void StartGame()
         {
             var list = _activeBullets.ToList();
@@ -34,6 +35,7 @@ namespace Bullets
             }
             _activeBullets.Clear();
         }
+
         private void FixedUpdate()
         {
             _cache.Clear();
@@ -54,12 +56,12 @@ namespace Bullets
             else
                 bullet = Instantiate(_prefab, _worldTransform);
 
-            bullet.SetPosition(args.position);
-            bullet.SetColor(args.color);
-            bullet.SetPhysicsLayer(args.physicsLayer);
-            bullet.Damage = args.damage;
-            bullet.IsPlayer = args.isPlayer;
-            bullet.SetVelocity(args.velocity);
+            bullet.SetPosition(args.Position);
+            bullet.SetColor(args.Color);
+            bullet.SetPhysicsLayer(args.PhysicsLayer);
+            bullet.Damage = args.Damage;
+            bullet.IsPlayer = args.IsPlayer;
+            bullet.SetVelocity(args.Velocity);
 
             if (_activeBullets.Add(bullet))
                 bullet.OnCollisionEntered += OnBulletCollision;
@@ -83,14 +85,12 @@ namespace Bullets
 
         public struct Args
         {
-            public Vector2 position;
-            public Vector2 velocity;
-            public Color color;
-            public int physicsLayer;
-            public int damage;
-            public bool isPlayer;
+            public Vector2 Position;
+            public Vector2 Velocity;
+            public Color Color;
+            public int PhysicsLayer;
+            public int Damage;
+            public bool IsPlayer;
         }
-
-
     }
 }

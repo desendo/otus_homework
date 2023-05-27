@@ -170,7 +170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae5daa1be9cc40a78a2f07cd53e5b47e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitPoints: 3
+  _hitPoints: 4
 --- !u!114 &5568771391735819374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,6 +184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _firePoint: {fileID: 3195880656587174614}
+  _bulletConfig: {fileID: 11400000, guid: b2e0bc41b3cd1db44885a47a26a13cb5, type: 2}
 --- !u!114 &8186052948131603766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,12 +225,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 376e8ae01ec968f4a8a3ef34e57a96e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveComponent: {fileID: 5568771391735819372}
-  _hitPointsComponent: {fileID: 5568771391735819373}
-  _enemyMoveAgent: {fileID: 8186052948131603766}
-  _weaponComponent: {fileID: 5568771391735819374}
-  _enemyAttackAgent: {fileID: 6896809305229427933}
-  _teamComponent: {fileID: 5568771391735819379}
 --- !u!1 &2239154907127902911
 GameObject:
   m_ObjectHideFlags: 0

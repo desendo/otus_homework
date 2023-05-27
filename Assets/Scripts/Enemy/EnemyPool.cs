@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,33 +6,38 @@ namespace Enemy
 {
     public sealed class EnemyPool : MonoBehaviour
     {
-        [SerializeField] private EnemyPositions _enemyPositions;
         [SerializeField] private Transform _worldTransform;
         [SerializeField] private Transform _container;
         [SerializeField] private Enemy _prefab;
+        [SerializeField] private int _poolSize;
 
         private readonly Queue<Enemy> _enemyPool = new Queue<Enemy>();
 
         private void Awake()
         {
-            for (var i = 0; i < 7; i++)
+            for (var i = 0; i < _poolSize; i++)
             {
-                var enemy = Instantiate(_prefab, _container);
-                _enemyPool.Enqueue(enemy);
+                AddEnemyToPool();
             }
+        }
+
+        private void AddEnemyToPool()
+        {
+            var enemy = Instantiate(_prefab, _container);
+            _enemyPool.Enqueue(enemy);
         }
 
         public Enemy SpawnEnemy()
         {
-            if (!_enemyPool.TryDequeue(out var enemy)) return null;
+            if(_enemyPool.Count == 0)
+                AddEnemyToPool();
 
-            enemy.transform.SetParent(_worldTransform);
-
-            var spawnPosition = _enemyPositions.RandomSpawnPosition();
-            enemy.transform.position = spawnPosition.position;
-
-
-            return enemy;
+            if (_enemyPool.TryDequeue(out var enemy))
+            {
+                enemy.transform.SetParent(_worldTransform);
+                return enemy;
+            }
+            throw new Exception("no enemies in pool");
         }
 
         public void UnspawnEnemy(Enemy enemy)

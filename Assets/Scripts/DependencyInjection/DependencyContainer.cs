@@ -8,12 +8,12 @@ namespace DependencyInjection
     public class DependencyContainer
     {
         private List<object> _objects = new List<object>();
-        private readonly DependencyContainerCache _cache;
+        private readonly Cache _cache;
         private readonly DependencyInjector _injector;
 
         public DependencyContainer()
         {
-            _cache = new DependencyContainerCache();
+            _cache = new Cache();
             _injector = new DependencyInjector(this);
         }
         public void AddOnly(object target)
@@ -29,6 +29,12 @@ namespace DependencyInjection
         {
             var constructors = typeof(T).GetConstructors();
             object instance;
+
+            if (constructors.Length > 1)
+            {
+                throw new Exception("trying to bind multiple constructor object. can't choose.");
+            }
+
             if (constructors.Length == 1)
             {
                 var paramInfos = constructors[0].GetParameters();
@@ -59,7 +65,7 @@ namespace DependencyInjection
         {
             return _cache.GetList(type);
         }
-        private class DependencyContainerCache
+        private class Cache
         {
             private readonly Dictionary<Type, List<object>> _objectsByInterfaces = new Dictionary<Type, List<object>>();
             private readonly Dictionary<Type, object> _objectsByTypes = new Dictionary<Type, object>();

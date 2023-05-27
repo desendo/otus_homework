@@ -3,34 +3,40 @@ using UnityEngine;
 
 namespace Components
 {
-    public sealed class HitPointsComponent : MonoBehaviour
+    public sealed class HitPointsComponent : MonoBehaviour, IReset
     {
-        [SerializeField] private int hitPoints;
+        private int _hitPoints;
         private int _initialPoints;
-        public event Action<GameObject> hpEmpty;
+        private bool _isSet;
+        public event Action<GameObject> HpEmpty;
         public event Action<int> HpLeft;
-
-        public int HitPoints => hitPoints;
+        public int HitPoints => _hitPoints;
 
         public bool IsHitPointsExists()
         {
             return HitPoints > 0;
         }
 
-        private void Awake()
-        {
-            _initialPoints = HitPoints;
-        }
-
         public void TakeDamage(int damage)
         {
-            hitPoints = HitPoints - damage;
+            _hitPoints = HitPoints - damage;
             HpLeft?.Invoke(HitPoints);
-            if (HitPoints <= 0) hpEmpty?.Invoke(gameObject);
+            if (HitPoints <= 0) HpEmpty?.Invoke(gameObject);
         }
+
         public void DoReset()
         {
-            hitPoints = _initialPoints;
+            if(_isSet)
+                _hitPoints = _initialPoints;
+            else
+                throw new Exception($"Cant reset component. run {nameof(SetHitPoints)} first");
+        }
+
+        public void SetHitPoints(int max, int current)
+        {
+            _isSet = true;
+            _initialPoints = max;
+            _hitPoints = current;
         }
     }
 }

@@ -6,10 +6,9 @@ namespace Enemy.Agents
     public sealed class EnemyMoveAgent : MonoBehaviour
     {
         [SerializeField] private MoveComponent _moveComponent;
-
-        private Vector2 _destination;
-
         public bool IsReached { get; private set; }
+        private Vector2 _destination;
+        private float _speed;
 
         private void FixedUpdate()
         {
@@ -22,8 +21,8 @@ namespace Enemy.Agents
                 return;
             }
 
-            var direction = vector.normalized * Time.fixedDeltaTime;
-            _moveComponent.MoveByRigidbodyVelocity(direction);
+            var velocity = vector.normalized * (Time.fixedDeltaTime * _speed);
+            _moveComponent.MoveByRigidbodyVelocity(velocity);
         }
 
         public void SetDestination(Vector2 endPoint)
@@ -31,5 +30,11 @@ namespace Enemy.Agents
             _destination = endPoint;
             IsReached = false;
         }
+
+        public void SetSpeed(float speed)
+        {
+            _speed = speed;
+        }
+
     }
 }

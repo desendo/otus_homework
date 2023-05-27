@@ -1,47 +1,38 @@
 using System;
 using System.Collections.Generic;
-using Bullets;
-using Common;
+using Config;
 using UnityEngine;
 
 namespace Enemy
 {
-    public sealed class EnemyManager : IStartGame, IFinishGame, IUpdate
+    public sealed class EnemyManager : IStartGame, IFinishGame, IUpdate,IReset
     {
+        public event Action<Enemy> OnEnemySpawn;
+        public event Action<Enemy> OnEnemyDeSpawn;
         public event Action<int> OnEnemiesKilled;
-        private readonly EnemyPool _enemyPool;
-        private readonly BulletSystem _bulletSystem;
-        private readonly EnemyPositions _enemyPositions;
-        private readonly Character.Character _character;
-
-        private readonly HashSet<Enemy> _activeEnemies = new HashSet<Enemy>();
-        private float _delay;
-        private float _timeToSpawn = 1f;
-        private bool _gameStarted;
-        private int _killedEnemies = 0;
-        public int KilledEnemies => _killedEnemies;
-
-        public EnemyManager(EnemyPool enemyPool, BulletSystem bulletSystem, EnemyPositions enemyPositions, Character.Character character)
+        public int KilledEnemies
         {
-            _enemyPool = enemyPool;
-            _bulletSystem = bulletSystem;
-            _enemyPositions = enemyPositions;
-            _character = character;
+            get => _killed;
+            private set
+            {
+                _killed = value;
+                OnEnemiesKilled?.Invoke(_killed);
+            }
         }
 
+        private readonly HashSet<Enemy> _activeEnemies = new HashSet<Enemy>();
+        private readonly EnemyPool _enemyPool;
+        private readonly GameConfig _gameConfig;
+        private readonly EnemyPositions _enemyPositions;
+        private float _delay;
+        private bool _gameStarted;
+        private int _killed;
 
-        public void StartGame()
+        public EnemyManager(EnemyPool enemyPool, GameConfig gameConfig, EnemyPositions enemyPositions)
         {
-            foreach (var enemy in _activeEnemies)
-            {
-                enemy.HitPointsComponent.hpEmpty -= OnDestroyed;
-                enemy.EnemyAttackAgent.OnFire -= OnFire;
-
-                _enemyPool.UnspawnEnemy(enemy);
-            }
-            _activeEnemies.Clear();
-            _killedEnemies = 0;
-            _gameStarted = true;
+            _gameConfig = gameConfig;
+            _enemyPositions = enemyPositions;
+            _enemyPool = enemyPool;
         }
 
         public void FinishGame()
@@ -49,59 +40,54 @@ namespace Enemy
             _gameStarted = false;
         }
 
+        public void StartGame()
+        {
+            _gameStarted = true;
+        }
+
         public void Update(float dt)
         {
-            if(!_gameStarted)
+            if (!_gameStarted)
                 return;
 
             _delay += dt;
-            if(_delay < _timeToSpawn)
+            if (_delay < _gameConfig.EnemySpawnInterval)
                 return;
 
             _delay = 0f;
             var enemy = _enemyPool.SpawnEnemy();
-            if (enemy != null)
-                if (_activeEnemies.Add(enemy))
-                {
-                    var attackPosition = _enemyPositions.RandomAttackPosition();
-                    enemy.EnemyMoveAgent.SetDestination(attackPosition.position);
-                    enemy.EnemyAttackAgent.SetTarget(_character.gameObject);
-                    enemy.HitPointsComponent.hpEmpty += OnDestroyed;
-                    enemy.EnemyAttackAgent.OnFire += OnFire;
-                }
+            var spawnPosition = _enemyPositions.RandomSpawnPosition();
+            enemy.transform.position = spawnPosition.position;
+            if (_activeEnemies.Add(enemy))
+                OnEnemySpawn?.Invoke(enemy);
         }
 
-        private void OnDestroyed(GameObject obj)
+        public void SetEnemyIsDead(GameObject gameObject)
         {
-            var enemy = obj.GetComponent<Enemy>();
-            if(enemy == null)
-                return;
+            var enemy = gameObject.GetComponent<Enemy>();
+            if (enemy == null)
+                throw new Exception("no enemy component");
 
             if (_activeEnemies.Remove(enemy))
             {
-                enemy.HitPointsComponent.hpEmpty -= OnDestroyed;
-                enemy.EnemyAttackAgent.OnFire -= OnFire;
-
+                OnEnemyDeSpawn?.Invoke(enemy);
                 _enemyPool.UnspawnEnemy(enemy);
             }
 
-            _killedEnemies += 1;
-            OnEnemiesKilled?.Invoke(_killedEnemies);
+            KilledEnemies++;
         }
 
-        private void OnFire(GameObject enemy, Vector2 position, Vector2 direction)
+        public void DoReset()
         {
-            _bulletSystem.FlyBulletByArgs(new BulletSystem.Args
+            foreach (var enemy in _activeEnemies)
             {
-                isPlayer = false,
-                physicsLayer = (int) PhysicsLayer.ENEMY_BULLET,
-                color = Color.red,
-                damage = 1,
-                position = position,
-                velocity = direction * 2.0f
-            });
+                OnEnemyDeSpawn?.Invoke(enemy);
+                _enemyPool.UnspawnEnemy(enemy);
+            }
+
+            KilledEnemies = 0;
+            _activeEnemies.Clear();
+            _delay = _gameConfig.EnemySpawnInterval;
         }
-
-
     }
 }

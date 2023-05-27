@@ -155,6 +155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _firePoint: {fileID: 3926786963072264220}
+  _bulletConfig: {fileID: 11400000, guid: 7138ae5d32d814e0ca50c616c65ea105, type: 2}
 --- !u!114 &3926786964091724597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,10 +195,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7465b89a9f8a440f96b69e5f7c257025, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hitPointsComponent: {fileID: 3926786964091724599}
-  _weaponComponent: {fileID: 3926786964091724598}
-  _moveComponent: {fileID: 3926786963732877808}
-  _teamComponent: {fileID: 3926786964091724597}
 --- !u!1 &3926786963072264211
 GameObject:
   m_ObjectHideFlags: 0

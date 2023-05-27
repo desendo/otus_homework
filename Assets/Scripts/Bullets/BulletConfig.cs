@@ -9,9 +9,9 @@ namespace Bullets
     )]
     public sealed class BulletConfig : ScriptableObject
     {
-        [SerializeField] public PhysicsLayer _physicsLayer;
-        [SerializeField] public Color _color;
-        [SerializeField] public int _damage;
-        [SerializeField] public float _speed;
+        [SerializeField] public PhysicsLayer PhysicsLayer;
+        [SerializeField] public Color Color;
+        [SerializeField] public int Damage;
+        [SerializeField] public float Speed;
     }
 }

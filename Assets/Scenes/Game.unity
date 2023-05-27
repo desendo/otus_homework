@@ -399,7 +399,7 @@ MonoBehaviour:
   _updateManager: {fileID: 256329402}
   _enemyPositions: {fileID: 7166351703523243261}
   _character: {fileID: 3926786964592264469}
-  _bulletConfig: {fileID: 11400000, guid: 7138ae5d32d814e0ca50c616c65ea105, type: 2}
+  _gameConfig: {fileID: 11400000, guid: fa77e1ac736459d43b2f43633be13cc5, type: 2}
   _bulletSystem: {fileID: 363245577}
   _enemyPool: {fileID: 562298207}
   _canvasView: {fileID: 431922200}
@@ -460,11 +460,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37bd15923a144ffbab0333dc6e74e641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialCount: 50
-  container: {fileID: 1831741369}
-  prefab: {fileID: 201757604187811891, guid: 5fe72886874b4e445b06cf777ca4920d, type: 3}
-  worldTransform: {fileID: 1683128698}
-  levelBounds: {fileID: 2572952653776768186}
+  _initialCount: 50
+  _container: {fileID: 1831741369}
+  _prefab: {fileID: 201757604187811891, guid: 5fe72886874b4e445b06cf777ca4920d, type: 3}
+  _worldTransform: {fileID: 1683128698}
+  _levelBounds: {fileID: 2572952653776768186}
 --- !u!1 &431922195
 GameObject:
   m_ObjectHideFlags: 0
@@ -714,9 +714,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyPositions: {fileID: 7166351703523243261}
-  worldTransform: {fileID: 1683128698}
-  container: {fileID: 178513672}
-  prefab: {fileID: 1563361181873382179, guid: 87fe189881a524806800482ac8eaaa83, type: 3}
+  _worldTransform: {fileID: 1683128698}
+  _container: {fileID: 178513672}
+  _prefab: {fileID: 1563361181873382179, guid: 87fe189881a524806800482ac8eaaa83, type: 3}
+  _poolSize: 7
 --- !u!1 &677983826
 GameObject:
   m_ObjectHideFlags: 0
@@ -1636,10 +1637,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a40dacbeba84ba1b55163e9b048081b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leftBorder: {fileID: 6563466540960878063}
-  rightBorder: {fileID: 1668159544493171190}
-  downBorder: {fileID: 3327143300152331510}
-  topBorder: {fileID: 1752465411210150465}
+  _leftBorder: {fileID: 6563466540960878063}
+  _rightBorder: {fileID: 1668159544493171190}
+  _downBorder: {fileID: 3327143300152331510}
+  _topBorder: {fileID: 1752465411210150465}
 --- !u!1 &3066462935130252019
 GameObject:
   m_ObjectHideFlags: 0
@@ -1870,6 +1871,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Character
       objectReference: {fileID: 0}
+    - target: {fileID: 3926786964091724598, guid: 9699e7e809fd44b2bbf3d30c951ecbd2,
+        type: 3}
+      propertyPath: _bulletConfig
+      value: 
+      objectReference: {fileID: 11400000, guid: 7138ae5d32d814e0ca50c616c65ea105,
+        type: 2}
+    - target: {fileID: 3926786964091724599, guid: 9699e7e809fd44b2bbf3d30c951ecbd2,
+        type: 3}
+      propertyPath: _hitPoints
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9699e7e809fd44b2bbf3d30c951ecbd2, type: 3}
 --- !u!114 &3926786964592264469 stripped
@@ -2003,10 +2015,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5377a5d4caa94482972174d0a74ac4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_params:
-    m_startPositionY: 19
-    m_endPositionY: -38
-    m_movingSpeedY: 5
+  _params:
+    _startPositionY: 0
+    _endPositionY: 0
+    _movingSpeedY: 0
 --- !u!1 &4914023371208914563
 GameObject:
   m_ObjectHideFlags: 0
@@ -2238,14 +2250,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a94380673bed40d7aff42c7cee30b556, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnPositions:
+  _spawnPositions:
   - {fileID: 5098186055898699330}
   - {fileID: 3822857799868723767}
   - {fileID: 6359635304368030436}
   - {fileID: 2272249728968689581}
   - {fileID: 5689270860486713316}
   - {fileID: 106235378999874491}
-  attackPositions:
+  _attackPositions:
   - {fileID: 8569045085939387605}
   - {fileID: 9088267052445128325}
   - {fileID: 713232402740842374}

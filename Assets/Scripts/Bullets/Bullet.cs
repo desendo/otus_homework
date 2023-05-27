@@ -5,17 +5,16 @@ namespace Bullets
 {
     public sealed class Bullet : MonoBehaviour
     {
-        [SerializeField] private new Rigidbody2D _rigidbody2D;
+        [SerializeField] private Rigidbody2D _rigidbody2D;
         [SerializeField] private SpriteRenderer _spriteRenderer;
         public int Damage { get; set; }
         public bool IsPlayer { get; set; }
+        public event Action<Bullet, Collision2D> OnCollisionEntered;
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
             OnCollisionEntered?.Invoke(this, collision);
         }
-
-        public event Action<Bullet, Collision2D> OnCollisionEntered;
 
         public void SetVelocity(Vector2 velocity)
         {

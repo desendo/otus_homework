@@ -1,3 +1,6 @@
+using System;
+using Character;
+using Components;
 using DependencyInjection;
 using Enemy;
 using GameManager;
@@ -10,27 +13,36 @@ public class CanvasView : MonoBehaviour
     [SerializeField] private Button _startButton;
     [SerializeField] private TextMeshProUGUI _score;
     [SerializeField] private TextMeshProUGUI _life;
-
+    private EnemyManager _enemyManager;
+    private CharacterMono _character;
 
     [Inject]
-    public void Construct(Character.Character character, GameStateService gameStateManager, EnemyManager enemyManager)
+    public void Construct(CharacterMono character, GameStateService gameStateManager, EnemyManager enemyManager)
     {
+        _character = character;
+        _enemyManager = enemyManager;
         _startButton.onClick.AddListener(gameStateManager.SetGameStarted);
         gameStateManager.OnGameStart += () =>
         {
-            enemyManager.OnEnemiesKilled += EnemyManagerOnOnEnemiesKilled;
-            character.HitPointsComponent.HpLeft += OnHitPointsComponentOnHpLeft;
-            OnHitPointsComponentOnHpLeft(character.HitPointsComponent.HitPoints);
-            EnemyManagerOnOnEnemiesKilled(enemyManager.KilledEnemies);
+            _enemyManager.OnEnemiesKilled += EnemyManagerOnOnEnemiesKilled;
+            _character.GetComponent<HitPointsComponent>().HpLeft += OnHitPointsComponentOnHpLeft;
+            OnHitPointsComponentOnHpLeft(_character.GetComponent<HitPointsComponent>().HitPoints);
+            EnemyManagerOnOnEnemiesKilled(_enemyManager.KilledEnemies);
             _startButton.gameObject.SetActive(false);
         };
         gameStateManager.OnGameFinish += () =>
         {
-            enemyManager.OnEnemiesKilled -= EnemyManagerOnOnEnemiesKilled;
+            _enemyManager.OnEnemiesKilled -= EnemyManagerOnOnEnemiesKilled;
 
-            character.HitPointsComponent.HpLeft -= OnHitPointsComponentOnHpLeft;
+            _character.GetComponent<HitPointsComponent>().HpLeft -= OnHitPointsComponentOnHpLeft;
             _startButton.gameObject.SetActive(true);
         };
+    }
+
+    private void OnEnable()
+    {
+        OnHitPointsComponentOnHpLeft(_character.GetComponent<HitPointsComponent>().HitPoints);
+        EnemyManagerOnOnEnemiesKilled(_enemyManager.KilledEnemies);
     }
 
     private void EnemyManagerOnOnEnemiesKilled(int obj)
