@@ -28,8 +28,6 @@ namespace Components
         {
             if(_isSet)
                 _hitPoints = _initialPoints;
-            else
-                throw new Exception($"Cant reset component. run {nameof(SetHitPoints)} first");
         }
 
         public void SetHitPoints(int max, int current)

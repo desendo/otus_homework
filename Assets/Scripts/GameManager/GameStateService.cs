@@ -11,12 +11,16 @@ namespace GameManager
         public event Action OnGameStart;
         public event Action OnGameFinish;
 
+        public bool GameStarted { get; private set; }
+
         public void SetGameStarted()
         {
+            GameStarted = true;
             OnGameStart?.Invoke();
         }
         public void SetGameFinished()
         {
+            GameStarted = false;
             OnGameFinish?.Invoke();
         }
     }
