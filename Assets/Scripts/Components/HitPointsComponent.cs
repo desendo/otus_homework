@@ -1,4 +1,5 @@
 using System;
+using ReactiveExtension;
 using UnityEngine;
 
 namespace Components
@@ -9,7 +10,7 @@ namespace Components
         private int _initialPoints;
         private bool _isSet;
         public event Action<GameObject> HpEmpty;
-        public event Action<int> HpLeft;
+        public Reactive<int> HpLeft = new Reactive<int>();
         public int HitPoints => _hitPoints;
 
         public bool IsHitPointsExists()
@@ -19,8 +20,8 @@ namespace Components
 
         public void TakeDamage(int damage)
         {
-            _hitPoints = HitPoints - damage;
-            HpLeft?.Invoke(HitPoints);
+            _hitPoints -= damage;
+            HpLeft.Value = HitPoints;
             if (HitPoints <= 0) HpEmpty?.Invoke(gameObject);
         }
 

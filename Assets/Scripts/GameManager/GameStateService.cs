@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ReactiveExtension;
 
 namespace GameManager
 {
@@ -8,19 +9,19 @@ namespace GameManager
         private readonly List<IStartGame> _startGames;
         private readonly List<IFinishGame> _finishGames;
         private readonly List<IReset> _resets;
+        public readonly Reactive<bool> GameStartedReactive = new Reactive<bool>();
         public event Action OnGameStart;
         public event Action OnGameFinish;
 
-        public bool GameStarted { get; private set; }
 
         public void SetGameStarted()
         {
-            GameStarted = true;
+            GameStartedReactive.Value = true;
             OnGameStart?.Invoke();
         }
         public void SetGameFinished()
         {
-            GameStarted = false;
+            GameStartedReactive.Value = false;
             OnGameFinish?.Invoke();
         }
     }

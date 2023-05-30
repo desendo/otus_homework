@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Config;
+using ReactiveExtension;
 using UnityEngine;
 
 namespace Enemy
@@ -9,14 +10,14 @@ namespace Enemy
     {
         public event Action<Enemy> OnEnemySpawn;
         public event Action<Enemy> OnEnemyDeSpawn;
-        public event Action<int> OnEnemiesKilled;
+        public readonly Reactive<int> OnEnemiesKilledReactive = new Reactive<int>();
         public int KilledEnemies
         {
             get => _killed;
             private set
             {
                 _killed = value;
-                OnEnemiesKilled?.Invoke(_killed);
+                OnEnemiesKilledReactive.Value = _killed;
             }
         }
 

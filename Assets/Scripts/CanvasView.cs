@@ -6,6 +6,7 @@ using GameManager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using IDisposable = ReactiveExtension.IDisposable;
 
 public class CanvasView : MonoBehaviour
 {
@@ -14,39 +15,36 @@ public class CanvasView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _life;
     private EnemyManager _enemyManager;
     private CharacterMono _character;
-    private GameStateService _gameStateManager;
+    private GameStateService _gameStateService;
+    private IDisposable _killedSub;
+    private IDisposable _gameStartSub;
+    private IDisposable _hpLeftSubSub;
 
     [Inject]
-    public void Construct(CharacterMono character, GameStateService gameStateManager, EnemyManager enemyManager)
+    public void Construct(CharacterMono character, GameStateService gameStateService, EnemyManager enemyManager)
     {
         _character = character;
         _enemyManager = enemyManager;
-        _gameStateManager = gameStateManager;
-        _startButton.onClick.AddListener(gameStateManager.SetGameStarted);
-        gameStateManager.OnGameStart += () =>
+        _gameStateService = gameStateService;
+        _startButton.onClick.AddListener(gameStateService.SetGameStarted);
+
+        _gameStartSub = _gameStateService.GameStartedReactive.Subscribe(isGameStarted =>
         {
-            _enemyManager.OnEnemiesKilled += EnemyManagerOnOnEnemiesKilled;
-            _character.GetComponent<HitPointsComponent>().HpLeft += OnHitPointsComponentOnHpLeft;
-            OnHitPointsComponentOnHpLeft(_character.GetComponent<HitPointsComponent>().HitPoints);
-            EnemyManagerOnOnEnemiesKilled(_enemyManager.KilledEnemies);
+            if (isGameStarted)
+            {
+                _killedSub = _enemyManager.OnEnemiesKilledReactive.Subscribe(EnemyManagerOnOnEnemiesKilled);
+                _hpLeftSubSub = _character.GetComponent<HitPointsComponent>().HpLeft
+                    .Subscribe(OnHitPointsComponentOnHpLeft);
+                _startButton.gameObject.SetActive(false);
+            }
+            else
+            {
+                _killedSub?.Dispose();
+                _hpLeftSubSub?.Dispose();
+                _startButton.gameObject.SetActive(true);
+            }
+        });
 
-            _startButton.gameObject.SetActive(false);
-        };
-        gameStateManager.OnGameFinish += () =>
-        {
-            _enemyManager.OnEnemiesKilled -= EnemyManagerOnOnEnemiesKilled;
-            _character.GetComponent<HitPointsComponent>().HpLeft -= OnHitPointsComponentOnHpLeft;
-            _startButton.gameObject.SetActive(true);
-        };
-    }
-
-    private void OnEnable()
-    {
-        if(_gameStateManager == null || !_gameStateManager.GameStarted)
-            return;
-
-        OnHitPointsComponentOnHpLeft(_character.GetComponent<HitPointsComponent>().HitPoints);
-        EnemyManagerOnOnEnemiesKilled(_enemyManager.KilledEnemies);
     }
 
     private void EnemyManagerOnOnEnemiesKilled(int obj)
@@ -57,5 +55,12 @@ public class CanvasView : MonoBehaviour
     private void OnHitPointsComponentOnHpLeft(int x)
     {
         _life.text = "HP:" + x;
+    }
+
+    private void OnDestroy()
+    {
+        _gameStartSub?.Dispose();
+        _killedSub?.Dispose();
+        _hpLeftSubSub?.Dispose();
     }
 }
