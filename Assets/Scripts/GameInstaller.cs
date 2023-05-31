@@ -2,19 +2,24 @@ using Bullets;
 using Character;
 using Config;
 using DependencyInjection;
+using Effects;
 using Enemy;
 using GameManager;
 using Input;
+using Level;
 using UnityEngine;
 
 public class GameInstaller : MonoBehaviour
 {
     [SerializeField] private UpdateManager _updateManager;
     [SerializeField] private EnemyPositions _enemyPositions;
-    [SerializeField] private CharacterMono _character;
+    [SerializeField] private LevelBounds _levelBounds;
+    [SerializeField] private GameObject _character;
     [SerializeField] private GameConfig _gameConfig;
-    [SerializeField] private BulletSystem _bulletSystem;
+    [SerializeField] private BulletPool _bulletPool;
     [SerializeField] private EnemyPool _enemyPool;
+    [SerializeField] private ExplosionEffectPool _explosionEffectPool;
+    [SerializeField] private HitEffectPool _hitEffectPool;
     [SerializeField] private CanvasView _canvasView;
 
     private DependencyContainer _container;
@@ -26,31 +31,37 @@ public class GameInstaller : MonoBehaviour
     private void Bind()
     {
         _container = new DependencyContainer();
-        _container.AddOnly(_gameConfig);
+        _container.Add(_gameConfig);
 
-        _container.AddOnly(_enemyPositions);
-        _container.AddInject(_enemyPool);
-        _container.AddOnly(_character);
-        _container.AddOnly(_bulletSystem);
+        _container.Add(_enemyPool);
+        _container.Add(_bulletPool);
+        _container.Add(_hitEffectPool);
+        _container.Add(_explosionEffectPool);
 
-        _container.AddInject<GameStateService>();
-        _container.AddInject<InputManager>();
+        _container.Add(_levelBounds);
+        _container.Add(_enemyPositions);
 
-        _container.AddInject<EnemyManager>();
-        _container.AddInject<EnemyDeathController>();
-        _container.AddInject<EnemySetFireTargetController>();
-        _container.AddInject<EnemyFireController>();
-        _container.AddInject<EnemySetMoveTargetController>();
-        _container.AddInject<EnemySetBalanceParametersController>();
+        _container.Add<GameStateService>();
+        _container.Add<InputManager>();
+        _container.Add<CharacterService>().SetCharacter(_character);
 
-        _container.AddInject<CharacterDeathController>();
-        _container.AddInject<CharacterFireController>();
-        _container.AddInject<CharacterMoveController>();
-        _container.AddInject<CharacterSetParametersController>();
+        _container.Bind<EffectsService>();
 
-        _container.AddInject<GameStateManager>();
-        _container.AddInject(_canvasView);
-        _container.InjectOnly(_updateManager);
+        _container.Bind<BulletSpawner>();
+        _container.Bind<BulletManager>();
 
+        _container.Bind<EnemySpawner>();
+        _container.Bind<EnemyManager>();
+        _container.Bind<EnemyDeathController>();
+        _container.Bind<EnemyFireController>();
+
+        _container.Bind<CharacterDeathObserver>();
+        _container.Bind<CharacterFireController>();
+        _container.Bind<CharacterMoveController>();
+        _container.Bind<CharacterInstaller>();
+
+        _container.Bind<GameStateManager>();
+        _container.Bind(_canvasView);
+        _container.Inject(_updateManager);
     }
 }

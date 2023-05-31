@@ -1,36 +1,30 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 
 namespace GameManager
 {
     public sealed class GameStateManager
     {
-        private readonly List<IStartGame> _startGames;
-        private readonly List<IFinishGame> _finishGames;
-        private readonly List<IReset> _resets;
+        private readonly List<IStartGame> _startGameListeners;
+        private readonly List<IFinishGame> _finishGameListeners;
 
-        public GameStateManager(List<IStartGame> startGames, List<IFinishGame> finishGames, List<IReset> resets, GameStateService gameStateService)
+        public GameStateManager(List<IStartGame> startGameListeners, List<IFinishGame> finishGameListeners,
+            GameStateService gameStateService)
         {
-            _startGames = startGames;
-            _finishGames = finishGames;
-            _resets = resets;
-            gameStateService.OnGameStart += OnGameStart;
-            gameStateService.OnGameFinish += OnGameFinish;
+            _startGameListeners = startGameListeners;
+            _finishGameListeners = finishGameListeners;
+            gameStateService.OnGameStart.Subscribe(OnGameStart);
+            gameStateService.OnGameFinish.Subscribe(OnGameFinish);
         }
 
         private void OnGameFinish()
         {
-            Time.timeScale = 0f;
-            foreach (var finishGame in _finishGames)
+            foreach (var finishGame in _finishGameListeners)
                 finishGame.FinishGame();
         }
 
         private void OnGameStart()
         {
-            Time.timeScale = 1f;
-            foreach (var reset in _resets)
-                reset.DoReset();
-            foreach (var startGame in _startGames)
+            foreach (var startGame in _startGameListeners)
                 startGame.StartGame();
         }
     }

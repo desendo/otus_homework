@@ -7,17 +7,17 @@ namespace Character
 {
     public sealed class CharacterFireController : IStartGame, IFinishGame, IUpdate
     {
-        private readonly BulletSystem _bulletSystem;
-        private readonly CharacterMono _characterMono;
+        private readonly BulletManager _bulletManager;
+        private readonly CharacterService _characterService;
         private readonly InputManager _inputManager;
         private bool _started;
 
-        public CharacterFireController(InputManager inputManager, CharacterMono characterMono,
-            BulletSystem bulletSystem)
+        public CharacterFireController(InputManager inputManager, CharacterService characterService,
+            BulletManager bulletManager)
         {
             _inputManager = inputManager;
-            _characterMono = characterMono;
-            _bulletSystem = bulletSystem;
+            _characterService = characterService;
+            _bulletManager = bulletManager;
         }
         public void Update(float dt)
         {
@@ -30,8 +30,8 @@ namespace Character
 
         private void OnFlyBullet()
         {
-            var weapon = _characterMono.GetComponent<WeaponComponent>();
-            _bulletSystem.FlyBulletByArgs(new BulletSystem.Args
+            var weapon = _characterService.Character.GetComponent<WeaponComponent>();
+            _bulletManager.FlyBulletByArgs(new BulletManager.Args
             {
                 IsPlayer = true,
                 PhysicsLayer = (int) weapon.BulletConfig.PhysicsLayer,

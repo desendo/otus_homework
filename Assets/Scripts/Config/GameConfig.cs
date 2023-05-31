@@ -13,6 +13,7 @@ namespace Config
         [SerializeField] public int EnemyHealth;
         [SerializeField] public float EnemyMoveSpeed;
         [SerializeField] public float EnemyFireInterval;
+        [SerializeField] public float EnemyPositionRandomRadius = 1;
         [SerializeField] public bool EnemyFireImmediately;
         [SerializeField] public BulletConfig EnemyBulletConfig;
         [SerializeField] public BulletConfig PlayerBulletConfig;

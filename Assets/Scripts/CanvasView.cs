@@ -1,3 +1,4 @@
+using System;
 using Character;
 using Components;
 using DependencyInjection;
@@ -6,7 +7,6 @@ using GameManager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using IDisposable = ReactiveExtension.IDisposable;
 
 public class CanvasView : MonoBehaviour
 {
@@ -14,16 +14,16 @@ public class CanvasView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _score;
     [SerializeField] private TextMeshProUGUI _life;
     private EnemyManager _enemyManager;
-    private CharacterMono _character;
+    private CharacterService _characterService;
     private GameStateService _gameStateService;
     private IDisposable _killedSub;
     private IDisposable _gameStartSub;
     private IDisposable _hpLeftSubSub;
 
     [Inject]
-    public void Construct(CharacterMono character, GameStateService gameStateService, EnemyManager enemyManager)
+    public void Construct(CharacterService characterService, GameStateService gameStateService, EnemyManager enemyManager)
     {
-        _character = character;
+        _characterService = characterService;
         _enemyManager = enemyManager;
         _gameStateService = gameStateService;
         _startButton.onClick.AddListener(gameStateService.SetGameStarted);
@@ -33,7 +33,7 @@ public class CanvasView : MonoBehaviour
             if (isGameStarted)
             {
                 _killedSub = _enemyManager.OnEnemiesKilledReactive.Subscribe(EnemyManagerOnOnEnemiesKilled);
-                _hpLeftSubSub = _character.GetComponent<HitPointsComponent>().HpLeft
+                _hpLeftSubSub = _characterService.Character.GetComponent<HitPointsComponent>().HpLeft
                     .Subscribe(OnHitPointsComponentOnHpLeft);
                 _startButton.gameObject.SetActive(false);
             }

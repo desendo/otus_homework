@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10f65847b3c9485b95a0fe53b46da80c, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: 
-  CharMoveSpeed: 4
+  CharMoveSpeed: 7
   CharHealth: 5
-  EnemySpawnInterval: 4
+  EnemySpawnInterval: 1
   EnemyHealth: 3
-  EnemyMoveSpeed: 5
-  EnemyFireInterval: 3
+  EnemyMoveSpeed: 7
+  EnemyFireInterval: 2
+  EnemyPositionRandomRadius: 0.5
   EnemyFireImmediately: 1
   EnemyBulletConfig: {fileID: 11400000, guid: b2e0bc41b3cd1db44885a47a26a13cb5, type: 2}
   PlayerBulletConfig: {fileID: 11400000, guid: 7138ae5d32d814e0ca50c616c65ea105, type: 2}

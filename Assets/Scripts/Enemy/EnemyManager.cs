@@ -1,49 +1,46 @@
 using System;
 using System.Collections.Generic;
+using Common;
 using Config;
+using Effects;
 using ReactiveExtension;
 using UnityEngine;
 
 namespace Enemy
 {
-    public sealed class EnemyManager : IStartGame, IFinishGame, IUpdate,IReset
+    public sealed class EnemyManager : IStartGame, IFinishGame, IUpdate
     {
         public event Action<Enemy> OnEnemySpawn;
-        public event Action<Enemy> OnEnemyDeSpawn;
+        public event Action<Enemy> OnEnemyUnspawn;
         public readonly Reactive<int> OnEnemiesKilledReactive = new Reactive<int>();
-        public int KilledEnemies
-        {
-            get => _killed;
-            private set
-            {
-                _killed = value;
-                OnEnemiesKilledReactive.Value = _killed;
-            }
-        }
 
         private readonly HashSet<Enemy> _activeEnemies = new HashSet<Enemy>();
-        private readonly EnemyPool _enemyPool;
-        private readonly GameConfig _gameConfig;
+        private readonly EnemySpawner _enemySpawner;
         private readonly EnemyPositions _enemyPositions;
-        private float _delay;
-        private bool _gameStarted;
-        private int _killed;
+        private readonly EffectsService _effectsService;
+        private readonly Timer _spawnTimer;
 
-        public EnemyManager(EnemyPool enemyPool, GameConfig gameConfig, EnemyPositions enemyPositions)
+        private bool _gameStarted;
+
+        public EnemyManager(EnemySpawner enemySpawner, EffectsService effectsService, GameConfig gameConfig)
         {
-            _gameConfig = gameConfig;
-            _enemyPositions = enemyPositions;
-            _enemyPool = enemyPool;
+            _effectsService = effectsService;
+            _enemySpawner = enemySpawner;
+            _spawnTimer = new Timer(gameConfig.EnemySpawnInterval);
         }
 
         public void FinishGame()
         {
             _gameStarted = false;
+            _spawnTimer.OnTime -= SpawnEnemy;
         }
 
         public void StartGame()
         {
+            DoReset();
             _gameStarted = true;
+            _spawnTimer.Reset();
+            _spawnTimer.OnTime += SpawnEnemy;
         }
 
         public void Update(float dt)
@@ -51,16 +48,14 @@ namespace Enemy
             if (!_gameStarted)
                 return;
 
-            _delay += dt;
-            if (_delay < _gameConfig.EnemySpawnInterval)
-                return;
+            _spawnTimer.Update(dt);
+        }
 
-            _delay = 0f;
-            var enemy = _enemyPool.SpawnEnemy();
-            var spawnPosition = _enemyPositions.RandomSpawnPosition();
-            enemy.transform.position = spawnPosition.position;
-            if (_activeEnemies.Add(enemy))
-                OnEnemySpawn?.Invoke(enemy);
+        private void SpawnEnemy()
+        {
+            var enemyInstance = _enemySpawner.SpawnEnemy();
+            if(_activeEnemies.Add(enemyInstance))
+                OnEnemySpawn?.Invoke(enemyInstance);
         }
 
         public void SetEnemyIsDead(GameObject gameObject)
@@ -71,24 +66,23 @@ namespace Enemy
 
             if (_activeEnemies.Remove(enemy))
             {
-                OnEnemyDeSpawn?.Invoke(enemy);
-                _enemyPool.UnspawnEnemy(enemy);
+                OnEnemyUnspawn?.Invoke(enemy);
+                _effectsService.ShowExplosionEffect(enemy.transform.position);
+                _enemySpawner.Unspawn(enemy);
             }
 
-            KilledEnemies++;
+            OnEnemiesKilledReactive.Value++;
         }
 
         public void DoReset()
         {
             foreach (var enemy in _activeEnemies)
             {
-                OnEnemyDeSpawn?.Invoke(enemy);
-                _enemyPool.UnspawnEnemy(enemy);
+                OnEnemyUnspawn?.Invoke(enemy);
             }
-
-            KilledEnemies = 0;
+            _enemySpawner.Clear();
             _activeEnemies.Clear();
-            _delay = _gameConfig.EnemySpawnInterval;
+            OnEnemiesKilledReactive.Value = 0;
         }
     }
 }

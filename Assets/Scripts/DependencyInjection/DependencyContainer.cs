@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static System.Activator;
 
 namespace DependencyInjection
 {
     public class DependencyContainer
     {
-        private List<object> _objects = new List<object>();
         private readonly Cache _cache;
         private readonly DependencyInjector _injector;
 
@@ -16,16 +14,24 @@ namespace DependencyInjection
             _cache = new Cache();
             _injector = new DependencyInjector(this);
         }
-        public void AddOnly(object target)
+
+        public T Add<T>() where T : class
+        {
+            var instance = Activator.CreateInstance(typeof(T));
+            _cache.Add(instance);
+            return (T) instance;
+        }
+
+        public void Add(object target)
         {
             _cache.Add(target);
         }
-        public void AddInject(object target)
+        public void Bind(object target)
         {
             _cache.Add(target);
             _injector.Inject(target);
         }
-        public T AddInject<T>() where T: class
+        public T Bind<T>() where T: class
         {
             var constructors = typeof(T).GetConstructors();
             object instance;
@@ -39,17 +45,17 @@ namespace DependencyInjection
             {
                 var paramInfos = constructors[0].GetParameters();
                 var args = _injector.GetArguments(paramInfos);
-                instance = CreateInstance(typeof(T), args);
+                instance = Activator.CreateInstance(typeof(T), args);
             }
             else
             {
-                instance = CreateInstance(typeof(T));
+                instance = Activator.CreateInstance(typeof(T));
             }
             _cache.Add(instance);
             _injector.Inject(instance);
             return (T) instance;
         }
-        public void InjectOnly(object target)
+        public void Inject(object target)
         {
             _injector.Inject(target);
         }

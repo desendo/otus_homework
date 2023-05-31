@@ -11,10 +11,10 @@ namespace GameManager
         private bool _isInitialized;
 
         [Inject]
-        public void Construct(List<IUpdate> updates, List<IFixedUpdate> fixedUpdates)
+        public void Construct(List<IUpdate> updateListeners, List<IFixedUpdate> fixedUpdateListeners)
         {
-            _updates = updates;
-            _fixedUpdates = fixedUpdates;
+            _updates = updateListeners;
+            _fixedUpdates = fixedUpdateListeners;
             _isInitialized = true;
         }
 

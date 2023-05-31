@@ -4,6 +4,5 @@ namespace Enemy
 {
     public class Enemy : MonoBehaviour
     {
-
     }
 }

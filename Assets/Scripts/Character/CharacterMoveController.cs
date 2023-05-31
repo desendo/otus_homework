@@ -8,15 +8,15 @@ namespace Character
     public sealed class CharacterMoveController : IStartGame, IFinishGame, IFixedUpdate
     {
         private readonly InputManager _inputManager;
-        private readonly CharacterMono _characterMono;
+        private readonly CharacterService _characterService;
         private bool _started;
         private readonly GameConfig _gameConfig;
 
-        public CharacterMoveController(InputManager inputManager, CharacterMono characterMono, GameConfig gameConfig)
+        public CharacterMoveController(InputManager inputManager, CharacterService characterService, GameConfig gameConfig)
         {
             _gameConfig = gameConfig;
             _inputManager = inputManager;
-            _characterMono = characterMono;
+            _characterService = characterService;
         }
 
         public void StartGame()
@@ -35,7 +35,7 @@ namespace Character
                 return;
 
             var velocity = new Vector2(_inputManager.HorizontalDirection, 0) * (dt * _gameConfig.CharMoveSpeed);
-            _characterMono.GetComponent<MoveComponent>().MoveByRigidbodyVelocity(velocity);
+            _characterService.Character.GetComponent<MoveComponent>().MoveByRigidbodyVelocity(velocity);
 
         }
     }

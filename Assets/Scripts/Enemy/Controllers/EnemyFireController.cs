@@ -7,19 +7,19 @@ namespace Enemy
 {
     public sealed class EnemyFireController
     {
-        private readonly BulletSystem _bulletSystem;
+        private readonly BulletManager _bulletManager;
 
-        public EnemyFireController(EnemyManager enemyManager, BulletSystem bulletSystem)
+        public EnemyFireController(EnemyManager enemyManager, BulletManager bulletManager)
         {
-            _bulletSystem = bulletSystem;
+            _bulletManager = bulletManager;
             enemyManager.OnEnemySpawn += OnEnemySpawn;
-            enemyManager.OnEnemyDeSpawn += OnEnemyDeSpawn;
+            enemyManager.OnEnemyUnspawn += OnEnemyUnspawn;
         }
         private void OnEnemySpawn(Enemy enemy)
         {
             enemy.GetComponent<EnemyAttackAgent>().OnFire += OnFire;
         }
-        private void OnEnemyDeSpawn(Enemy enemy)
+        private void OnEnemyUnspawn(Enemy enemy)
         {
             enemy.GetComponent<EnemyAttackAgent>().OnFire -= OnFire;
         }
@@ -27,14 +27,14 @@ namespace Enemy
         private void OnFire(GameObject enemy, Vector2 position, Vector2 direction)
         {
             var weaponComponent = enemy.GetComponent<WeaponComponent>();
-            _bulletSystem.FlyBulletByArgs(new BulletSystem.Args
+            _bulletManager.FlyBulletByArgs(new BulletManager.Args
             {
                 IsPlayer = false,
                 PhysicsLayer = (int) weaponComponent.BulletConfig.PhysicsLayer,
                 Color = weaponComponent.BulletConfig.Color,
                 Damage = weaponComponent.BulletConfig.Damage,
                 Position = position,
-                Velocity = direction * weaponComponent.BulletConfig.Speed
+                Velocity = direction * weaponComponent.BulletConfig.Speed,
             });
         }
     }

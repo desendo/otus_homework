@@ -14,10 +14,10 @@ namespace Enemy
             _enemyManager = enemyManager;
 
             enemyManager.OnEnemySpawn += OnEnemySpawn;
-            enemyManager.OnEnemyDeSpawn += OnEnemyDeSpawn;
+            enemyManager.OnEnemyUnspawn += OnEnemyUnspawn;
         }
 
-        private void OnEnemyDeSpawn(Enemy obj)
+        private void OnEnemyUnspawn(Enemy obj)
         {
             obj.GetComponent<HitPointsComponent>().HpEmpty -= OnHpEmpty;
         }
