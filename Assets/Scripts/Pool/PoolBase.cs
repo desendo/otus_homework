@@ -39,8 +39,8 @@ namespace Pool
                 instance.transform.SetParent(_worldTransform);
                 if(_active.Add(instance))
                     return instance;
-                else
-                    throw new Exception($"already {typeof(T)} in active");
+
+                throw new Exception($"already {typeof(T)} in active");
             }
             throw new Exception($"no {typeof(T)} in pool");
         }

@@ -13,7 +13,6 @@ namespace Enemy
         private readonly EnemyPositions _enemyPositions;
         private readonly CharacterService _characterService;
         private readonly GameConfig _gameConfig;
-        private readonly HashSet<Enemy> _activeEnemies = new HashSet<Enemy>();
 
         public EnemySpawner(EnemyPool enemyPool, EnemyPositions enemyPositions, CharacterService characterService, GameConfig gameConfig)
         {

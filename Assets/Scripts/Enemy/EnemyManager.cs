@@ -74,7 +74,7 @@ namespace Enemy
             OnEnemiesKilledReactive.Value++;
         }
 
-        public void DoReset()
+        private void DoReset()
         {
             foreach (var enemy in _activeEnemies)
             {
