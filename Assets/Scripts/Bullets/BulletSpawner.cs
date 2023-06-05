@@ -1,12 +1,7 @@
-﻿using System.Collections.Generic;
-using ReactiveExtension;
-using UnityEngine;
-
-namespace Bullets
+﻿namespace Bullets
 {
     public sealed class BulletSpawner
     {
-
         private readonly BulletPool _bulletPool;
 
         public BulletSpawner(BulletPool bulletPool)
