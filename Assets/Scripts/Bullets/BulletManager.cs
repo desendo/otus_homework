@@ -6,31 +6,49 @@ using UnityEngine;
 
 namespace Bullets
 {
-    public sealed class BulletManager : IStartGame, IFixedUpdate, IFinishGame
+    public sealed class BulletManager : IStartGame, IFixedUpdate
     {
         private readonly BulletSpawner _bulletSpawner;
         private readonly LevelBounds _levelBounds;
         private readonly EffectsService _effectsService;
-        private IDisposable _collisionSubscription;
         private readonly BulletPool _bulletPool;
 
-        public BulletManager(BulletSpawner bulletSpawner, LevelBounds levelBounds, EffectsService effectsService)
+        private readonly HashSet<Bullet> _activeBullets = new HashSet<Bullet>();
+
+        public BulletManager(BulletSpawner bulletSpawner, BulletPool bulletPool, LevelBounds levelBounds, EffectsService effectsService)
         {
             _bulletSpawner = bulletSpawner;
             _levelBounds = levelBounds;
             _effectsService = effectsService;
+            _bulletPool = bulletPool;
         }
 
         public void StartGame()
         {
-            _collisionSubscription = _bulletSpawner.OnBulletCollision.Subscribe(OnBulletCollision);
-            _bulletSpawner.Clear();
+            Clear();
+        }
+
+        private void RemoveBullet(Bullet bullet)
+        {
+            if (_activeBullets.Remove(bullet))
+            {
+                bullet.OnCollisionEntered -= OnBulletCollision;
+                _bulletPool.Unspawn(bullet);
+            }
+        }
+
+        public void FlyBulletByArgs(Args args)
+        {
+            var bullet = _bulletSpawner.SpawnBullet(args);
+            if(_activeBullets.Add(bullet))
+                bullet.OnCollisionEntered += OnBulletCollision;
         }
 
         public void FixedUpdate(float dt)
         {
-            List<Bullet> bulletsToRemove = new List<Bullet>();
-            foreach (var bullet in _bulletSpawner.Bullets)
+            var bulletsToRemove = new List<Bullet>();
+
+            foreach (var bullet in _activeBullets)
             {
                 if (!_levelBounds.InBounds(bullet.transform.position))
                 {
@@ -40,21 +58,15 @@ namespace Bullets
 
             foreach (var bullet in bulletsToRemove)
             {
-                _bulletSpawner.RemoveBullet(bullet);
+                RemoveBullet(bullet);
             }
         }
 
-        public void FlyBulletByArgs(Args args)
-        {
-            _bulletSpawner.SpawnBullet(args);
-        }
         private void OnBulletCollision(Bullet bullet, Collision2D collision)
         {
             BulletUtils.DealDamage(bullet, collision.gameObject);
-
             ShowHitEffect(collision);
-
-            _bulletSpawner.RemoveBullet(bullet);
+            RemoveBullet(bullet);
         }
 
         private void ShowHitEffect(Collision2D collision)
@@ -72,6 +84,15 @@ namespace Bullets
             _effectsService.ShowHitEffect(midPoint, midNormal);
         }
 
+        private void Clear()
+        {
+            foreach (var bullet in _activeBullets)
+            {
+                bullet.OnCollisionEntered -= OnBulletCollision;
+                _bulletPool.Unspawn(bullet);
+            }
+            _activeBullets.Clear();
+        }
         public struct Args
         {
             public Vector2 Position;
@@ -80,11 +101,6 @@ namespace Bullets
             public int PhysicsLayer;
             public int Damage;
             public bool IsPlayer;
-        }
-
-        public void FinishGame()
-        {
-            _collisionSubscription?.Dispose();
         }
     }
 }
