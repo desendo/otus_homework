@@ -25,7 +25,7 @@ namespace Custom.View.UI.Popup
             _saveButtonWidget.OnClickEvent += TryClose;
         }
 
-        protected override void OnDataSet(object data)
+        protected override void OnShow(object data)
         {
             if (!(data is IUserInfoPresentationModel presentationModel))
                 throw new Exception($"expected {typeof(IUserInfoPresentationModel)} as data");
@@ -41,10 +41,9 @@ namespace Custom.View.UI.Popup
             _presentationModel?.SetTemporaryName(_nameInputField.text);
         }
 
-        private void OnDisable()
+        protected override void OnHide()
         {
             _saveButtonWidget.OnClickEvent -= _presentationModel.ApplyValues;
         }
     }
-
 }

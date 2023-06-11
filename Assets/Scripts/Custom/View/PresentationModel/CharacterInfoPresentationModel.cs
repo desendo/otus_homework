@@ -5,7 +5,6 @@ using System.Linq;
 namespace Custom.View.PresentationModel
 {
 
-
     public interface ICharacterInfoPresentationModel
     {
         List<INameValuePresentationModel> StatsPmList { get; }
@@ -20,8 +19,8 @@ namespace Custom.View.PresentationModel
 
         public CharacterInfoPresentationModel(CharacterInfo characterInfo)
         {
-            characterInfo.OnStatAdded += OnStatAdded;
-            characterInfo.OnStatRemoved += OnOnStatRemoved;
+            characterInfo.OnStatAdded += AddStat;
+            characterInfo.OnStatRemoved += RemoveStat;
             var stats = characterInfo.GetStats();
             foreach (var characterStat in stats)
             {
@@ -29,7 +28,7 @@ namespace Custom.View.PresentationModel
             }
         }
 
-        private void OnOnStatRemoved(CharacterStat obj)
+        private void RemoveStat(CharacterStat obj)
         {
             var pm = StatsPmList.FirstOrDefault(x => x.GetName() == obj.Name);
             if (pm != null)
@@ -40,7 +39,7 @@ namespace Custom.View.PresentationModel
             }
         }
 
-        private void OnStatAdded(CharacterStat stat)
+        private void AddStat(CharacterStat stat)
         {
             var pm = StatsPmList.FirstOrDefault(x => x.GetName() == stat.Name);
             if (pm == null)

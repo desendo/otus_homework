@@ -24,7 +24,7 @@ namespace Custom.View.UI.Popup
             _closeBackButton.onClick.AddListener(TryClose);
         }
 
-        protected override void OnDataSet(object data)
+        protected override void OnShow(object data)
         {
             if (!(data is LevelUpPresentationModel presentationModel))
                 throw new Exception($"expected {typeof(LevelUpPresentationModel)} as data");
@@ -32,28 +32,28 @@ namespace Custom.View.UI.Popup
             _presentationModel = presentationModel;
             _levelUpButtonWidget.OnClickEvent += presentationModel.ExperiencePresentationModel.LevelUp;
 
-            _presentationModel.UserInfoPresentationModel.OnChanged += OnUserChanged;
-            _presentationModel.ExperiencePresentationModel.OnChanged += OnExperienceChanged;
-            _presentationModel.CharacterInfoPresentationModel.OnStatAdd += OnStatAdd;
-            _presentationModel.CharacterInfoPresentationModel.OnStatRemove += OnStatRemove;
+            _presentationModel.UserInfoPresentationModel.OnChanged += UpdateUserInfo;
+            _presentationModel.ExperiencePresentationModel.OnChanged += UpdateExperienceInfo;
+            _presentationModel.CharacterInfoPresentationModel.OnStatAdd += AddStat;
+            _presentationModel.CharacterInfoPresentationModel.OnStatRemove += RemoveStat;
 
             foreach (var statPm in _presentationModel.CharacterInfoPresentationModel.StatsPmList)
             {
-                OnStatAdd(statPm);
+                AddStat(statPm);
             }
-            OnExperienceChanged();
-            OnUserChanged();
+            UpdateExperienceInfo();
+            UpdateUserInfo();
         }
 
-        private void OnStatAdd(INameValuePresentationModel obj)
+        private void AddStat(INameValuePresentationModel obj)
         {
             _statListWidget.AddWidget(obj);
         }
-        private void OnStatRemove(INameValuePresentationModel obj)
+        private void RemoveStat(INameValuePresentationModel obj)
         {
             _statListWidget.RemoveWidget(obj);
         }
-        private void OnExperienceChanged()
+        private void UpdateExperienceInfo()
         {
             _infoWidget.SetTitle(_presentationModel.ExperiencePresentationModel.GetLevelText());
             _levelUpButtonWidget.SetInteractable(_presentationModel.ExperiencePresentationModel.IsComplete);
@@ -62,21 +62,21 @@ namespace Custom.View.UI.Popup
             _progressBarWidget.SetText(_presentationModel.ExperiencePresentationModel.GetExperienceText());
         }
 
-        private void OnUserChanged()
+        private void UpdateUserInfo()
         {
             _infoWidget.SetDescription(_presentationModel.UserInfoPresentationModel.GetDescription());
             _infoWidget.SetIcon(_presentationModel.UserInfoPresentationModel.GetIcon());
             _titleWidget.SetTitle(_presentationModel.UserInfoPresentationModel.GetName());
         }
 
-        private void OnDisable()
+        protected override void OnHide()
         {
             _statListWidget.Dispose();
             _levelUpButtonWidget.OnClickEvent -= _presentationModel.ExperiencePresentationModel.LevelUp;
-            _presentationModel.UserInfoPresentationModel.OnChanged -= OnUserChanged;
-            _presentationModel.ExperiencePresentationModel.OnChanged -= OnExperienceChanged;
-            _presentationModel.CharacterInfoPresentationModel.OnStatAdd -= OnStatAdd;
-            _presentationModel.CharacterInfoPresentationModel.OnStatRemove -= OnStatRemove;
+            _presentationModel.UserInfoPresentationModel.OnChanged -= UpdateUserInfo;
+            _presentationModel.ExperiencePresentationModel.OnChanged -= UpdateExperienceInfo;
+            _presentationModel.CharacterInfoPresentationModel.OnStatAdd -= AddStat;
+            _presentationModel.CharacterInfoPresentationModel.OnStatRemove -= RemoveStat;
         }
     }
 

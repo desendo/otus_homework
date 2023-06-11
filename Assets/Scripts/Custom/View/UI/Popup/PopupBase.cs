@@ -18,13 +18,10 @@ namespace Custom.View.UI.Popup
         {
             _closeCommand = closeCommand;
             gameObject.SetActive(true);
-            OnDataSet(data);
-            OnShow();
+            OnShow(data);
         }
-        protected virtual void OnDataSet(object data)
-        {
-        }
-        protected virtual void OnShow()
+
+        protected virtual void OnShow(object data)
         {
         }
 
