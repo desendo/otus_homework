@@ -2,7 +2,6 @@
 using Custom.View.PresentationModel;
 using Custom.View.UI.Widgets;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Custom.View.UI.Popup
 {
@@ -13,16 +12,8 @@ namespace Custom.View.UI.Popup
         [SerializeField] private ProgressBarWidget _progressBarWidget;
         [SerializeField] private InfoWidget _infoWidget;
         [SerializeField] private NameValueListWidget _statListWidget;
-        [SerializeField] private Button _closeButton;
-        [SerializeField] private Button _closeBackButton;
 
         private LevelUpPresentationModel _presentationModel;
-
-        public void Awake()
-        {
-            _closeButton.onClick.AddListener(TryClose);
-            _closeBackButton.onClick.AddListener(TryClose);
-        }
 
         protected override void OnShow(object data)
         {
@@ -30,8 +21,8 @@ namespace Custom.View.UI.Popup
                 throw new Exception($"expected {typeof(LevelUpPresentationModel)} as data");
 
             _presentationModel = presentationModel;
-            _levelUpButtonWidget.OnClickEvent += presentationModel.ExperiencePresentationModel.LevelUp;
 
+            _levelUpButtonWidget.OnClickEvent += _presentationModel.ExperiencePresentationModel.LevelUp;
             _presentationModel.UserInfoPresentationModel.OnChanged += UpdateUserInfo;
             _presentationModel.ExperiencePresentationModel.OnChanged += UpdateExperienceInfo;
             _presentationModel.CharacterInfoPresentationModel.OnStatAdd += AddStat;
@@ -41,6 +32,7 @@ namespace Custom.View.UI.Popup
             {
                 AddStat(statPm);
             }
+
             UpdateExperienceInfo();
             UpdateUserInfo();
         }
@@ -79,5 +71,4 @@ namespace Custom.View.UI.Popup
             _presentationModel.CharacterInfoPresentationModel.OnStatRemove -= RemoveStat;
         }
     }
-
 }

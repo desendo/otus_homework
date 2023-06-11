@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Custom.View.UI.Popup
 {
@@ -11,8 +12,20 @@ namespace Custom.View.UI.Popup
     }
     public class PopupBase : MonoBehaviour, IView
     {
+        [SerializeField] protected Button _closeButton;
+        [SerializeField] protected Button _closeBackButton;
+
         private object _data;
         private Action _closeCommand;
+
+        protected virtual void Awake()
+        {
+            if(_closeBackButton != null)
+                _closeBackButton.onClick.AddListener(TryClose);
+
+            if(_closeButton != null)
+                _closeButton.onClick.AddListener(TryClose);
+        }
 
         public virtual void Show(Action closeCommand, object data = null)
         {
