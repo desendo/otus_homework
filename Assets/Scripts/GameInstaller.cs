@@ -1,9 +1,4 @@
-
-using Config;
 using DependencyInjection;
-
-using GameManager;
-
 using UnityEngine;
 
 public class GameInstaller : MonoBehaviour

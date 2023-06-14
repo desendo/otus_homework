@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
 using UnityEngine;
 
 namespace DependencyInjection
@@ -17,7 +20,15 @@ namespace DependencyInjection
 
         public T Add<T>() where T : class
         {
-            var instance = Activator.CreateInstance(typeof(T));
+            var constructors = typeof(T).GetConstructors();
+
+            object instance;
+            if (constructors.Length != 1 || !HasDefaultConstructor(typeof(T)))
+            {
+                instance = (T) FormatterServices.GetUninitializedObject(typeof(T));
+            }
+            else
+                instance = Activator.CreateInstance(typeof(T));
             _cache.Add(instance);
             return (T) instance;
         }
@@ -41,7 +52,7 @@ namespace DependencyInjection
                 throw new Exception("trying to bind multiple constructor object. can't choose.");
             }
 
-            if (constructors.Length == 1)
+            if (constructors.Length == 1 || HasDefaultConstructor(typeof(T)))
             {
                 var paramInfos = constructors[0].GetParameters();
                 var args = _injector.GetArguments(paramInfos);
@@ -49,7 +60,7 @@ namespace DependencyInjection
             }
             else
             {
-                instance = Activator.CreateInstance(typeof(T));
+                instance = (T) FormatterServices.GetUninitializedObject(typeof(T));
             }
             _cache.Add(instance);
             _injector.Inject(instance);
@@ -70,6 +81,19 @@ namespace DependencyInjection
         public object GetList(Type type)
         {
             return _cache.GetList(type);
+        }
+        public List<T> GetList<T>()
+        {
+            if( _cache.GetList(typeof(T)) == null)
+                return null;
+
+            var cached = ((List<object>) _cache.GetList(typeof(T)));
+            var list = cached.Cast<T>().ToList();
+            return list;
+        }
+        private bool HasDefaultConstructor(Type t)
+        {
+            return t.IsValueType || t.GetConstructor(Type.EmptyTypes) != null;
         }
         private class Cache
         {
@@ -109,16 +133,27 @@ namespace DependencyInjection
                 {
                     return obj;
                 }
+                if (_objectsByInterfaces.TryGetValue(type, out var list))
+                {
+                    if (list.Count == 1)
+                        return list[0];
+
+                    throw new Exception($"trying to resolve 1 element of type {type} from list count {list.Count}");
+                }
                 return null;
             }
 
             public object GetList(Type type)
             {
-
                 if (_objectsByInterfaces.ContainsKey(type))
-                    return _objectsByInterfaces[type];
+                {
+                    var list = _objectsByInterfaces[type];
+                    return list;
+                }
 
-                return new List<object>();
+                var genericListType = typeof(List<>).MakeGenericType(new Type[] {type});
+                var genericListInstance = (IList) Activator.CreateInstance(genericListType);
+                return genericListInstance;
             }
         }
     }

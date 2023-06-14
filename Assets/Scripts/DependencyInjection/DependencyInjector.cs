@@ -10,6 +10,7 @@ namespace DependencyInjection
     internal class DependencyInjector
     {
         private readonly DependencyContainer _container;
+        private readonly HashSet<object> _injected = new HashSet<object>();
 
         internal DependencyInjector(DependencyContainer container)
         {
@@ -18,8 +19,11 @@ namespace DependencyInjection
 
         internal void Inject(object target)
         {
+            if(_injected.Contains(target))
+                return;
+
             var type = target.GetType();
-            var methods = type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy);
+            var methods = type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic |BindingFlags.FlattenHierarchy);
 
             foreach (var method in methods)
             {
@@ -28,6 +32,8 @@ namespace DependencyInjection
                     InvokeMethod(method, target);
                 }
             }
+
+            _injected.Add(target);
         }
 
         private void InvokeMethod(MethodInfo method, object target)
@@ -48,16 +54,21 @@ namespace DependencyInjection
                 object arg = null;
                 if (type.IsGenericType && (type.GetGenericTypeDefinition() == typeof(List<>)))
                 {
-                    var itemType = type.GetGenericArguments().Single();
-                    var cachedObjectsList = _container.GetList(itemType) as List<object>;
-                    var genericListType = typeof(List<>).MakeGenericType(new Type[] {itemType});
-                    var genericListInstance = (IList) Activator.CreateInstance(genericListType);
+                    arg = _container.Get(type);
+                    if (arg == null)
+                    {
 
-                    if (cachedObjectsList != null)
-                        foreach (var o in cachedObjectsList)
-                            genericListInstance.Add(o);
+                        var itemType = type.GetGenericArguments().Single();
+                        var cachedObjectsList = _container.GetList(itemType) as List<object>;
+                        var genericListType = typeof(List<>).MakeGenericType(new Type[] {itemType});
+                        var genericListInstance = (IList) Activator.CreateInstance(genericListType);
 
-                    arg = genericListInstance;
+                        if (cachedObjectsList != null)
+                            foreach (var o in cachedObjectsList)
+                                genericListInstance.Add(o);
+
+                        arg = genericListInstance;
+                    }
                 }
                 else
                 {
