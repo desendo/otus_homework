@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Pool
@@ -25,8 +26,8 @@ namespace Pool
 
         private void AddToPool()
         {
-            var enemy = GameObject.Instantiate(_prefab, _container);
-            _pool.Enqueue(enemy);
+            var pool = Instantiate(_prefab, _container);
+            _pool.Enqueue(pool);
         }
 
         public virtual T Spawn()
