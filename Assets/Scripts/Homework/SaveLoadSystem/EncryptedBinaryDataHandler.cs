@@ -11,6 +11,12 @@ namespace Homework
     {
         private static string SaveDirectory => Application.persistentDataPath + "/saves";
         private Dictionary<string, string> _stringData = new Dictionary<string, string>();
+        private readonly EncryptionUtil _encryptionUtil;
+
+        public EncryptedBinaryDataHandler()
+        {
+            _encryptionUtil = new EncryptionUtil();
+        }
 
         public void LoadData()
         {
@@ -25,10 +31,10 @@ namespace Homework
 
                 if (latestFile != null)
                 {
-                    //здесь должна быть дешифровка и десериализация из бинари 
-                    var sr = new StreamReader(latestFile.FullName);
-                    var content = sr.ReadToEnd();
-                    _stringData = JsonConvert.DeserializeObject<Dictionary<string, string>>(content);
+                    var fileData = File.ReadAllBytes(latestFile.FullName);
+                    fileData = _encryptionUtil.Decrypt(fileData);
+                    var data = System.Text.Encoding.UTF8.GetString(fileData);
+                    _stringData = JsonConvert.DeserializeObject<Dictionary<string, string>>(data);
                 }
             }
         }
@@ -64,12 +70,11 @@ namespace Homework
             var directory = new DirectoryInfo(SaveDirectory);
             directory.Create();
             var stringData = JsonConvert.SerializeObject(_stringData);
-            //здесь должна быть зашифровка и сериализация в бинари
-
-            var path = $"{SaveDirectory}/{name}.data";
-            var sw = File.CreateText(path);
-            sw.Write(stringData);
-            sw.Close();
+            var path = $"{SaveDirectory}/{name}.bin";
+            var fileStream = new FileStream(path, FileMode.Create);
+            byte[] arrayBytes = System.Text.Encoding.UTF8.GetBytes(stringData);
+            arrayBytes = _encryptionUtil.Encrypt(arrayBytes);
+            fileStream.Write(arrayBytes, 0, arrayBytes.Length);
             Debug.Log("saved to :"+path);
         }
     }
