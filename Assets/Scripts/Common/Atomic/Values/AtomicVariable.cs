@@ -4,7 +4,7 @@ namespace Common.Atomic.Values
 {
     public class AtomicVariable<T> : IAtomicVariable<T>
     {
-        public AtomicEvent<T> OnChanged { get; set; }
+        public AtomicEvent<T> OnChanged { get; set; } = new AtomicEvent<T>();
 
         public T Value
         {
@@ -12,16 +12,27 @@ namespace Common.Atomic.Values
             set
             {
                 this.value = value;
-                this.OnChanged?.Invoke(value);
+                OnChanged?.Invoke(value);
             }
         }
 
+
         private T value;
+
+        public AtomicVariable()
+        {
+            this.value = default;
+        }
+
+        public AtomicVariable(T value)
+        {
+            this.value = value;
+        }
 
 #if UNITY_EDITOR
         private void OnValueChanged(T val)
         {
-            OnChanged?.Invoke(val);
+            this.OnChanged?.Invoke(val);
         }
 #endif
     }

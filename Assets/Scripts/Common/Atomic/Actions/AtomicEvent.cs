@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Common.Atomic.Actions
@@ -50,51 +51,50 @@ namespace Common.Atomic.Actions
 
     public class AtomicEvent<T> : IAction<T>
     {
-        protected List<IAction<T>> actions;
-
-        public AtomicEvent()
-        {
-            this.actions = new List<IAction<T>>(1);
-        }
-
-        public AtomicEvent(params IAction<T>[] actions)
-        {
-            this.actions = new List<IAction<T>>(actions);
-        }
+        private readonly List<IAction<T>> actions = new List<IAction<T>>();
+        private readonly Dictionary<System.Action<T>, IAction<T>> delegates = new Dictionary<Action<T>, IAction<T>>();
+        private readonly List<IAction<T>> cache = new List<IAction<T>>();
 
         public static AtomicEvent<T> operator +(AtomicEvent<T> composite, IAction<T> action)
         {
-            if (composite == null)
-            {
-                composite = new AtomicEvent<T>();
-            }
-
             composite.actions.Add(action);
             return composite;
         }
-        
-        public static AtomicEvent<T> operator +(AtomicEvent<T> composite, System.Action<T> action)
+
+        public static AtomicEvent<T> operator +(AtomicEvent<T> composite, System.Action<T> @delegate)
         {
-            composite += new AtomicAction<T>(action);
+            var action = new AtomicAction<T>(@delegate);
+            composite.actions.Add(action);
+            composite.delegates[@delegate] = action;
             return composite;
         }
-        
+
         public static AtomicEvent<T> operator -(AtomicEvent<T> composite, IAction<T> action)
         {
-            if (composite == null)
-            {
-                return null;
-            }
-
             composite.actions.Remove(action);
             return composite;
         }
-        
+
+        public static AtomicEvent<T> operator -(AtomicEvent<T> composite, Action<T> @delegate)
+        {
+            if (composite.delegates.TryGetValue(@delegate, out var action))
+            {
+                composite.delegates.Remove(@delegate);
+                composite.actions.Remove(action);
+            }
+
+            return composite;
+        }
+
         public void Invoke(T args)
         {
-            foreach (var listener in this.actions)
+            this.cache.Clear();
+            this.cache.AddRange(this.actions);
+
+            for (int i = 0, count = this.cache.Count; i < count; i++)
             {
-                listener.Invoke(args);
+                var action = this.cache[i];
+                action.Invoke(args);
             }
         }
     }

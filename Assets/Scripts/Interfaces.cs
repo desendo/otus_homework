@@ -1,15 +1,27 @@
-﻿public interface IStartGame
+﻿public interface IStartGameListener
 {
-    public void StartGame();
+    public void OnStartGame();
 }
-public interface IFinishGame
+public interface IGameLoadedListener
 {
-    public void FinishGame();
+    public void OnGameLoaded(bool isLoaded);
+}
+public interface IWinGameListener
+{
+    public void OnWinGame();
+}
+public interface ILostGameListener
+{
+    public void OnLostGame();
 }
 
 public interface IUpdate
 {
     public void Update(float dt);
+}
+public interface ILateUpdate
+{
+    public void LateUpdate();
 }
 public interface IFixedUpdate
 {
@@ -18,4 +30,9 @@ public interface IFixedUpdate
 public interface IInit
 {
     public void Init();
+}
+public interface ISpawner
+{
+    void Spawn();
+    void Clear();
 }
