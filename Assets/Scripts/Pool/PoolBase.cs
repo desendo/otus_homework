@@ -37,8 +37,12 @@ namespace Pool
             if (_pool.TryDequeue(out var instance))
             {
                 instance.transform.SetParent(_worldTransform);
-                if(_active.Add(instance))
+                if (_active.Add(instance))
+                {
+                    if(instance is ISpawn spawn)
+                        spawn.OnSpawn();
                     return instance;
+                }
 
                 throw new Exception($"already {typeof(T)} in active");
             }
@@ -53,6 +57,8 @@ namespace Pool
             {
                 _pool.Enqueue(instance);
                 _active.Remove(instance);
+                if(instance is ISpawn spawn)
+                    spawn.OnUnSpawn();
             }
         }
 
@@ -62,8 +68,16 @@ namespace Pool
             {
                 instance.transform.SetParent(_container);
                 _pool.Enqueue(instance);
+                if(instance is ISpawn spawn)
+                    spawn.OnUnSpawn();
             }
             _active.Clear();
         }
+    }
+
+    public interface ISpawn
+    {
+        void OnSpawn();
+        void OnUnSpawn();
     }
 }

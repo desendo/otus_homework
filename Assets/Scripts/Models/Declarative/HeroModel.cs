@@ -1,9 +1,10 @@
-﻿using GameManager;
+﻿using System;
+using GameManager;
 using UnityEngine;
 
 namespace Models.Declarative
 {
-    public class HeroModel
+    public class HeroModel : IDisposable
     {
         public readonly HeroModelCore Core = new HeroModelCore();
         public readonly HeroModelVisual Visual = new HeroModelVisual();
@@ -12,7 +13,12 @@ namespace Models.Declarative
         {
             Core.Construct();
             Visual.Construct(Core, rootTransform, animator, updateProvider);
+        }
 
+        public void Dispose()
+        {
+            Core.Dispose();
+            Visual.Dispose();
         }
     }
 }

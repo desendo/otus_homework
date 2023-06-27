@@ -6,25 +6,13 @@ namespace Models.Components
 {
     public sealed class Component_Move
     {
-        private readonly IAction<Vector3> _onDeltaMove;
-        public AtomicEvent<Vector3> MoveRequested = new AtomicEvent<Vector3>();
-        private readonly AtomicVariable<Vector3> _velocity;
+        public readonly AtomicVariable<Vector3> Velocity = new AtomicVariable<Vector3>();
 
-        public Component_Move(IAction<Vector3> onDeltaMove, AtomicEvent<Vector3> moveRequested, AtomicVariable<Vector3> velocity)
+        public Component_Move(AtomicVariable<Vector3> dir, AtomicVariable<float> speed)
         {
-            _velocity = velocity;
-            _onDeltaMove = onDeltaMove;
-            moveRequested += moveStep => MoveRequested?.Invoke(moveStep);
-        }
-
-        public void Move(Vector3 deltaMove)
-        {
-            _onDeltaMove.Invoke(deltaMove);
-        }
-
-        public void SetVelocity(Vector3 translateDelta)
-        {
-            _velocity.Value = translateDelta;
+            Velocity.Value = dir.Value * speed.Value;
+            dir.OnChanged.Subscribe( x=> Velocity.Value = speed.Value * x);
+            speed.OnChanged.Subscribe( x=> Velocity.Value = dir.Value * x);
         }
     }
 }

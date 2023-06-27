@@ -31,7 +31,6 @@ namespace GameManager
 
         private void FixedUpdate()
         {
-
             if (!_isInitialized) return;
 
             foreach (var fixedUpdate in _fixedUpdates)

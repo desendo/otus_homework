@@ -1,7 +1,14 @@
-﻿using Common.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Common.Atomic.Actions;
+using Common.Atomic.Values;
+using Common.Entities;
 using Config;
 using DependencyInjection;
 using DependencyInjection.Util;
+using GameManager;
+using Models.Components;
 using Models.Entities;
 using UnityEngine;
 
@@ -11,30 +18,124 @@ namespace Services
     {
         private readonly GameConfig _gameConfig;
         private readonly VisualConfig _visualConfig;
-        private DependencyContainer _dependencyContainer;
+        private readonly DependencyContainer _dependencyContainer;
         public EntityMono HeroEntity { get; private set; }
+        public AtomicVariable<IWeapon> CurrentWeaponEntity { get; private set; } = new AtomicVariable<IWeapon>();
+        public AtomicEvent<IWeapon> OnWeaponCollected { get; private set; } = new AtomicEvent<IWeapon>();
+        public AtomicEvent<IWeapon> OnWeaponDropped { get; private set; } = new AtomicEvent<IWeapon>();
 
-        public HeroService(GameConfig gameConfig, VisualConfig visualConfig, DependencyContainer dependencyContainer)
+        public readonly List<IWeapon> CollectedWeapons = new List<IWeapon>();
+        private readonly IUpdateProvider _updateProvider;
+        private IDisposable _reloadSubscribe;
+        private IDisposable _shotSubscribe;
+
+        public HeroService(GameConfig gameConfig, VisualConfig visualConfig,
+            DependencyContainer dependencyContainer, IUpdateProvider updateProvider)
         {
+            _updateProvider = updateProvider;
             _dependencyContainer = dependencyContainer;
             _gameConfig = gameConfig;
             _visualConfig = visualConfig;
+            CurrentWeaponEntity.OnChanged.Subscribe(OnWeaponChange);
         }
 
         public void Spawn()
         {
             var prefab = _visualConfig.PlayerPrefab;
-            HeroEntity = InstantiateUtil.Instantiate(prefab,
-                instance => _dependencyContainer.Inject(instance));
-            if (HeroEntity is HeroEntityMono entity)
+            HeroEntity = _dependencyContainer.InstantiateInject(prefab);
+            HeroEntity.Get<Component_HeroInstaller>().Setup(_gameConfig);
+
+            var riffleConfig = _gameConfig.PlayerWeapons
+                .FirstOrDefault(x => x.Type == WeaponType.Riffle);
+
+            var riffleWeapon = CreateWeapon(riffleConfig);
+            CollectedWeapons.Add(riffleWeapon);
+            OnWeaponCollected.Invoke(riffleWeapon);
+
+            var shotGun = _gameConfig.PlayerWeapons
+                .FirstOrDefault(x => x.Type == WeaponType.Shotgun);
+
+            var shotGunWeapon = CreateWeapon(shotGun);
+            CollectedWeapons.Add(shotGunWeapon);
+            OnWeaponCollected.Invoke(shotGunWeapon);
+
+            var machineGun = _gameConfig.PlayerWeapons
+                .FirstOrDefault(x => x.Type == WeaponType.MachineGun);
+
+            var machineGunWeapon = CreateWeapon(machineGun);
+            CollectedWeapons.Add(machineGunWeapon);
+            OnWeaponCollected.Invoke(machineGunWeapon);
+
+            CurrentWeaponEntity.Value = riffleWeapon;
+            //OnWeaponChange()
+        }
+
+        private void OnWeaponChange(IWeapon weapon)
+        {
+            if(weapon == null || HeroEntity == null)
+                return;
+
+            _reloadSubscribe?.Dispose();
+            _reloadSubscribe = weapon.Get<Component_Reload>()
+                .ReloadStart.Subscribe(HeroEntity.Get<Component_IsReloading>().SetReloadingTime);
+
+            _shotSubscribe?.Dispose();
+            _shotSubscribe = weapon.Get<Component_Shoot>()
+                .OnShot.Subscribe(() =>
+                {
+                    HeroEntity.Get<Component_Shoot>().OnShot.Invoke();
+                });
+
+            foreach (var collectedWeapon in CollectedWeapons)
             {
-                entity.Setup(_gameConfig);
+                collectedWeapon.Get<Component_SetActive>().SetActive(false);
             }
+            weapon.Get<Component_SetActive>().SetActive(true);
+        }
+
+        private IWeapon CreateWeapon(PlayerWeapon weaponConfig)
+        {
+            if (weaponConfig != null)
+            {
+                if (weaponConfig.Type == WeaponType.Riffle)
+                {
+                    var attackPoint = HeroEntity.Get<Component_AttackPivot>().AttackPoint;
+                    var weapon = new RiffleEntity(_updateProvider, attackPoint, weaponConfig.Type);
+                    weapon.Get<IComponent_WeaponInstaller>().Setup(weaponConfig.Parameters);
+                    return weapon;
+                }
+
+                if (weaponConfig.Type == WeaponType.Shotgun)
+                {
+                    var attackPoint = HeroEntity.Get<Component_AttackPivot>().AttackPoint;
+                    var weapon = new ShotGunEntity(_updateProvider, attackPoint, weaponConfig.Type);
+                    weapon.Get<IComponent_WeaponInstaller>().Setup(weaponConfig.Parameters);
+                    return weapon;
+                }
+
+                if (weaponConfig.Type == WeaponType.MachineGun)
+                {
+                    var attackPoint = HeroEntity.Get<Component_AttackPivot>().AttackPoint;
+                    var weapon = new MachineGunEntity(_updateProvider, attackPoint, weaponConfig.Type);
+                    weapon.Get<IComponent_WeaponInstaller>().Setup(weaponConfig.Parameters);
+                    return weapon;
+                }
+            }
+
+            throw new Exception("no config " + (WeaponType.Riffle));
         }
 
         public void Clear()
         {
+            /*foreach (var collectedWeapon in _collectedWeapons)
+            {
+                collectedWeapon.Dispose();
+            }*/
+        }
 
+        public void SetWeaponSelected(in int i)
+        {
+            CurrentWeaponEntity.Value = CollectedWeapons[i];
         }
     }
 }

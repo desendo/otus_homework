@@ -14,12 +14,16 @@ namespace Config
         public int PlayerHealth;
         public int PlayerMoveSpeed;
         public int PlayerRotationSpeed;
-
+        public float PlayerReloadTime;
+        public int PlayerClipSize;
+        public float PlayerShotDelay;
+        public int PlayerDamage;
     }
 
     [System.Serializable]
     public class PlayerWeapon
     {
+        public string Id;
         public WeaponType Type;
         public List<Parameter> Parameters;
     }
@@ -28,8 +32,13 @@ namespace Config
     {
         None = 0,
         Sword = 1,
-        Pistol = 2,
+        Riffle = 2,
         Shotgun = 3,
+        MachineGun = 4,
+        Flamer = 5,
+        RocketLauncher = 6,
+        GrenadeLauncher = 7,
+        Laser = 8,
     }
     [System.Serializable]
 

@@ -1,4 +1,5 @@
-﻿using Common.Entities;
+﻿using System;
+using Common.Entities;
 using UnityEngine;
 
 namespace Config
@@ -7,5 +8,11 @@ namespace Config
     public sealed class VisualConfig : ScriptableObject
     {
         public EntityMono PlayerPrefab;
+    }
+    [Serializable]
+    public class SpriteEntry
+    {
+        public string Id;
+        public Sprite Sprite;
     }
 }

@@ -16,32 +16,69 @@ MonoBehaviour:
   ZombieHitDelay: 1
   ZombieHitDamage: 1
   PlayerWeapons:
-  - Type: 2
+  - Id: w1
+    Type: 2
     Parameters:
     - Id: ClipCapacity_int
-      Value: 10
+      Value: 7
+    - Id: Damage_int
+      Value: 5
+    - Id: Delay_float
+      Value: 0
+    - Id: ReloadTime_float
+      Value: 2
+    - Id: RotationSpeedMultiplier_float
+      Value: 1
+    - Id: BulletSpeed_float
+      Value: 15
+    - Id: Name_string
+      Value: "\u0412\u0438\u043D\u0442\u043E\u0432\u043A\u0430"
+  - Id: w2
+    Type: 3
+    Parameters:
+    - Id: ClipCapacity_int
+      Value: 2
     - Id: Damage_int
       Value: 1
     - Id: Delay_float
-      Value: 0.3
-    - Id: RestoreSpeed_float
+      Value: 0,1
+    - Id: ReloadTime_float
       Value: 1
     - Id: RotationSpeedMultiplier_float
-      Value: 1
-  - Type: 3
+      Value: 0,8
+    - Id: RotationSpeedMultiplier_float
+      Value: 0,8
+    - Id: BulletSpeed_float
+      Value: 25
+    - Id: BurstAngle_float
+      Value: 10
+    - Id: BurstCount_int
+      Value: 10
+    - Id: Name_string
+      Value: "\u0414\u0432\u0443\u0441\u0442\u0432\u043E\u043B\u043A\u0430"
+  - Id: w3
+    Type: 4
     Parameters:
     - Id: ClipCapacity_int
-      Value: 10
+      Value: 50
     - Id: Damage_int
-      Value: 1
+      Value: 2
     - Id: Delay_float
-      Value: 0.3
-    - Id: RestoreSpeed_float
+      Value: 0,1
+    - Id: ReloadTime_float
+      Value: 5
+    - Id: RotationSpeedMultiplier_float
       Value: 1
-    - Id: RotationSpeedMultiplier_float
-      Value: 0.8
-    - Id: RotationSpeedMultiplier_float
-      Value: 0.8
+    - Id: BulletSpeed_float
+      Value: 12
+    - Id: Name_string
+      Value: "\u041F\u0443\u043B\u0435\u043C\u0435\u0442"
+    - Id: DisperseAngle_float
+      Value: 5
   PlayerHealth: 10
   PlayerMoveSpeed: 3
   PlayerRotationSpeed: 2000
+  PlayerReloadTime: 0
+  PlayerClipSize: 0
+  PlayerShotDelay: 0
+  PlayerDamage: 0
