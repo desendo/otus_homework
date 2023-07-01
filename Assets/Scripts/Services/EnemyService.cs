@@ -7,6 +7,7 @@ using Common.Entities;
 using Config;
 using Models.Components;
 using Models.Entities;
+using UnityEngine;
 
 namespace Services
 {
@@ -32,7 +33,10 @@ namespace Services
             instance.Get<Component_ZombieHandsInstaller>()
                 .Setup(_gameConfig.Weapons.FirstOrDefault(x=>x.Type == WeaponType.ZombieHands)?.Parameters);
             instance.Get<Component_EnemyInstaller>().Setup(_gameConfig);
-            instance.Get<Component_Death>().SetCallback(x=> OnDeath.Invoke(x));
+            instance.Get<Component_Death>().SetCallback(x=>
+            {
+                OnDeath.Invoke(x);
+            });
             instance.Get<Component_IsActive>().IsActive.Value = true;
 
             TotalSpawned.Value++;

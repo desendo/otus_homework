@@ -19,7 +19,7 @@ namespace Models.Declarative
             _onTakeDamage = OnTakeDamage.Subscribe(damage => HitPoints.Value -= damage);
             _onHitPointsChanged = HitPoints.OnChanged.Subscribe(hitPoints =>
             {
-                if (hitPoints <= 0 && MaxHitPoints.Value > 0)
+                if (hitPoints <= 0 && MaxHitPoints.Value > 0 && !IsDead.Value)
                 {
                     IsDead.Value = true;
                     OnDeath.Invoke();

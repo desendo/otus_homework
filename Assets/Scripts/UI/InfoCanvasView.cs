@@ -16,16 +16,19 @@ namespace UI
         [SerializeField] private ProgressBarWidget _hp;
         [SerializeField] private ProgressBarWidget _killProgress;
 
-
+        private HeroInfoPresentationModel _hpPm;
         private WeaponsListPresentationModel _weaponsListPresentationModel;
         private readonly List<IDisposable> _changeSub = new List<IDisposable>();
         private readonly List<WeaponUIView> _weaponUIViews = new List<WeaponUIView>();
-        private HeroInfoPresentationModel _hpPm;
+        private KillsPresentationModel _killsPm;
 
         [Inject]
-        void Construct(GameStateManager gameStateManager, WeaponsListPresentationModel weaponsListPresentationModel,
-            HeroInfoPresentationModel hpPm)
+        void Construct(GameStateManager gameStateManager,
+            WeaponsListPresentationModel weaponsListPresentationModel,
+            HeroInfoPresentationModel hpPm,
+            KillsPresentationModel killsPm)
         {
+            _killsPm = killsPm;
             _hpPm = hpPm;
             _weaponsListPresentationModel = weaponsListPresentationModel;
             gameStateManager.GameLoaded.OnChanged.Subscribe(UpdateGameState);
@@ -38,16 +41,27 @@ namespace UI
                 return;
 
             _weaponsListPresentationModel.OnChange.Subscribe(UpdateWeaponList).AddTo(_changeSub);
-            _hpPm.HpCurrent.OnChanged.Subscribe(x => UpdateHealthBar(_hpPm.HpCurrent.Value, _hpPm.HpMax.Value)).AddTo(_changeSub);
-            _hpPm.HpMax.OnChanged.Subscribe(x => UpdateHealthBar(_hpPm.HpCurrent.Value, _hpPm.HpMax.Value)).AddTo(_changeSub);
-            UpdateHealthBar(_hpPm.HpCurrent.Value, _hpPm.HpMax.Value);
+            _hpPm.Current.OnChanged.Subscribe(x => UpdateHealthBar()).AddTo(_changeSub);
+            _hpPm.Max.OnChanged.Subscribe(x => UpdateHealthBar()).AddTo(_changeSub);
+
+            _killsPm.Current.OnChanged.Subscribe(x=>UpdateKills()).AddTo(_changeSub);
+            _killsPm.Max.OnChanged.Subscribe(x=>UpdateKills()).AddTo(_changeSub);
+
+            UpdateHealthBar();
+            UpdateKills();
             UpdateWeaponList();
         }
 
-        private void UpdateHealthBar(int hpCurrentValue, int hpMaxValue)
+        private void UpdateKills()
         {
-            _hp.SetFill((float) hpCurrentValue/hpMaxValue);
-            _hp.SetText($"{hpCurrentValue}/{hpMaxValue}");
+            _killProgress.SetFill((float)_killsPm.Current.Value/_killsPm.Max.Value);
+            _killProgress.SetText($"{_killsPm.Current.Value}/{_killsPm.Max.Value}");
+        }
+
+        private void UpdateHealthBar()
+        {
+            _hp.SetFill((float) _hpPm.Current.Value/_hpPm.Max.Value);
+            _hp.SetText($"{_hpPm.Current.Value}/{_hpPm.Max.Value}");
         }
 
         private void UpdateWeaponList()

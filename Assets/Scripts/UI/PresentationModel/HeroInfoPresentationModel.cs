@@ -9,8 +9,8 @@ namespace UI.PresentationModel
 {
     public class HeroInfoPresentationModel
     {
-        public AtomicVariable<int> HpCurrent { get; } = new AtomicVariable<int>();
-        public AtomicVariable<int> HpMax { get; } = new AtomicVariable<int>();
+        public AtomicVariable<int> Current { get; } = new AtomicVariable<int>();
+        public AtomicVariable<int> Max { get; } = new AtomicVariable<int>();
 
         private readonly List<IDisposable> _subs = new List<IDisposable>();
         public HeroInfoPresentationModel(HeroService heroService)
@@ -26,10 +26,10 @@ namespace UI.PresentationModel
 
             var health = obj.Get<Component_Health>();
 
-            health.Current.OnChanged.Subscribe(x => HpCurrent.Value = x);
-            health.Max.OnChanged.Subscribe(x => HpMax.Value = x);
-            HpCurrent.Value = health.Current.Value;
-            HpMax.Value = health.Max.Value;
+            health.Current.OnChanged.Subscribe(x => Current.Value = x);
+            health.Max.OnChanged.Subscribe(x => Max.Value = x);
+            Current.Value = health.Current.Value;
+            Max.Value = health.Max.Value;
         }
     }
 }

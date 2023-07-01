@@ -92,6 +92,7 @@ public class GameInstaller : MonoBehaviour
         //pm
         _container.Bind<WeaponsListPresentationModel>();
         _container.Bind<HeroInfoPresentationModel>();
+        _container.Bind<KillsPresentationModel>();
 
         //state and update managers
         _container.Bind<GameStateManager>();
