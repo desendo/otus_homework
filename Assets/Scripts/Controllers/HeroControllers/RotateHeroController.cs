@@ -23,16 +23,18 @@ namespace Controllers.HeroControllers
         {
             if (!_loaded || !_started) return;
 
-            var root = _heroService.HeroEntity.Get<Component_Transform>().RootTransform;
-            var rotationSpeedValue = _heroService.HeroEntity.Get<Component_Rotate>().RotationSpeed.Value;
+            var root = _heroService.HeroEntity.Value.Get<Component_Transform>().RootTransform;
+            var rotationSpeedValue = _heroService.HeroEntity.Value.Get<Component_Rotate>().RotationSpeed.Value;
+            var attackPivotTransform = _heroService.HeroEntity.Value.Get<Component_AttackPivot>().AttackPoint;
 
+            var height = new Vector3(0,attackPivotTransform.position.y,0);
             var position = root.position;
 
             var ray  = _camera.ScreenPointToRay(_inputService.MouseScreenPosition);
-            var plane = new Plane(root.up, position);
+            var plane = new Plane(root.up, position + height);
             if (plane.Raycast(ray, out var distance))
             {
-                var direction = (ray.GetPoint(distance) - position).normalized;
+                var direction = (ray.GetPoint(distance) - position + height).normalized;
                 var targetAngle = Mathf.Atan2(direction.z, direction.x) * Mathf.Rad2Deg - 90f;
                 var rotationAmount = rotationSpeedValue * dt;
                 root.rotation = Quaternion.RotateTowards(root.rotation,

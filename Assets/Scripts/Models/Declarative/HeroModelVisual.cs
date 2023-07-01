@@ -20,9 +20,10 @@ namespace Models.Declarative
 
         private Animator _animator;
         private float _reloadAnimationTime;
+        public Rigidbody Rigidbody { get; private set; }
 
 
-        public void Construct(HeroModelCore core, Transform rootTransform, Animator animator, IUpdateProvider updateProvider)
+        public void Construct(HeroModelCore core, Transform rootTransform, Animator animator, IUpdateProvider updateProvider, Rigidbody rigidbody)
         {
             _animator = animator;
             var clips = _animator.runtimeAnimatorController.animationClips;
@@ -32,6 +33,7 @@ namespace Models.Declarative
                     _reloadAnimationTime = animationClip.length;
             }
 
+            Rigidbody = rigidbody;
             RootTransform = rootTransform;
             var isDead = core.LifeModel.IsDead;
             core.AttackModel.IsReloadStarted.Subscribe(reloadTime =>

@@ -25,10 +25,6 @@ namespace Models.Components
             {
                 _core.ReloadModel.ReloadDelay.Value = float.Parse(p.Value);
             }
-            else if (p.Id == "ReloadTime_float")
-            {
-                _core.ReloadModel.ReloadDelay.Value = float.Parse(p.Value);
-            }
             else if (p.Id == "BulletSpeed_float")
             {
                 _core.BulletSpeed.Value = float.Parse(p.Value);

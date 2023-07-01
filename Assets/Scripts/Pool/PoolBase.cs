@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DependencyInjection.Util;
 using UnityEngine;
 
 namespace Pool
@@ -10,29 +11,21 @@ namespace Pool
         [SerializeField] private Transform _worldTransform;
         [SerializeField] private Transform _container;
         [SerializeField] private T _prefab;
-        [SerializeField] private int _initialPoolSize;
 
         private readonly Queue<T> _pool = new Queue<T>();
         private readonly HashSet<T> _active = new HashSet<T>();
 
-        private void Awake()
+
+        private void AddToPool(Action<T> callbackBeforeAwake = null)
         {
-            for (var i = 0; i < _initialPoolSize; i++)
-            {
-                AddToPool();
-            }
+            var instance = InstantiateUtil.Instantiate(_prefab, _container, callbackBeforeAwake);
+            _pool.Enqueue(instance);
         }
 
-        private void AddToPool()
-        {
-            var enemy = GameObject.Instantiate(_prefab, _container);
-            _pool.Enqueue(enemy);
-        }
-
-        public virtual T Spawn()
+        public virtual T Spawn(Action<T> callbackBeforeAwake = null)
         {
             if(_pool.Count == 0)
-                AddToPool();
+                AddToPool(callbackBeforeAwake);
 
             if (_pool.TryDequeue(out var instance))
             {

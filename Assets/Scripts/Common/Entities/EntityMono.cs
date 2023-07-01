@@ -1,52 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Common.Entities
 {
     public class EntityMono : MonoBehaviour, IEntity
     {
-        private readonly List<object> components = new List<object>();
-
+        private readonly Entity _entity = new Entity();
         public T Get<T>()
         {
-            for (int i = 0, count = this.components.Count; i < count; i++)
-            {
-                var component = this.components[i];
-                if (component is T result)
-                {
-                    return result;
-                }
-            }
-
-            throw new Exception($"Component of type {typeof(T).Name} is not found!");
+            return _entity.Get<T>();
         }
 
         public bool TryGet<T>(out T result)
         {
-            for (int i = 0, count = this.components.Count; i < count; i++)
-            {
-                var component = this.components[i];
-                if (component is T tComponent)
-                {
-                    result = tComponent;
-                    return true;
-                }
-            }
-
-            result = default;
-            return false;
+            return _entity.TryGet<T>(out result);
         }
 
         public void Add(object component)
         {
-            this.components.Add(component);
+            _entity.Add(component);
         }
 
         public void Remove(object component)
         {
-            this.components.Remove(component);
+            _entity.Remove(component);
         }
-
     }
 }

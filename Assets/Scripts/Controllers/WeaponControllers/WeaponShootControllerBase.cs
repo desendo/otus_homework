@@ -5,20 +5,19 @@ using Managers;
 using Models.Components;
 using Models.Entities;
 using Services;
-using UnityEngine;
 
-namespace Controllers
+namespace Controllers.WeaponControllers
 {
     public abstract class WeaponShootControllerBase
     {
         private IDisposable _shootRequested;
-        protected readonly BulletManager _bulletManager;
+        protected readonly IBulletSpawner BulletSpawner;
 
         protected abstract WeaponType WeaponType { get; }
 
-        protected WeaponShootControllerBase(HeroService heroService, BulletManager bulletManager)
+        protected WeaponShootControllerBase(HeroService heroService, IBulletSpawner bulletSpawner)
         {
-            _bulletManager = bulletManager;
+            BulletSpawner = bulletSpawner;
             heroService.CurrentWeaponEntity.OnChanged.Subscribe(OnWeaponChanged);
         }
 

@@ -19,7 +19,7 @@ namespace Controllers
 
         public void OnStartGame()
         {
-            _targetTransform = _heroService.HeroEntity.Get<Component_Transform>().RootTransform;
+            _targetTransform = _heroService.HeroEntity.Value.Get<Component_Transform>().RootTransform;
             _camera = Camera.main;
             _cameraTransform = _camera.transform;
             _follow = true;
@@ -50,7 +50,8 @@ namespace Controllers
             {
                 var delta = (ray.GetPoint(distance) - targetPos);
                 delta.y = 0f;
-                _cameraTransform.position = Vector3.Lerp(cameraTransformPosition, - delta + cameraTransformPosition, 0.1f);
+                //_cameraTransform.position = Vector3.Lerp(cameraTransformPosition, - delta + cameraTransformPosition, 5f * Time.deltaTime);
+                _cameraTransform.position = -delta + cameraTransformPosition;
 
             }
         }

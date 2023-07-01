@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using Common;
 using DependencyInjection;
 using GameState;
 using Pool;
 using UI.PresentationModel;
+using UI.Widgets;
 using UnityEngine;
 
 namespace UI
@@ -11,15 +13,20 @@ namespace UI
     public class InfoCanvasView : MonoBehaviour
     {
         [SerializeField] private WeaponUIViewPool _pool;
+        [SerializeField] private ProgressBarWidget _hp;
+        [SerializeField] private ProgressBarWidget _killProgress;
 
 
         private WeaponsListPresentationModel _weaponsListPresentationModel;
-        private IDisposable _changeSub;
+        private readonly List<IDisposable> _changeSub = new List<IDisposable>();
         private readonly List<WeaponUIView> _weaponUIViews = new List<WeaponUIView>();
+        private HeroInfoPresentationModel _hpPm;
 
         [Inject]
-        void Construct(GameStateManager gameStateManager, WeaponsListPresentationModel weaponsListPresentationModel)
+        void Construct(GameStateManager gameStateManager, WeaponsListPresentationModel weaponsListPresentationModel,
+            HeroInfoPresentationModel hpPm)
         {
+            _hpPm = hpPm;
             _weaponsListPresentationModel = weaponsListPresentationModel;
             gameStateManager.GameLoaded.OnChanged.Subscribe(UpdateGameState);
         }
@@ -30,11 +37,20 @@ namespace UI
             if(!gameLoaded)
                 return;
 
-            _changeSub = _weaponsListPresentationModel.OnChange.Subscribe(UpdateList);
-            UpdateList();
+            _weaponsListPresentationModel.OnChange.Subscribe(UpdateWeaponList).AddTo(_changeSub);
+            _hpPm.HpCurrent.OnChanged.Subscribe(x => UpdateHealthBar(_hpPm.HpCurrent.Value, _hpPm.HpMax.Value)).AddTo(_changeSub);
+            _hpPm.HpMax.OnChanged.Subscribe(x => UpdateHealthBar(_hpPm.HpCurrent.Value, _hpPm.HpMax.Value)).AddTo(_changeSub);
+            UpdateHealthBar(_hpPm.HpCurrent.Value, _hpPm.HpMax.Value);
+            UpdateWeaponList();
         }
 
-        private void UpdateList()
+        private void UpdateHealthBar(int hpCurrentValue, int hpMaxValue)
+        {
+            _hp.SetFill((float) hpCurrentValue/hpMaxValue);
+            _hp.SetText($"{hpCurrentValue}/{hpMaxValue}");
+        }
+
+        private void UpdateWeaponList()
         {
             Clear();
             foreach (var pm in _weaponsListPresentationModel.WeaponPresentationModels)

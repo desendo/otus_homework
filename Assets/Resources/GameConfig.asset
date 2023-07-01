@@ -12,10 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10f65847b3c9485b95a0fe53b46da80c, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: 
-  ZombieMoveSpeed: 2
-  ZombieHitDelay: 1
-  ZombieHitDamage: 1
-  PlayerWeapons:
+  Weapons:
   - Id: w1
     Type: 2
     Parameters:
@@ -39,7 +36,7 @@ MonoBehaviour:
     - Id: ClipCapacity_int
       Value: 2
     - Id: Damage_int
-      Value: 1
+      Value: 2
     - Id: Delay_float
       Value: 0,1
     - Id: ReloadTime_float
@@ -49,7 +46,7 @@ MonoBehaviour:
     - Id: RotationSpeedMultiplier_float
       Value: 0,8
     - Id: BulletSpeed_float
-      Value: 25
+      Value: 20
     - Id: BurstAngle_float
       Value: 10
     - Id: BurstCount_int
@@ -75,10 +72,21 @@ MonoBehaviour:
       Value: "\u041F\u0443\u043B\u0435\u043C\u0435\u0442"
     - Id: DisperseAngle_float
       Value: 5
+  - Id: e1
+    Type: 9
+    Parameters:
+    - Id: Damage_int
+      Value: 1
+    - Id: ReloadTime_float
+      Value: 2,5
+    - Id: BulletSpeed_float
+      Value: 12
+    - Id: Name_string
+      Value: "\u0420\u0443\u043A\u0438 \u0437\u043E\u043C\u0431\u044F\u0440\u044B"
   PlayerHealth: 10
-  PlayerMoveSpeed: 3
+  PlayerMoveSpeed: 2.5
   PlayerRotationSpeed: 2000
-  PlayerReloadTime: 0
-  PlayerClipSize: 0
-  PlayerShotDelay: 0
-  PlayerDamage: 0
+  ZombieSpawnInterval: 1
+  KillGoal: 50
+  ZombieHealth: 12
+  ZombieMoveSpeed: 1.9

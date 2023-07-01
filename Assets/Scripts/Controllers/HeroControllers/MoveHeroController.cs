@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Controllers.HeroControllers
 {
-    public class MoveHeroController : IGameLoadedListener, IStartGameListener, ILostGameListener, IWinGameListener, IUpdate
+    public class MoveHeroController : IGameLoadedListener, IStartGameListener, ILostGameListener, IWinGameListener, IFixedUpdate
     {
         private readonly InputService _inputService;
         private readonly HeroService _heroService;
@@ -18,14 +18,14 @@ namespace Controllers.HeroControllers
             _heroService = heroService;
         }
 
-        public void Update(float dt)
+        public void FixedUpdate(float dt)
         {
             if (!_loaded || !_started) return;
 
             var dir = (Vector3)_inputService.MoveDirection.normalized;
-            var componentMove = _heroService.HeroEntity.Get<Component_ObservedMove>();
+            var componentMove = _heroService.HeroEntity.Value.Get<Component_ObservedMove>();
             dir = new Vector3(dir.x, 0, dir.y);
-            componentMove.Move(dir * dt);
+            componentMove.Move(dir);
         }
         public void OnGameLoaded(bool isLoaded)
         {

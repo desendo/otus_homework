@@ -1,15 +1,14 @@
-﻿using System;
-using Common.Entities;
+﻿using Common.Entities;
 using Config;
 using Managers;
 using Models.Components;
 using Services;
 
-namespace Controllers
+namespace Controllers.WeaponControllers
 {
     public class RiffleShootController : WeaponShootControllerBase
     {
-        public RiffleShootController(HeroService heroService, BulletManager bulletManager) : base(heroService, bulletManager)
+        public RiffleShootController(HeroService heroService, IBulletSpawner bulletSpawner) : base(heroService, bulletSpawner)
         {
         }
 
@@ -19,7 +18,8 @@ namespace Controllers
         {
             var pivot = riffle.Get<Component_Pivot>();
             var bulletSpeed = riffle.Get<Component_Speed>().Speed;
-            _bulletManager.FireBullet(pivot.Position, pivot.Direction, bulletSpeed);
+            var damage = riffle.Get<Component_Damage>().Damage.Value;
+            BulletSpawner.FireBullet(pivot.Position, pivot.Direction, bulletSpeed, damage);
         }
     }
 }

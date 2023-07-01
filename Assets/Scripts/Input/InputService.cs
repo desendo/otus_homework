@@ -15,6 +15,7 @@ namespace Input
     {
         public readonly AtomicEvent<FireState> FireState = new AtomicEvent<FireState>();
         public readonly AtomicEvent<int> DigitPressed = new AtomicEvent<int>();
+        public readonly AtomicEvent<float> ScrollDelta = new AtomicEvent<float>();
         public readonly AtomicEvent ReloadPressed = new AtomicEvent();
         public Vector2 MouseScreenPosition { get; private set; }
         public Vector2 MoveDirection { get; private set; }
@@ -54,10 +55,15 @@ namespace Input
                 dir.x = -1;
             else if (UnityEngine.Input.GetKey(KeyCode.RightArrow))
                 dir.x = 1;
-            
+
             var x = UnityEngine.Input.GetAxis("Horizontal");
             var y = UnityEngine.Input.GetAxis("Vertical");
             MoveDirection = new Vector2(x,y);
+
+
+            var scrollDelta = UnityEngine.Input.mouseScrollDelta.y;
+            if(Mathf.Abs(scrollDelta) > float.Epsilon)
+                ScrollDelta.Invoke(scrollDelta);
 
 
             //MoveDirection = dir;

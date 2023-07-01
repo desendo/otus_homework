@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Common.Atomic.Values;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,7 +22,10 @@ namespace UI.Widgets
         }
         public void SetFillComplete(bool isComplete)
         {
-            _fillComplete.SetActive(isComplete);
+            if(_fillComplete!= null)
+                _fillComplete.SetActive(isComplete);
         }
+
+
     }
 }

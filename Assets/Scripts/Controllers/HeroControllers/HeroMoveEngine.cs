@@ -15,24 +15,25 @@ namespace Controllers.HeroControllers
 
         public void OnStartGame()
         {
-            var entity = _heroService.HeroEntity;
+            var entity = _heroService.HeroEntity.Value;
             entity.Get<Component_ObservedMove>().MoveRequested.Subscribe(OnMoveRequested);
         }
         public void OnLostGame()
         {
-            _heroService.HeroEntity.Get<Component_ObservedMove>().MoveRequested.UnSubscribe(OnMoveRequested);
+            _heroService.HeroEntity.Value.Get<Component_ObservedMove>().MoveRequested.UnSubscribe(OnMoveRequested);
         }
 
         public void OnWinGame()
         {
-            _heroService.HeroEntity.Get<Component_ObservedMove>().MoveRequested.UnSubscribe(OnMoveRequested);
+            _heroService.HeroEntity.Value.Get<Component_ObservedMove>().MoveRequested.UnSubscribe(OnMoveRequested);
         }
         private void OnMoveRequested(Vector3 moveStep)
         {
             var translateDelta = moveStep;
             //модификаторы скорости передвижения
-            _heroService.HeroEntity.Get<Component_ObservedMove>().SetVelocity(translateDelta);
-            _heroService.HeroEntity.Get<Component_Transform>().Translate(translateDelta);
+            _heroService.HeroEntity.Value.Get<Component_ObservedMove>().SetVelocity(translateDelta); 
+            //_heroService.HeroEntity.Value.Get<Component_Transform>().Translate(translateDelta);
+            _heroService.HeroEntity.Value.Get<Component_Rigidbody>().SetVelocity(translateDelta);
         }
     }
 }

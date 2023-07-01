@@ -8,18 +8,21 @@ namespace Models.Components
     {
         private readonly AtomicVariable<float> _moveModelSpeed;
         private readonly AtomicVariable<float> _moveModelRotationSpeed;
+        private readonly AtomicVariable<int> _healthMax;
 
-        public Component_HeroInstaller(AtomicVariable<float> moveModelSpeed, AtomicVariable<float> moveModelRotationSpeed)
+        public Component_HeroInstaller(AtomicVariable<float> moveModelSpeed, AtomicVariable<float> moveModelRotationSpeed,
+            AtomicVariable<int> healthMax)
         {
+            _healthMax = healthMax;
             _moveModelSpeed = moveModelSpeed;
             _moveModelRotationSpeed = moveModelRotationSpeed;
         }
 
         public void Setup(GameConfig gameConfig)
         {
+            _healthMax.Value = gameConfig.PlayerHealth;
             _moveModelSpeed.Value = gameConfig.PlayerMoveSpeed;
             _moveModelRotationSpeed.Value = gameConfig.PlayerRotationSpeed;
         }
     }
-
 }

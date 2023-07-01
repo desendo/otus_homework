@@ -9,10 +9,10 @@ namespace Models.Declarative
         public readonly HeroModelCore Core = new HeroModelCore();
         public readonly HeroModelVisual Visual = new HeroModelVisual();
 
-        public void Construct(Transform rootTransform, Animator animator, IUpdateProvider updateProvider)
+        public void Construct(Transform rootTransform, Animator animator, IUpdateProvider updateProvider, Rigidbody rigidbody)
         {
             Core.Construct();
-            Visual.Construct(Core, rootTransform, animator, updateProvider);
+            Visual.Construct(Core, rootTransform, animator, updateProvider, rigidbody);
         }
 
         public void Dispose()

@@ -6,7 +6,7 @@ namespace DependencyInjection.Util
 {
     public static class InstantiateUtil
     {
-        public static T Instantiate<T>(T unityObject, Action<T> beforeAwake = null) where T : Object
+        public static T Instantiate<T>(T unityObject,  Transform parent = null, Action<T> beforeAwake = null) where T : Object
         {
             var gameObject = unityObject as GameObject;
             var component = unityObject as Component;
@@ -21,7 +21,7 @@ namespace DependencyInjection.Util
                 gameObject.SetActive(false);
             }
 
-            var obj = Object.Instantiate(unityObject);
+            var obj = Object.Instantiate(unityObject, parent);
             if (obj == null)
                 throw new Exception("Failed to instantiate Object " + unityObject);
 

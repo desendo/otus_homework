@@ -10,7 +10,6 @@ using DependencyInjection.Util;
 using GameManager;
 using Models.Components;
 using Models.Entities;
-using UnityEngine;
 
 namespace Services
 {
@@ -19,7 +18,7 @@ namespace Services
         private readonly GameConfig _gameConfig;
         private readonly VisualConfig _visualConfig;
         private readonly DependencyContainer _dependencyContainer;
-        public EntityMono HeroEntity { get; private set; }
+        public AtomicVariable<EntityMono> HeroEntity { get; } = new AtomicVariable<EntityMono>();
         public AtomicVariable<IWeapon> CurrentWeaponEntity { get; private set; } = new AtomicVariable<IWeapon>();
         public AtomicEvent<IWeapon> OnWeaponCollected { get; private set; } = new AtomicEvent<IWeapon>();
         public AtomicEvent<IWeapon> OnWeaponDropped { get; private set; } = new AtomicEvent<IWeapon>();
@@ -42,24 +41,24 @@ namespace Services
         public void Spawn()
         {
             var prefab = _visualConfig.PlayerPrefab;
-            HeroEntity = _dependencyContainer.InstantiateInject(prefab);
-            HeroEntity.Get<Component_HeroInstaller>().Setup(_gameConfig);
+            HeroEntity.Value = _dependencyContainer.InstantiateInject(prefab);
+            HeroEntity.Value.Get<Component_HeroInstaller>().Setup(_gameConfig);
 
-            var riffleConfig = _gameConfig.PlayerWeapons
+            var riffleConfig = _gameConfig.Weapons
                 .FirstOrDefault(x => x.Type == WeaponType.Riffle);
 
             var riffleWeapon = CreateWeapon(riffleConfig);
             CollectedWeapons.Add(riffleWeapon);
             OnWeaponCollected.Invoke(riffleWeapon);
 
-            var shotGun = _gameConfig.PlayerWeapons
+            var shotGun = _gameConfig.Weapons
                 .FirstOrDefault(x => x.Type == WeaponType.Shotgun);
 
             var shotGunWeapon = CreateWeapon(shotGun);
             CollectedWeapons.Add(shotGunWeapon);
             OnWeaponCollected.Invoke(shotGunWeapon);
 
-            var machineGun = _gameConfig.PlayerWeapons
+            var machineGun = _gameConfig.Weapons
                 .FirstOrDefault(x => x.Type == WeaponType.MachineGun);
 
             var machineGunWeapon = CreateWeapon(machineGun);
@@ -77,13 +76,13 @@ namespace Services
 
             _reloadSubscribe?.Dispose();
             _reloadSubscribe = weapon.Get<Component_Reload>()
-                .ReloadStart.Subscribe(HeroEntity.Get<Component_IsReloading>().SetReloadingTime);
+                .ReloadStart.Subscribe(HeroEntity.Value.Get<Component_IsReloading>().SetReloadingTime);
 
             _shotSubscribe?.Dispose();
             _shotSubscribe = weapon.Get<Component_Shoot>()
                 .OnShot.Subscribe(() =>
                 {
-                    HeroEntity.Get<Component_Shoot>().OnShot.Invoke();
+                    HeroEntity.Value.Get<Component_Shoot>().OnShot.Invoke();
                 });
 
             foreach (var collectedWeapon in CollectedWeapons)
@@ -99,7 +98,7 @@ namespace Services
             {
                 if (weaponConfig.Type == WeaponType.Riffle)
                 {
-                    var attackPoint = HeroEntity.Get<Component_AttackPivot>().AttackPoint;
+                    var attackPoint = HeroEntity.Value.Get<Component_AttackPivot>().AttackPoint;
                     var weapon = new RiffleEntity(_updateProvider, attackPoint, weaponConfig.Type);
                     weapon.Get<IComponent_WeaponInstaller>().Setup(weaponConfig.Parameters);
                     return weapon;
@@ -107,7 +106,7 @@ namespace Services
 
                 if (weaponConfig.Type == WeaponType.Shotgun)
                 {
-                    var attackPoint = HeroEntity.Get<Component_AttackPivot>().AttackPoint;
+                    var attackPoint = HeroEntity.Value.Get<Component_AttackPivot>().AttackPoint;
                     var weapon = new ShotGunEntity(_updateProvider, attackPoint, weaponConfig.Type);
                     weapon.Get<IComponent_WeaponInstaller>().Setup(weaponConfig.Parameters);
                     return weapon;
@@ -115,7 +114,7 @@ namespace Services
 
                 if (weaponConfig.Type == WeaponType.MachineGun)
                 {
-                    var attackPoint = HeroEntity.Get<Component_AttackPivot>().AttackPoint;
+                    var attackPoint = HeroEntity.Value.Get<Component_AttackPivot>().AttackPoint;
                     var weapon = new MachineGunEntity(_updateProvider, attackPoint, weaponConfig.Type);
                     weapon.Get<IComponent_WeaponInstaller>().Setup(weaponConfig.Parameters);
                     return weapon;

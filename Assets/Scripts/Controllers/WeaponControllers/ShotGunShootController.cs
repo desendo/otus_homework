@@ -5,13 +5,13 @@ using Models.Components;
 using Services;
 using UnityEngine;
 
-namespace Controllers
+namespace Controllers.WeaponControllers
 {
     public class ShotGunShootController : WeaponShootControllerBase
     {
         protected override WeaponType WeaponType => WeaponType.Shotgun;
 
-        public ShotGunShootController(HeroService heroService, BulletManager bulletManager) : base(heroService, bulletManager)
+        public ShotGunShootController(HeroService heroService, IBulletSpawner bulletSpawner) : base(heroService, bulletSpawner)
         {
         }
         protected override void HandleShoot(IEntity weapon)
@@ -23,8 +23,9 @@ namespace Controllers
             {
                 var randomAngle = UnityEngine.Random.Range(-burst.Angle.Value, burst.Angle.Value);
                 var randomized = Quaternion.Euler(0f, randomAngle, 0f) * pivot.Direction;
+                var damage = weapon.Get<Component_Damage>().Damage.Value;
 
-                _bulletManager.FireBullet(pivot.Position, randomized, bulletSpeed);
+                BulletSpawner.FireBullet(pivot.Position, randomized, bulletSpeed, damage);
             }
         }
     }
