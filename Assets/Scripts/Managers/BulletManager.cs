@@ -65,8 +65,8 @@ namespace Managers
 
         private void OnHit(IEntity bullet, Collision collision)
         {
-            var entity = collision.body.GetComponent<IEntity>();
-            if (entity != null)
+
+            if(collision.body.TryGetComponent<IEntity>(out var entity))
             {
                 var takeDamage = entity.Get<Component_TakeDamage>();
                 var damage = bullet.Get<Component_Damage>().Damage.Value;

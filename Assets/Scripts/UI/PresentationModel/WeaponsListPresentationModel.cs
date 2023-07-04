@@ -14,6 +14,7 @@ namespace UI.PresentationModel
         public WeaponsListPresentationModel(HeroService heroService)
         {
             heroService.OnWeaponCollected.Subscribe(OnWeaponAdd);
+            heroService.OnWeaponsClear.Subscribe(Clear);
         }
 
         private void OnWeaponAdd(IWeapon obj)
@@ -31,6 +32,11 @@ namespace UI.PresentationModel
             pm.Name.Value = info.Name.Value;
             WeaponPresentationModels.Add(pm);
             OnChange.Invoke();
+        }
+
+        private void Clear()
+        {
+            WeaponPresentationModels.Clear();
         }
     }
 }

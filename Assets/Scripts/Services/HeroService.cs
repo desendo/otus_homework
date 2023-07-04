@@ -24,6 +24,7 @@ namespace Services
         public AtomicVariable<IWeapon> CurrentWeaponEntity { get; private set; } = new AtomicVariable<IWeapon>();
         public AtomicEvent<IWeapon> OnWeaponCollected { get; private set; } = new AtomicEvent<IWeapon>();
         public AtomicEvent<IWeapon> OnWeaponDropped { get; private set; } = new AtomicEvent<IWeapon>();
+        public AtomicEvent OnWeaponsClear { get; private set; } = new AtomicEvent();
 
         public readonly List<IWeapon> CollectedWeapons = new List<IWeapon>();
         private readonly IUpdateProvider _updateProvider;
@@ -131,7 +132,8 @@ namespace Services
             {
                 collectedWeapon.Dispose();
             }
-
+            CollectedWeapons.Clear();
+            OnWeaponsClear.Invoke();
             if (HeroEntity.Value != null)
             {
                 var gameObject = (HeroEntity.Value as MonoBehaviour)?.gameObject;

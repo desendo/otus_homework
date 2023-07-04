@@ -31,11 +31,11 @@ namespace UI
             _killsPm = killsPm;
             _hpPm = hpPm;
             _weaponsListPresentationModel = weaponsListPresentationModel;
-            gameStateManager.GameLoaded.OnChanged.Subscribe(UpdateGameState);
+            gameStateManager.State.OnChanged.Subscribe(UpdateGameState);
             gameStateManager.State.OnChanged.Subscribe(UpdateVisibility);
 
             UpdateVisibility(gameStateManager.State.Value);
-            UpdateGameState(gameStateManager.GameLoaded.Value);
+            UpdateGameState(gameStateManager.State.Value);
         }
 
         private void UpdateVisibility(LevelState obj)
@@ -44,10 +44,12 @@ namespace UI
             _killProgress.gameObject.SetActive(obj == LevelState.Started);
         }
 
-        private void UpdateGameState(bool gameLoaded)
+        private void UpdateGameState(LevelState state)
         {
             _changeSub?.Dispose();
-            if(!gameLoaded)
+            Clear();
+
+            if(state != LevelState.Started)
                 return;
 
             _weaponsListPresentationModel.OnChange.Subscribe(UpdateWeaponList).AddTo(_changeSub);
@@ -81,6 +83,7 @@ namespace UI
             {
                 var ui = _pool.Spawn();
                 ui.Setup(pm);
+                _weaponUIViews.Add(ui);
             }
         }
 
