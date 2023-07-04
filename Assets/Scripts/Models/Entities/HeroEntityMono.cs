@@ -39,13 +39,20 @@ namespace Models.Entities
             Add(new Component_Attack(_heroModel.Core.AttackModel.Attack));
             Add(new Component_AttackPivot(_shootPoint));
             Add(new Component_Health(_heroModel.Core.LifeModel.HitPoints, _heroModel.Core.LifeModel.MaxHitPoints));
-            Add(new Component_Shoot(_heroModel.Core.AttackModel.OnAttackStart));
-            Add(new Component_IsReloading(_heroModel.Core.AttackModel.IsReloadStarted));
+            Add(new Component_Death(_heroModel.Core.LifeModel.OnDeath, this));
+            Add(new Component_TakeDamage(_heroModel.Core.LifeModel.OnTakeDamage));
+            Add(new Component_OnAttack(_heroModel.Core.AttackModel.OnAttackStart));
+            Add(new Component_IsReloading(_heroModel.Core.AttackModel.OnReloadStarted));
             Add(new Component_HeroInstaller(_heroModel.Core.MoveModel.Speed,
                 _heroModel.Core.MoveModel.RotationSpeed, _heroModel.Core.LifeModel.MaxHitPoints));
         }
 
         private void OnDestroy()
+        {
+            Dispose();
+        }
+
+        public override void Dispose()
         {
             _heroModel.Dispose();
         }

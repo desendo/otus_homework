@@ -68,11 +68,11 @@ namespace Managers
             var entity = collision.body.GetComponent<IEntity>();
             if (entity != null)
             {
-                var health = entity.Get<Component_Health>();
+                var takeDamage = entity.Get<Component_TakeDamage>();
                 var damage = bullet.Get<Component_Damage>().Damage.Value;
                 var bulletDir = bullet.Get<Component_Transform>().RootTransform.forward;
                 entity.Get<Component_Rigidbody>().Rigidbody.AddForce(bulletDir * 50);
-                health.Current.Value -= damage;
+                takeDamage.DoDamage(damage);
 
                 _effectsService.ShowHitEffect(collision);
             }

@@ -1,19 +1,19 @@
 ﻿using Common.Atomic.Actions;
+
 namespace Models.Components
 {
     public sealed class Component_IsReloading
     {
-        private readonly AtomicEvent<float> _isReloading;
+        private readonly AtomicEvent<float> _onReloadingStarted;
 
-
-        public Component_IsReloading(AtomicEvent<float> isReloading)
+        public Component_IsReloading(AtomicEvent<float> onReloadingStart)
         {
-            _isReloading = isReloading;
+            _onReloadingStarted = onReloadingStart;
         }
 
         public void SetReloadingTime(float time)
         {
-            _isReloading.Invoke(time);
+            _onReloadingStarted.Invoke(time);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace UI.PresentationModel
             heroService.HeroEntity.OnChanged.Subscribe(OnHero);
         }
 
-        private void OnHero(EntityMono obj)
+        private void OnHero(IEntity obj)
         {
             _subs.Clear();
             if(obj == null)

@@ -1,29 +1,32 @@
 ﻿using System;
-using Common.Atomic.Actions;
+using Common.Atomic.Values;
+using Common.Entities;
 using GameManager;
+using Models.Components;
 
 namespace Models.Declarative.Weapons
 {
     public class EnemyWeaponModelCore : WeaponModelCoreAbstract
     {
-        public readonly ReloadModel ReloadModel = new ReloadModel();
+        public readonly AtomicVariable<float> MaxRange = new AtomicVariable<float>();
+        public readonly AttackDelayModel AttackDelayModel = new AttackDelayModel();
 
         private IUpdateProvider _updateProvider;
         private IDisposable _updateSub;
+        private IDisposable _activateSub;
 
 
         public void Construct(IUpdateProvider updateProvider)
         {
             _updateProvider = updateProvider;
             _updateSub = _updateProvider.OnUpdate.Subscribe(Update);
-            OnAttack = new AtomicAction(TryAttack);
-            Activate.Subscribe(isActive =>
+            _activateSub = Activate.Subscribe(isActive =>
             {
                 IsActive.Value = isActive;
                 AttackReady.Value = true;
-                if(!isActive)
-                    ReloadModel.CancelReload();
+
             });
+            AttackDelayModel.Construct(this);
         }
 
         private void Update(float dt)
@@ -31,21 +34,27 @@ namespace Models.Declarative.Weapons
             if(!IsActive.Value)
                 return;
 
-            ReloadModel.Update(dt);
-
+            AttackDelayModel.Update(dt);
         }
 
-        private void TryAttack()
+        public void DoHit(IEntity entity)
         {
-            if (AttackReady.Value && !ReloadModel.IsReloading.Value)
+            entity.Get<Component_TakeDamage>().DoDamage(Damage.Value);
+        }
+
+        protected override void TryAttack()
+        {
+            if (AttackReady.Value)
             {
                 AttackRequested.Invoke();
+                AttackReady.Value = false;
             }
         }
 
         public override void Dispose()
         {
             _updateSub?.Dispose();
+            _activateSub?.Dispose();
         }
     }
 }

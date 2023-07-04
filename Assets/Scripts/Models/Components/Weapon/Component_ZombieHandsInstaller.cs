@@ -13,9 +13,13 @@ namespace Models.Components
 
         protected override void HandleParameter(Parameter p)
         {
-            if (p.Id == "ReloadTime_float")
+            if (p.Id == "Delay_float")
             {
-                _core.ReloadModel.ReloadDelay.Value = float.Parse(p.Value);
+                _core.AttackDelayModel.AttackDelayValue.Value = float.Parse(p.Value);
+            }
+            if (p.Id == "MaxRange_float")
+            {
+                _core.MaxRange.Value = float.Parse(p.Value);
             }
         }
     }

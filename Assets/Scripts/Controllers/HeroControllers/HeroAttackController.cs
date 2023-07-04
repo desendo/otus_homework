@@ -5,7 +5,6 @@ using Services;
 namespace Controllers.HeroControllers
 {
     public class HeroAttackController : IGameLoadedListener, IStartGameListener, ILostGameListener, IWinGameListener
-
     {
         private readonly HeroService _heroService;
         private bool _loaded;

@@ -29,7 +29,7 @@ namespace Models.Entities
             Add(new Component_Attack(_core.OnAttack));
             Add(new Component_Clip(_core.ClipModel.ClipSize, _core.ClipModel.ShotsLeft));
             Add(new Component_Pivot(_shootTransform));
-            Add(new Component_Shoot(_core.AttackRequested));
+            Add(new Component_OnAttack(_core.AttackRequested));
             Add(new Component_Speed(_core.BulletSpeed));
             Add(new Component_Burst(_core.BurstModel.BurstAngle, _core.BurstModel.BurstCount));
             Add(new Component_Damage(_core.Damage));
@@ -39,11 +39,9 @@ namespace Models.Entities
             Add(new Component_ShotGunInstaller(_core));
         }
 
-        ~ShotGunEntity()
+        public override void Dispose()
         {
             _core.Dispose();
         }
-
-
     }
 }

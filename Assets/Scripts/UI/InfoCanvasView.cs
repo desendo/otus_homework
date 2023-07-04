@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Common;
 using DependencyInjection;
-using GameState;
+using GameManager;
 using Pool;
 using UI.PresentationModel;
 using UI.Widgets;
@@ -32,6 +32,16 @@ namespace UI
             _hpPm = hpPm;
             _weaponsListPresentationModel = weaponsListPresentationModel;
             gameStateManager.GameLoaded.OnChanged.Subscribe(UpdateGameState);
+            gameStateManager.State.OnChanged.Subscribe(UpdateVisibility);
+
+            UpdateVisibility(gameStateManager.State.Value);
+            UpdateGameState(gameStateManager.GameLoaded.Value);
+        }
+
+        private void UpdateVisibility(LevelState obj)
+        {
+            _hp.gameObject.SetActive(obj == LevelState.Started);
+            _killProgress.gameObject.SetActive(obj == LevelState.Started);
         }
 
         private void UpdateGameState(bool gameLoaded)

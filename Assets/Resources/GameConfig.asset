@@ -77,16 +77,17 @@ MonoBehaviour:
     Parameters:
     - Id: Damage_int
       Value: 1
-    - Id: ReloadTime_float
-      Value: 2,5
-    - Id: BulletSpeed_float
-      Value: 12
+    - Id: Delay_float
+      Value: 1
     - Id: Name_string
       Value: "\u0420\u0443\u043A\u0438 \u0437\u043E\u043C\u0431\u044F\u0440\u044B"
+    - Id: MaxRange_float
+      Value: 0,8
   PlayerHealth: 10
-  PlayerMoveSpeed: 2.5
+  PlayerMoveSpeed: 2.2
   PlayerRotationSpeed: 2000
   ZombieSpawnInterval: 1
-  KillGoal: 50
+  KillGoal: 100
   ZombieHealth: 12
-  ZombieMoveSpeed: 1.9
+  ZombieMoveSpeed: 1.8
+  ZombieMoveSpeedReloadMultiplier: 0.1

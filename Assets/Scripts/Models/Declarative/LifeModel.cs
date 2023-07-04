@@ -16,7 +16,14 @@ namespace Models.Declarative
 
         public void Construct()
         {
-            _onTakeDamage = OnTakeDamage.Subscribe(damage => HitPoints.Value -= damage);
+            _onTakeDamage = OnTakeDamage.Subscribe(damage =>
+            {
+                var targetHP = HitPoints.Value - damage;
+                if (targetHP < 0)
+                    targetHP = 0;
+                HitPoints.Value = targetHP;
+
+            });
             _onHitPointsChanged = HitPoints.OnChanged.Subscribe(hitPoints =>
             {
                 if (hitPoints <= 0 && MaxHitPoints.Value > 0 && !IsDead.Value)

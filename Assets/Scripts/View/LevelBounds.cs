@@ -26,5 +26,13 @@ namespace View
             H = MaxZ - MinZ;
             W = MaxX - MinX;
         }
+
+        public bool InBounds(Vector3 trySpawnPos)
+        {
+            return trySpawnPos.x > MinX
+                   && trySpawnPos.x < MaxX
+                   && trySpawnPos.z > MinZ
+                   && trySpawnPos.z < MaxZ;
+        }
     }
 }

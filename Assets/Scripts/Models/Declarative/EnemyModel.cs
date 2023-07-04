@@ -1,5 +1,7 @@
 ﻿using System;
+using Common;
 using GameManager;
+using GameObjectsComponents;
 using UnityEngine;
 
 namespace Models.Declarative
@@ -10,10 +12,11 @@ namespace Models.Declarative
         public readonly EnemyModelVisual Visual = new EnemyModelVisual();
 
         public void Construct(Transform rootTransform, Animator animator, IUpdateProvider updateProvider,
-            Rigidbody rigidbody, Collider hitCollider)
+            Rigidbody rigidbody, Collider hitCollider, AnimationEventListener animationEventListener,
+            CollisionSensor weaponCollisionSensor)
         {
             Core.Construct(updateProvider);
-            Visual.Construct(Core, rootTransform, animator, updateProvider, rigidbody, hitCollider);
+            Visual.Construct(Core, animator, updateProvider, rigidbody, hitCollider, animationEventListener, weaponCollisionSensor);
         }
 
         public void Dispose()

@@ -10,12 +10,11 @@ namespace Models.Declarative.Weapons
         public readonly ReloadModel ReloadModel = new ReloadModel();
         public readonly ClipModel ClipModel = new ClipModel();
         public readonly BurstModel BurstModel = new BurstModel();
+        public readonly AttackDelayModel AttackDelayModel = new AttackDelayModel();
 
 
-        public readonly AtomicVariable<float> ShootDelay = new AtomicVariable<float>();
         public readonly AtomicVariable<float> ShootTimer = new AtomicVariable<float>();
         public readonly AtomicVariable<float> BulletSpeed = new AtomicVariable<float>();
-
 
         private IUpdateProvider _updateProvider;
         private IDisposable _updateSub;
@@ -25,7 +24,6 @@ namespace Models.Declarative.Weapons
         {
             _updateProvider = updateProvider;
             _updateSub = _updateProvider.OnUpdate.Subscribe(Update);
-            OnAttack = new AtomicAction(TryShoot);
             Activate.Subscribe(isActive =>
             {
                 IsActive.Value = isActive;
@@ -33,6 +31,8 @@ namespace Models.Declarative.Weapons
                     ReloadModel.CancelReload();
             });
             ReloadModel.Construct(ClipModel);
+            AttackDelayModel.Construct(this);
+
         }
 
         private void Update(float dt)
@@ -41,19 +41,14 @@ namespace Models.Declarative.Weapons
                 return;
 
             ReloadModel.Update(dt);
-            if (!AttackReady.Value)
-            {
-                ShootTimer.Value += dt;
-                if (ShootTimer.Value > ShootDelay.Value)
-                    AttackReady.Value = true;
-            }
+            AttackDelayModel.Update(dt);
+
         }
 
-        private void TryShoot()
+        protected override void TryAttack()
         {
             if (AttackReady.Value && ClipModel.ShotsLeft.Value > 0 && !ReloadModel.IsReloading.Value)
             {
-                ShootTimer.Value = ShootDelay.Value;
                 AttackRequested.Invoke();
                 AttackReady.Value = false;
                 ClipModel.ShotsLeft.Value--;

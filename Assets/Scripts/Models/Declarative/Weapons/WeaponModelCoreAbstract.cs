@@ -11,8 +11,18 @@ namespace Models.Declarative.Weapons
         public readonly AtomicVariable<bool> IsActive = new AtomicVariable<bool>();
         public readonly AtomicEvent AttackRequested = new AtomicEvent();
         public readonly AtomicVariable<string> Name = new AtomicVariable<string>();
-        public AtomicAction OnAttack;
-        public AtomicEvent<bool> Activate = new AtomicEvent<bool>();
+        public readonly AtomicAction OnAttack;
+        public readonly AtomicEvent<bool> Activate = new AtomicEvent<bool>();
+
+        protected WeaponModelCoreAbstract()
+        {
+            OnAttack = new AtomicAction(TryAttack);
+        }
+
         public abstract void Dispose();
+
+        protected virtual void TryAttack()
+        {
+        }
     }
 }

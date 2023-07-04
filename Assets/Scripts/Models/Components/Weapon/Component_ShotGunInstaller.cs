@@ -21,7 +21,7 @@ namespace Models.Components
             }
             else if (p.Id == "Delay_float")
             {
-                _core.ShootDelay.Value = float.Parse(p.Value);
+                _core.AttackDelayModel.AttackDelayValue.Value = float.Parse(p.Value);
             }
             else if (p.Id == "ReloadTime_float")
             {

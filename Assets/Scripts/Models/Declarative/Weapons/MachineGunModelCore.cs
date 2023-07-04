@@ -9,7 +9,7 @@ namespace Models.Declarative.Weapons
     {
         public readonly ReloadModel ReloadModel = new ReloadModel();
         public readonly ClipModel ClipModel = new ClipModel();
-        public readonly ShootDelayModel ShootDelayModel = new ShootDelayModel();
+        public readonly AttackDelayModel AttackDelayModel = new AttackDelayModel();
         public AtomicAction OnAttackContinue;
         public AtomicAction OnAttackStop;
 
@@ -25,7 +25,6 @@ namespace Models.Declarative.Weapons
         {
             _updateProvider = updateProvider;
             _updateSub = _updateProvider.OnUpdate.Subscribe(Update);
-            OnAttack = new AtomicAction(TryShoot);
             OnAttackContinue = new AtomicAction(() =>_continueShoot = true);
             OnAttackStop = new AtomicAction(() =>_continueShoot = false);
             Activate.Subscribe( isActive =>
@@ -35,7 +34,7 @@ namespace Models.Declarative.Weapons
                     ReloadModel.CancelReload();
             });
             ReloadModel.Construct(ClipModel);
-            ShootDelayModel.Construct(this);
+            AttackDelayModel.Construct(this);
         }
 
         private void Update(float dt)
@@ -45,13 +44,13 @@ namespace Models.Declarative.Weapons
 
             ReloadModel.Update(dt);
 
-            ShootDelayModel.Update(dt);
+            AttackDelayModel.Update(dt);
 
              if(_continueShoot)
-                TryShoot();
+                 TryAttack();
         }
 
-        private void TryShoot()
+        protected override void TryAttack()
         {
             if (AttackReady.Value && ClipModel.ShotsLeft.Value > 0 && !ReloadModel.IsReloading.Value)
             {

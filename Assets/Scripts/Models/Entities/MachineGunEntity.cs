@@ -29,7 +29,7 @@ namespace Models.Entities
             Add(new Component_IsActive(_core.IsActive));
             Add(new Component_Clip(_core.ClipModel.ClipSize, _core.ClipModel.ShotsLeft));
             Add(new Component_Pivot(_shootTransform));
-            Add(new Component_Shoot(_core.AttackRequested));
+            Add(new Component_OnAttack(_core.AttackRequested));
             Add(new Component_Speed(_core.BulletSpeed));
             Add(new Component_Damage(_core.Damage));
             Add(new Component_Reload(_core.ReloadModel.OnReload, _core.ReloadModel.ReloadStarted,
@@ -38,7 +38,7 @@ namespace Models.Entities
             Add(new Component_MachineGunInstaller(_core));
         }
 
-        ~MachineGunEntity()
+        public override void Dispose()
         {
             _core.Dispose();
         }

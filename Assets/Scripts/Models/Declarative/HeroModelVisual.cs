@@ -1,4 +1,7 @@
-﻿using GameManager;
+﻿using System;
+using System.Collections.Generic;
+using Common;
+using GameManager;
 using UnityEngine;
 
 namespace Models.Declarative
@@ -14,6 +17,7 @@ namespace Models.Declarative
         private static readonly int reload = Animator.StringToHash("reload");
         private static readonly int reload_animation_speed = Animator.StringToHash("reload_animation_speed");
 
+        private readonly List<IDisposable> _subs = new List<IDisposable>();
         private const int IDLE_STATE = 0;
         private const int MOVE_STATE = 1;
         private const int DEATH_STATE = 5;
@@ -36,18 +40,18 @@ namespace Models.Declarative
             Rigidbody = rigidbody;
             RootTransform = rootTransform;
             var isDead = core.LifeModel.IsDead;
-            core.AttackModel.IsReloadStarted.Subscribe(reloadTime =>
+            core.AttackModel.OnReloadStarted.Subscribe(reloadTime =>
             {
                 var speed =  _reloadAnimationTime / reloadTime;
                 _animator.SetFloat(reload_animation_speed, speed);
                 _animator.ResetTrigger(reload);
                 _animator.SetTrigger(reload);
-            });
+            }).AddTo(_subs);
             core.AttackModel.OnAttackStart.Subscribe(() =>
             {
                 _animator.ResetTrigger(shot);
                 _animator.SetTrigger(shot);
-            });
+            }).AddTo(_subs);
             updateProvider.OnLateUpdate.Subscribe(() => {
                 if (isDead.Value)
                 {
@@ -70,11 +74,12 @@ namespace Models.Declarative
                 {
                     _animator.SetInteger(state, IDLE_STATE);
                 }
-            });
+            }).AddTo(_subs);
         }
 
         public void Dispose()
         {
+            _subs.Dispose();
         }
     }
 }

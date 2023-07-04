@@ -7,18 +7,21 @@ namespace Models.Components
     {
         private readonly AtomicVariable<float> _moveModelSpeed;
         private readonly AtomicVariable<int> _healthMax;
+        private AtomicVariable<float> _reloadSpeedMultiplier;
 
         public Component_EnemyInstaller(AtomicVariable<float> moveModelSpeed,
-            AtomicVariable<int> healthMax)
+            AtomicVariable<int> healthMax, AtomicVariable<float> reloadSpeedMultiplier)
         {
             _healthMax = healthMax;
             _moveModelSpeed = moveModelSpeed;
+            _reloadSpeedMultiplier = reloadSpeedMultiplier;
         }
 
         public void Setup(GameConfig gameConfig)
         {
             _healthMax.Value = gameConfig.ZombieHealth;
             _moveModelSpeed.Value = gameConfig.ZombieMoveSpeed;
+            _reloadSpeedMultiplier.Value = gameConfig.ZombieMoveSpeedReloadMultiplier;
         }
     }
 }

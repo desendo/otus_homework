@@ -18,6 +18,7 @@ namespace Services
         public readonly AtomicVariable<int> KillGoal = new AtomicVariable<int>();
         public readonly AtomicVariable<int> Killed = new AtomicVariable<int>();
         public readonly AtomicEvent<IEntity> OnDeath = new AtomicEvent<IEntity>();
+        public readonly AtomicEvent<IEntity> OnSpawn = new AtomicEvent<IEntity>();
         public List<EnemyEntityMono> Units { get; } = new List<EnemyEntityMono>();
 
         public EnemyService(GameConfig gameConfig)

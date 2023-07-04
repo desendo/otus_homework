@@ -26,7 +26,7 @@ namespace Controllers.WeaponControllers
             _shootRequested?.Dispose();
             if (obj.WeaponType == WeaponType)
             {
-                _shootRequested = obj.Get<Component_Shoot>().OnShot.Subscribe(() =>
+                _shootRequested = obj.Get<Component_OnAttack>().OnAttack.Subscribe(() =>
                 {
                     HandleShoot(obj);
                 });

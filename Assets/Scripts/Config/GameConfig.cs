@@ -16,7 +16,7 @@ namespace Config
         public int KillGoal;
         public int ZombieHealth;
         public float ZombieMoveSpeed;
-
+        public float ZombieMoveSpeedReloadMultiplier;
     }
 
     [System.Serializable]

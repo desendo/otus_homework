@@ -24,5 +24,10 @@ namespace Common.Entities
         {
             _entity.Remove(component);
         }
+
+        public virtual void Dispose()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

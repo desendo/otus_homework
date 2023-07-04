@@ -10,6 +10,8 @@ using DependencyInjection.Util;
 using GameManager;
 using Models.Components;
 using Models.Entities;
+using UnityEngine;
+using Object = System.Object;
 
 namespace Services
 {
@@ -18,7 +20,7 @@ namespace Services
         private readonly GameConfig _gameConfig;
         private readonly VisualConfig _visualConfig;
         private readonly DependencyContainer _dependencyContainer;
-        public AtomicVariable<EntityMono> HeroEntity { get; } = new AtomicVariable<EntityMono>();
+        public AtomicVariable<IEntity> HeroEntity { get; } = new AtomicVariable<IEntity>();
         public AtomicVariable<IWeapon> CurrentWeaponEntity { get; private set; } = new AtomicVariable<IWeapon>();
         public AtomicEvent<IWeapon> OnWeaponCollected { get; private set; } = new AtomicEvent<IWeapon>();
         public AtomicEvent<IWeapon> OnWeaponDropped { get; private set; } = new AtomicEvent<IWeapon>();
@@ -66,7 +68,6 @@ namespace Services
             OnWeaponCollected.Invoke(machineGunWeapon);
 
             CurrentWeaponEntity.Value = riffleWeapon;
-            //OnWeaponChange()
         }
 
         private void OnWeaponChange(IWeapon weapon)
@@ -79,10 +80,10 @@ namespace Services
                 .ReloadStart.Subscribe(HeroEntity.Value.Get<Component_IsReloading>().SetReloadingTime);
 
             _shotSubscribe?.Dispose();
-            _shotSubscribe = weapon.Get<Component_Shoot>()
-                .OnShot.Subscribe(() =>
+            _shotSubscribe = weapon.Get<Component_OnAttack>()
+                .OnAttack.Subscribe(() =>
                 {
-                    HeroEntity.Value.Get<Component_Shoot>().OnShot.Invoke();
+                    HeroEntity.Value.Get<Component_OnAttack>().OnAttack.Invoke();
                 });
 
             foreach (var collectedWeapon in CollectedWeapons)
@@ -126,10 +127,16 @@ namespace Services
 
         public void Clear()
         {
-            /*foreach (var collectedWeapon in _collectedWeapons)
+            foreach (var collectedWeapon in CollectedWeapons)
             {
                 collectedWeapon.Dispose();
-            }*/
+            }
+
+            if (HeroEntity.Value != null)
+            {
+                var gameObject = (HeroEntity.Value as MonoBehaviour)?.gameObject;
+                UnityEngine.Object.Destroy(gameObject);
+            }
         }
 
         public void SetWeaponSelected(in int i)

@@ -5,11 +5,11 @@ using Controllers.WeaponControllers;
 using DependencyInjection;
 using Effects;
 using GameManager;
-using GameState;
 using Input;
 using Managers;
 using Pool;
 using Services;
+using Signals;
 using UI.PresentationModel;
 using UnityEngine;
 using View;
@@ -28,21 +28,8 @@ public class GameInstaller : MonoBehaviour
     private void Start()
     {
         Bind();
-        StartGame();
     }
 
-    private void StartGame()
-    {
-        _container.Get<GameStateManager>().State.Value = LevelState.None;
-        var spawners = _container.GetList<ISpawner>();
-        foreach (var spawner in spawners)
-        {
-            spawner.Spawn();
-        }
-
-        _container.Get<GameStateManager>().GameLoaded.Value = true;
-        _container.Get<GameStateManager>().State.Value = LevelState.Started;
-    }
 
     private void Bind()
     {
@@ -55,6 +42,7 @@ public class GameInstaller : MonoBehaviour
 
         //scene
         _container.Add(_levelBounds);
+
         //pools
         _container.Add(_bulletPool);
         _container.Add(_enemyPool);
@@ -65,19 +53,22 @@ public class GameInstaller : MonoBehaviour
         _container.Bind<HeroService>();
         _container.Bind<EnemyService>();
         _container.Bind<EffectsService>();
+        _container.Bind<SignalBusService>();
 
         //managers
         _container.Bind<BulletManager>();
 
         //controllers
-
+            //game
+        _container.Bind<GameWinController>();
             //camera
         _container.Bind<CameraFollowController>();
         _container.Bind<CameraAngleController>();
             //enemy
         _container.Bind<EnemySpawnController>();
-        _container.Bind<EnemyDeathController>();
+        _container.Bind<EnemyDeathCountController>();
         _container.Bind<EnemyMoveController>();
+        _container.Bind<EnemyAttackController>();
 
             //hero
         _container.Bind<HeroAttackController>();
@@ -88,6 +79,7 @@ public class GameInstaller : MonoBehaviour
         _container.Bind<ShotGunShootController>();
         _container.Bind<MachineGunController>();
         _container.Bind<SwitchWeaponController>();
+        _container.Bind<HeroDeathController>();
 
         //pm
         _container.Bind<WeaponsListPresentationModel>();
@@ -102,7 +94,7 @@ public class GameInstaller : MonoBehaviour
     }
     private void SearchAndInject()
     {
-        var objects = FindObjectsOfType<MonoBehaviour>();
+        var objects = FindObjectsOfType<MonoBehaviour>(true);
         foreach (var obj in objects)
         {
             var monoBehaviours = obj.GetComponents<MonoBehaviour>();

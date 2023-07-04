@@ -1,5 +1,4 @@
 ﻿using System;
-using Common.Atomic.Actions;
 using Common.Atomic.Values;
 using GameManager;
 
@@ -9,7 +8,7 @@ namespace Models.Declarative.Weapons
     {
         public readonly ReloadModel ReloadModel = new ReloadModel();
         public readonly ClipModel ClipModel = new ClipModel();
-        public readonly ShootDelayModel ShootDelayModel = new ShootDelayModel();
+        public readonly AttackDelayModel AttackDelayModel = new AttackDelayModel();
 
 
         public readonly AtomicVariable<float> BulletSpeed = new AtomicVariable<float>();
@@ -20,7 +19,6 @@ namespace Models.Declarative.Weapons
 
         public void Construct(IUpdateProvider updateProvider)
         {
-            OnAttack = new AtomicAction(TryShoot);
             Activate.Subscribe(isActive =>
             {
                 IsActive.Value = isActive;
@@ -30,7 +28,7 @@ namespace Models.Declarative.Weapons
             _updateProvider = updateProvider;
             _updateSub = _updateProvider.OnUpdate.Subscribe(Update);
             ReloadModel.Construct(ClipModel);
-            ShootDelayModel.Construct(this);
+            AttackDelayModel.Construct(this);
 
         }
 
@@ -40,11 +38,11 @@ namespace Models.Declarative.Weapons
                 return;
 
             ReloadModel.Update(dt);
-            ShootDelayModel.Update(dt);
+            AttackDelayModel.Update(dt);
 
         }
 
-        private void TryShoot()
+        protected override void TryAttack()
         {
             if (AttackReady.Value && ClipModel.ShotsLeft.Value > 0 && !ReloadModel.IsReloading.Value)
             {
