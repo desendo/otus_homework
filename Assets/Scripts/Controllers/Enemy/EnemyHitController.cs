@@ -26,6 +26,10 @@ namespace Controllers
 
             foreach (var unit in _enemyService.Units)
             {
+                var componentActive = unit.Get<Component_IsActive>();
+                if(!componentActive.IsActive.Value)
+                    continue;
+
                 var componentAttack = unit.Get<Component_Attack>();
                 var componentRange = unit.Get<Component_WeaponRange>();
                 var componentTransform = unit.Get<Component_Transform>();
