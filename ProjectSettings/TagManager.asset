@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - SkyboxCamera
   layers:
   - Default
   - TransparentFX
@@ -15,11 +16,11 @@ TagManager:
   - 
   - 
   - 
-  - Character
-  - Enemy
   - 
-  - EnemyBullet
-  - PlayerBullet
+  - Team1
+  - Team2
+  - Team1Bullet
+  - Team2Bullet
   - 
   - 
   - 
@@ -40,4 +41,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: effects
+    uniqueID: 1966797889
+    locked: 0
+  - name: ships
+    uniqueID: 2391186827
     locked: 0

@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace Pool
 {
-
     public class PoolBase<T> : MonoBehaviour where T : MonoBehaviour
     {
         [SerializeField] private Transform _worldTransform;
