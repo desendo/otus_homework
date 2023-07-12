@@ -9,7 +9,6 @@ namespace Config
     {
         public float SpawnInterval;
         public int SpawnBurstCount;
-        public float BurstInterval;
         public float Health;
         public EngineConfig EngineConfig;
         public WeaponConfig WeaponConfig;

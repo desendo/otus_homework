@@ -9,13 +9,13 @@ namespace ECS.Systems
     {
         private EcsFilter _ttlFilter;
         private EcsWorld _world;
-        private EcsPool<CTimeToLive> _cTTLPool;
+        private EcsPool<CTimeToLive> _cTtlPool;
         private EcsPool<CView> _cViewPool;
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
 
-            _cTTLPool = _world.GetPool<CTimeToLive>();
+            _cTtlPool = _world.GetPool<CTimeToLive>();
             _cViewPool = _world.GetPool<CView>();
             _ttlFilter = _world.Filter<CTimeToLive>().Inc<CView>().End();
         }
@@ -24,20 +24,20 @@ namespace ECS.Systems
             List<int> destroyBuffer = new List<int>();
             foreach (var i in _ttlFilter)
             {
-                ref var ttl = ref _cTTLPool.Get(i);
+                ref var ttl = ref _cTtlPool.Get(i);
                 ref var view = ref _cViewPool.Get(i);
                 ttl.Current -= Time.deltaTime;
                 if (ttl.Current < 0f)
                 {
                     destroyBuffer.Add(i);
-                    view.View.Dispose();
                 }
             }
             foreach (var i in destroyBuffer)
             {
+                if(_cViewPool.Has(i))
+                    _cViewPool.Get(i).View.Dispose();
                 _world.DelEntity(i);
             }
         }
-
     }
 }

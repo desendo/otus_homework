@@ -27,6 +27,5 @@ namespace ECS.Systems
                 view.Transform.position = pos.Position;
             }
         }
-
     }
 }

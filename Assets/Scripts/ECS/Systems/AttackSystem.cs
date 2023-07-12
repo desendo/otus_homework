@@ -1,8 +1,7 @@
 ﻿using DependencyInjection;
 using ECS.Components;
-using Effects;
 using Leopotam.EcsLite;
-using Services;
+using Pool;
 using UnityEngine;
 
 namespace ECS.Systems
@@ -15,23 +14,29 @@ namespace ECS.Systems
         private EcsWorld _world;
         private EcsPool<CPosition> _cPositionPool;
         private EcsPool<CMove> _cMovePool;
+        private EcsPool<CTimeToLive> _cTimeToLivePool;
         private EcsPool<CTeam> _cTeamPool;
         private EcsPool<CWeapon> _cWeaponPool;
+        private EcsPool<CView> _cViewPool;
+        private EcsPool<CDamage> _cDamagePool;
 
-        private ProjectileManager _projectileManager;
+        private ProjectilePool _projectilePool;
 
         [Inject]
-        public void Construct(ProjectileManager projectileManager)
+        public void Construct(ProjectilePool projectilePool)
         {
-            _projectileManager = projectileManager;
+            _projectilePool = projectilePool;
         }
 
         public void Init(IEcsSystems systems)
         {
             _world = systems.GetWorld();
 
+            _cTimeToLivePool = _world.GetPool<CTimeToLive>();
+            _cViewPool = _world.GetPool<CView>();
             _cPositionPool = _world.GetPool<CPosition>();
             _cMovePool = _world.GetPool<CMove>();
+            _cDamagePool = _world.GetPool<CDamage>();
             _cTeamPool = _world.GetPool<CTeam>();
             _cWeaponPool = _world.GetPool<CWeapon>();
             _possibleTargetFilter = _world.Filter<CTeam>().Inc<CHealth>().Inc<CPosition>().End();
@@ -72,13 +77,49 @@ namespace ECS.Systems
                             continue;
 
                         weapon.Timer = weapon.Delay;
-                        _projectileManager.CreateProjectile(pos.Position, delta, team.Team,
+                        CreateProjectile( pos.Position, delta, team.Team,
                             weapon.Damage, weapon.Speed, weapon.TimeToLive);
+
                         break;
                     }
                 }
             }
         }
 
+        private void CreateProjectile(Vector3 position, Vector3 direction, int team, float damage, float speed, float ttl)
+        {
+            var entity = _world.NewEntity();
+
+
+            ref var cMove = ref _cMovePool.Add(entity);
+            ref var cView = ref _cViewPool.Add(entity);
+            ref var cPosition = ref _cPositionPool.Add(entity);
+            ref var cTeam = ref _cTeamPool.Add(entity);
+            ref var cDamage = ref _cDamagePool.Add(entity);
+            ref var cTimeToLive = ref _cTimeToLivePool.Add(entity);
+
+            cPosition.Direction = direction;
+            cPosition.Position = position;
+
+            var view = _projectilePool.Spawn();
+
+            cView.Transform = view.transform;
+            cView.View = view;
+
+            cView.Transform.forward = cPosition.Direction;
+            cView.Transform.position = cPosition.Position;
+
+            cMove.TargetDirection = cPosition.Direction;
+            cMove.CurrentMoveSpeed = speed;
+            cMove.TargetMoveSpeed = speed;
+
+            cDamage.Damage = damage;
+            cTimeToLive.Current = ttl;
+
+            cTeam.Team = team;
+            view.SetEntity(_world.PackEntityWithWorld(entity));
+            view.SetDisposeAction(()=>_projectilePool.Unspawn(view));
+            view.SetTeam(team);
+        }
     }
 }
