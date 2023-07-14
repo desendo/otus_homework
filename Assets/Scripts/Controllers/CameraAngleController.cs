@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Controllers
 {
-    public class CameraAngleController : IStartGameListener, ILostGameListener, IWinGameListener, IUpdate
+    public class CameraAngleController : IStartGameListener, IFinishGameListener, IUpdate
     {
         private bool _isEnabled;
         private Transform _cameraTransform;
@@ -37,15 +37,6 @@ namespace Controllers
             _cameraTransform = _camera.transform;
             _isEnabled = true;
         }
-        public void OnLostGame()
-        {
-            _isEnabled = false;
-        }
-
-        public void OnWinGame()
-        {
-            _isEnabled = false;
-        }
 
         public void Update(float dt)
         {
@@ -57,6 +48,11 @@ namespace Controllers
             current = Mathf.Lerp(current, _target, _lerpSpeed * dt);
             eulerAngles = new Vector3(current, eulerAngles.y, eulerAngles.z);
             _cameraTransform.eulerAngles = eulerAngles;
+        }
+
+        public void OnFinishGame(bool gameWin)
+        {
+            _isEnabled = false;
         }
     }
 }

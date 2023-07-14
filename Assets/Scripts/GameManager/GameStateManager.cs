@@ -7,23 +7,21 @@ namespace GameManager {
     public class GameStateManager
     {
         private readonly List<IGameLoadedListener> _gameLoadListeners;
-        private readonly List<IWinGameListener> _winListeners;
-        private readonly List<ILostGameListener> _lostListeners;
+        private readonly List<IFinishGameListener> _finishGameListeners;
+
         private readonly List<IStartGameListener> _startListeners;
         public readonly AtomicVariable<LevelState> State = new AtomicVariable<LevelState>(LevelState.None);
         public readonly AtomicVariable<bool> GameLoaded = new AtomicVariable<bool>();
         private readonly List<ISpawner> _spawners;
 
         public GameStateManager(List<IGameLoadedListener> gameLoadListeners,
-            List<IWinGameListener> winListeners,
-            List<ILostGameListener> lostListeners,
             List<IStartGameListener> startListeners,
+            List<IFinishGameListener> finishGameListeners,
             List<ISpawner> spawners,
             SignalBusService signalBusService)
         {
             _gameLoadListeners = gameLoadListeners;
-            _winListeners = winListeners;
-            _lostListeners = lostListeners;
+            _finishGameListeners = finishGameListeners;
             _startListeners = startListeners;
             _spawners = spawners;
 
@@ -59,12 +57,12 @@ namespace GameManager {
         private void GameStateChanged(LevelState obj)
         {
             if (obj == LevelState.Lost)
-                foreach (var listener in _lostListeners)
-                    listener.OnLostGame();
+                foreach (var listener in _finishGameListeners)
+                    listener.OnFinishGame(false);
 
             else if (obj == LevelState.Win)
-                foreach (var listener in _winListeners)
-                    listener.OnWinGame();
+                foreach (var listener in _finishGameListeners)
+                    listener.OnFinishGame(true);
 
             else if (obj == LevelState.Started)
                 foreach (var listener in _startListeners)

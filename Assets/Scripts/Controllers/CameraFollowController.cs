@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Controllers
 {
-    public class CameraFollowController : IStartGameListener, ILostGameListener, IWinGameListener, ILateUpdate
+    public class CameraFollowController : IStartGameListener, IFinishGameListener, ILateUpdate
     {
         private readonly HeroService _heroService;
         private bool _follow;
@@ -24,16 +24,6 @@ namespace Controllers
             _cameraTransform = _camera.transform;
             _follow = true;
         }
-        public void OnLostGame()
-        {
-            _follow = false;
-        }
-
-        public void OnWinGame()
-        {
-            _follow = false;
-        }
-
 
         public void LateUpdate()
         {
@@ -54,6 +44,11 @@ namespace Controllers
                 _cameraTransform.position = -delta + cameraTransformPosition;
 
             }
+        }
+
+        public void OnFinishGame(bool gameWin)
+        {
+            _follow = false;
         }
     }
 }

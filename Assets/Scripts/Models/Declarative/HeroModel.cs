@@ -4,15 +4,15 @@ using UnityEngine;
 
 namespace Models.Declarative
 {
-    public class HeroModel : IDisposable
+    public class HeroModel : MonoBehaviour, IDisposable
     {
+        [SerializeField] public HeroModelVisual Visual;
         public readonly HeroModelCore Core = new HeroModelCore();
-        public readonly HeroModelVisual Visual = new HeroModelVisual();
 
-        public void Construct(Transform rootTransform, Animator animator, IUpdateProvider updateProvider, Rigidbody rigidbody)
+        public void Construct(IUpdateProvider updateProvider)
         {
             Core.Construct();
-            Visual.Construct(Core, rootTransform, animator, updateProvider, rigidbody);
+            Visual.Construct(Core, updateProvider);
         }
 
         public void Dispose()

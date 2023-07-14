@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Controllers
 {
-    public class EnemyMoveController : IFixedUpdate, IStartGameListener, IWinGameListener, ILostGameListener
+    public class EnemyMoveController : IFixedUpdate, IStartGameListener, IFinishGameListener
     {
         private readonly EnemyService _enemyService;
         private bool _gameStarted;
@@ -43,13 +43,7 @@ namespace Controllers
         {
             _gameStarted = true;
         }
-
-        public void OnWinGame()
-        {
-            _gameStarted = false;
-        }
-
-        public void OnLostGame()
+        public void OnFinishGame(bool gameWin)
         {
             _gameStarted = false;
         }

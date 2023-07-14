@@ -15,7 +15,7 @@ namespace Models.Components
         {
             if (p.Id == "Delay_float")
             {
-                _core.AttackDelayModel.AttackDelayValue.Value = float.Parse(p.Value);
+                _core.AttackDelayMechanics.AttackDelayValue.Value = float.Parse(p.Value);
             }
             if (p.Id == "MaxRange_float")
             {

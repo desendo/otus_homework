@@ -4,7 +4,7 @@ using Services;
 
 namespace Controllers.HeroControllers
 {
-    public class HeroAttackController : IGameLoadedListener, IStartGameListener, ILostGameListener, IWinGameListener
+    public class HeroAttackController : IGameLoadedListener, IStartGameListener, IFinishGameListener
     {
         private readonly HeroService _heroService;
         private bool _loaded;
@@ -22,8 +22,6 @@ namespace Controllers.HeroControllers
             _heroService.CurrentWeaponEntity.Value?.Get<Component_Reload>().Reload();
 
         }
-
-
         private void HandleFireState(FireState fireState)
         {
             if (!_loaded || !_started) return;
@@ -46,12 +44,7 @@ namespace Controllers.HeroControllers
             _started = true;
         }
 
-        public void OnLostGame()
-        {
-            _started = false;
-        }
-
-        public void OnWinGame()
+        public void OnFinishGame(bool isWin)
         {
             _started = false;
         }

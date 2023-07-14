@@ -7,10 +7,10 @@ namespace Models.Declarative.Weapons
 {
     public class ShotgunModelCore : WeaponModelCoreAbstract
     {
-        public readonly ReloadModel ReloadModel = new ReloadModel();
+        public readonly Reload_Mechanics ReloadMechanics = new Reload_Mechanics();
         public readonly ClipModel ClipModel = new ClipModel();
-        public readonly BurstModel BurstModel = new BurstModel();
-        public readonly AttackDelayModel AttackDelayModel = new AttackDelayModel();
+        public readonly Burst Burst = new Burst();
+        public readonly AttackDelay_Mechanics AttackDelayMechanics = new AttackDelay_Mechanics();
 
 
         public readonly AtomicVariable<float> ShootTimer = new AtomicVariable<float>();
@@ -28,10 +28,10 @@ namespace Models.Declarative.Weapons
             {
                 IsActive.Value = isActive;
                 if(!isActive)
-                    ReloadModel.CancelReload();
+                    ReloadMechanics.CancelReload();
             });
-            ReloadModel.Construct(ClipModel);
-            AttackDelayModel.Construct(this);
+            ReloadMechanics.Construct(ClipModel);
+            AttackDelayMechanics.Construct(this);
 
         }
 
@@ -40,14 +40,14 @@ namespace Models.Declarative.Weapons
             if(!IsActive.Value)
                 return;
 
-            ReloadModel.Update(dt);
-            AttackDelayModel.Update(dt);
+            ReloadMechanics.Update(dt);
+            AttackDelayMechanics.Update(dt);
 
         }
 
         protected override void TryAttack()
         {
-            if (AttackReady.Value && ClipModel.ShotsLeft.Value > 0 && !ReloadModel.IsReloading.Value)
+            if (AttackReady.Value && ClipModel.ShotsLeft.Value > 0 && !ReloadMechanics.IsReloading.Value)
             {
                 AttackRequested.Invoke();
                 AttackReady.Value = false;

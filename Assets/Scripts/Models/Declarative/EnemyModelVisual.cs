@@ -8,8 +8,18 @@ using UnityEngine;
 
 namespace Models.Declarative
 {
+    [Serializable]
     public class EnemyModelVisual
     {
+        [SerializeField] private Animator _animator;
+        [SerializeField] private AnimationEventListener _animationEventListener;
+        [SerializeField] private CollisionSensor _weaponCollisionSensor;
+        [SerializeField] private Collider _hitCollider;
+        [SerializeField] private Rigidbody _rigidbody;
+        [SerializeField] private Transform _rootTransform;
+
+        public Rigidbody RigidBody => _rigidbody;
+        public Transform RootTransform => _rootTransform;
 
         private static readonly int death = Animator.StringToHash("Death");
         private static readonly int attack = Animator.StringToHash("Attack");
@@ -18,47 +28,47 @@ namespace Models.Declarative
 
         private readonly List<IDisposable> _subs = new List<IDisposable>();
 
-        public void Construct(EnemyModelCore core, Animator animator,
-            IUpdateProvider updateProvider, Rigidbody rigidbody, Collider hitCollider,
-            AnimationEventListener animationEventListener, CollisionSensor weaponCollisionSensor)
+
+        public void Construct(EnemyModelCore core, IUpdateProvider updateProvider)
         {
             var isDead = core.LifeModel.IsDead;
+            _animator.ResetTrigger(death);
 
-            weaponCollisionSensor.gameObject.SetActive(false);
-            animationEventListener.OnEvent.Subscribe(obj =>
+            _weaponCollisionSensor.gameObject.SetActive(false);
+            _animationEventListener.OnEvent.Subscribe(obj =>
             {
                 if(obj == "enable_weapon_collider")
-                    weaponCollisionSensor.gameObject.SetActive(true);
+                    _weaponCollisionSensor.gameObject.SetActive(true);
                 if(obj == "disable_weapon_collider")
-                    weaponCollisionSensor.gameObject.SetActive(false);
+                    _weaponCollisionSensor.gameObject.SetActive(false);
 
             }).AddTo(_subs);
 
-            weaponCollisionSensor.Collision.Subscribe(x =>
+            _weaponCollisionSensor.Collision.Subscribe(x =>
             {
                 if (x.body.TryGetComponent<IEntity>(out var entity))
                 {
-                    weaponCollisionSensor.gameObject.SetActive(false);
+                    _weaponCollisionSensor.gameObject.SetActive(false);
                     core.Weapon.DoHit(entity);
                 }
             }).AddTo(_subs);
 
-            core.IsActive.OnChanged.Subscribe(x=> hitCollider.enabled = x).AddTo(_subs);
-            hitCollider.enabled = core.IsActive.Value;
+            core.IsActive.OnChanged.Subscribe(x=> _hitCollider.enabled = x).AddTo(_subs);
+            _hitCollider.enabled = core.IsActive.Value;
 
             core.Weapon.AttackRequested.Subscribe(() =>
             {
-                animator.ResetTrigger(attack);
-                animator.SetTrigger(attack);
+                _animator.ResetTrigger(attack);
+                _animator.SetTrigger(attack);
             }).AddTo(_subs);
 
             updateProvider.OnLateUpdate.Subscribe(() => {
                 if (isDead.Value)
                 {
-                    animator.SetBool(death, true);
+                    _animator.SetBool(death, true);
                     return;
                 }
-                animator.SetFloat(speed, rigidbody.velocity.sqrMagnitude);
+                _animator.SetFloat(speed, _rigidbody.velocity.sqrMagnitude);
 
             }).AddTo(_subs);
         }

@@ -5,11 +5,11 @@ using GameManager;
 
 namespace Models.Declarative.Weapons
 {
-    public class MachineGunModelCore : WeaponModelCoreAbstract
+    public class MachineGunModel : WeaponModelCoreAbstract
     {
-        public readonly ReloadModel ReloadModel = new ReloadModel();
+        public readonly Reload_Mechanics ReloadMechanics = new Reload_Mechanics();
         public readonly ClipModel ClipModel = new ClipModel();
-        public readonly AttackDelayModel AttackDelayModel = new AttackDelayModel();
+        public readonly AttackDelay_Mechanics AttackDelayMechanics = new AttackDelay_Mechanics();
         public AtomicAction OnAttackContinue;
         public AtomicAction OnAttackStop;
 
@@ -31,10 +31,10 @@ namespace Models.Declarative.Weapons
             {
                 IsActive.Value = isActive;
                 if(!isActive)
-                    ReloadModel.CancelReload();
+                    ReloadMechanics.CancelReload();
             });
-            ReloadModel.Construct(ClipModel);
-            AttackDelayModel.Construct(this);
+            ReloadMechanics.Construct(ClipModel);
+            AttackDelayMechanics.Construct(this);
         }
 
         private void Update(float dt)
@@ -42,9 +42,9 @@ namespace Models.Declarative.Weapons
             if(!IsActive.Value)
                 return;
 
-            ReloadModel.Update(dt);
+            ReloadMechanics.Update(dt);
 
-            AttackDelayModel.Update(dt);
+            AttackDelayMechanics.Update(dt);
 
              if(_continueShoot)
                  TryAttack();
@@ -52,7 +52,7 @@ namespace Models.Declarative.Weapons
 
         protected override void TryAttack()
         {
-            if (AttackReady.Value && ClipModel.ShotsLeft.Value > 0 && !ReloadModel.IsReloading.Value)
+            if (AttackReady.Value && ClipModel.ShotsLeft.Value > 0 && !ReloadMechanics.IsReloading.Value)
             {
                 AttackRequested.Invoke();
                 AttackReady.Value = false;

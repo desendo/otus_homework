@@ -6,9 +6,9 @@ namespace Models.Components
 {
     public sealed class Component_MachineGunInstaller : Component_WeaponInstallerAbstract
     {
-        private readonly MachineGunModelCore _core;
+        private readonly MachineGunModel _core;
 
-        public Component_MachineGunInstaller(MachineGunModelCore core) : base(core)
+        public Component_MachineGunInstaller(MachineGunModel core) : base(core)
         {
             _core = core;
         }
@@ -23,11 +23,11 @@ namespace Models.Components
             else if (p.Id == "Delay_float")
             {
                 if (float.TryParse(p.Value, out var val))
-                    _core.AttackDelayModel.AttackDelayValue.Value = val;
+                    _core.AttackDelayMechanics.AttackDelayValue.Value = val;
             }
             else if (p.Id == "ReloadTime_float")
             {
-                _core.ReloadModel.ReloadDelay.Value = float.Parse(p.Value);
+                _core.ReloadMechanics.ReloadDelay.Value = float.Parse(p.Value);
             }
             else if (p.Id == "DisperseAngle_float")
             {

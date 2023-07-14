@@ -4,7 +4,7 @@ using Common.Atomic.Values;
 
 namespace Models.Declarative.Weapons
 {
-    public class ReloadModel : IDisposable
+    public class Reload_Mechanics : IDisposable
     {
         public readonly AtomicVariable<float> ReloadDelay = new AtomicVariable<float>();
         public readonly AtomicVariable<float> ReloadTimer = new AtomicVariable<float>();
@@ -14,7 +14,7 @@ namespace Models.Declarative.Weapons
         private ClipModel _clipModel;
         private bool _constructed;
 
-        public ReloadModel()
+        public Reload_Mechanics()
         {
             OnReload = new AtomicAction(()=>
             {

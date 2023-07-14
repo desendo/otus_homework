@@ -21,11 +21,11 @@ namespace Models.Components
             }
             else if (p.Id == "Delay_float")
             {
-                _core.AttackDelayModel.AttackDelayValue.Value = float.Parse(p.Value);
+                _core.AttackDelayMechanics.AttackDelayValue.Value = float.Parse(p.Value);
             }
             else if (p.Id == "ReloadTime_float")
             {
-                _core.ReloadModel.ReloadDelay.Value = float.Parse(p.Value);
+                _core.ReloadMechanics.ReloadDelay.Value = float.Parse(p.Value);
             }
             else if (p.Id == "BulletSpeed_float")
             {
@@ -33,12 +33,12 @@ namespace Models.Components
             }
             else if (p.Id == "BurstAngle_float")
             {
-                _core.BurstModel.BurstAngle.Value = float.Parse(p.Value);
+                _core.Burst.BurstAngle.Value = float.Parse(p.Value);
             }
             else if (p.Id == "BurstCount_int")
             {
                 if (int.TryParse(p.Value, out var val))
-                    _core.BurstModel.BurstCount.Value = val;
+                    _core.Burst.BurstCount.Value = val;
             }
         }
     }

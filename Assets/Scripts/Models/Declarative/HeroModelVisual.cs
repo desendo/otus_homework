@@ -6,10 +6,14 @@ using UnityEngine;
 
 namespace Models.Declarative
 {
+    [Serializable]
     public class HeroModelVisual
     {
-        public Transform RootTransform;
-
+        [SerializeField] private Transform _rootTransform;
+        [SerializeField] private Animator _animator;
+        [SerializeField] private Rigidbody _rigidbody;
+        public Transform RootTransform => _rootTransform;
+        public Rigidbody Rigidbody => _rigidbody;
         private static readonly int state = Animator.StringToHash("state");
         private static readonly int x = Animator.StringToHash("move_speed_x");
         private static readonly int y = Animator.StringToHash("move_speed_y");
@@ -22,14 +26,11 @@ namespace Models.Declarative
         private const int MOVE_STATE = 1;
         private const int DEATH_STATE = 5;
 
-        private Animator _animator;
         private float _reloadAnimationTime;
-        public Rigidbody Rigidbody { get; private set; }
 
 
-        public void Construct(HeroModelCore core, Transform rootTransform, Animator animator, IUpdateProvider updateProvider, Rigidbody rigidbody)
+        public void Construct(HeroModelCore core, IUpdateProvider updateProvider)
         {
-            _animator = animator;
             var clips = _animator.runtimeAnimatorController.animationClips;
             foreach (var animationClip in clips)
             {
@@ -37,8 +38,6 @@ namespace Models.Declarative
                     _reloadAnimationTime = animationClip.length;
             }
 
-            Rigidbody = rigidbody;
-            RootTransform = rootTransform;
             var isDead = core.LifeModel.IsDead;
             core.AttackModel.OnReloadStarted.Subscribe(reloadTime =>
             {
@@ -64,8 +63,8 @@ namespace Models.Declarative
                     _animator.SetInteger(state, MOVE_STATE);
                     var velocity = core.MoveModel.ResultVelocity.Value.normalized;
 
-                    var translatedVelocity = new Vector2(Vector3.Dot(velocity, rootTransform.right),
-                        Vector3.Dot(velocity, rootTransform.forward));
+                    var translatedVelocity = new Vector2(Vector3.Dot(velocity, RootTransform.right),
+                        Vector3.Dot(velocity, RootTransform.forward));
 
                     _animator.SetFloat(x, translatedVelocity.x);
                     _animator.SetFloat(y, translatedVelocity.y);

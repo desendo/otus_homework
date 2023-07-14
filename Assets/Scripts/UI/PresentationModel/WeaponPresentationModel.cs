@@ -14,15 +14,15 @@ namespace UI.PresentationModel
 
         public WeaponPresentationModel(AtomicVariable<int> shotsLeft, AtomicVariable<int> clipSize,
             AtomicVariable<float> reloadTimerNormalized, AtomicVariable<int> damage, AtomicVariable<bool> isActive,
-            AtomicVariable<int> shotMult = null)
+            int shotMult = 0)
         {
             reloadTimerNormalized.OnChanged.Subscribe(x => ReloadProgress.Value = x);
             damage.OnChanged.Subscribe(x =>
             {
-                Damage.Value = shotMult == null ? $"Damage: {x}" : $"Damage: {x}x{shotMult.Value}";
+                Damage.Value = shotMult == 0 ? $"Damage: {x}" : $"Damage: {x}x{shotMult}";
             });
 
-            Damage.Value = shotMult == null ? $"Damage: {damage.Value}" : $"Damage: {damage.Value}x{shotMult.Value}";
+            Damage.Value = shotMult == 0 ? $"Damage: {damage.Value}" : $"Damage: {damage.Value}x{shotMult}";
             shotsLeft.OnChanged.Subscribe(x => Shots.Value = $"{shotsLeft.Value}/{clipSize.Value}");
             clipSize.OnChanged.Subscribe(x => Shots.Value = $"{shotsLeft.Value}/{clipSize.Value}");
             Shots.Value = $"{shotsLeft.Value}/{clipSize.Value}";

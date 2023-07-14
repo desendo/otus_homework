@@ -4,13 +4,15 @@ namespace Models.Components
 {
     public sealed class Component_Burst
     {
-        public readonly AtomicVariable<float> Angle;
-        public readonly AtomicVariable<int> Count;
+        public float Angle { get; private set; }
+        public int Count { get; private set; }
 
         public Component_Burst(AtomicVariable<float> angle, AtomicVariable<int> count)
         {
-            Angle = angle;
-            Count = count;
+            angle.OnChanged.Subscribe(x => Angle = angle.Value);
+            count.OnChanged.Subscribe(x => Count = count.Value);
+            Angle = angle.Value;
+            Count = count.Value;
         }
     }
 }

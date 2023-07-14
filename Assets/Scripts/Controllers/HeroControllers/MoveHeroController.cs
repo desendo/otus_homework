@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Controllers.HeroControllers
 {
-    public class MoveHeroController : IGameLoadedListener, IStartGameListener, ILostGameListener, IWinGameListener, IFixedUpdate
+    public class MoveHeroController : IGameLoadedListener, IStartGameListener, IFinishGameListener, IFixedUpdate
     {
         private readonly InputService _inputService;
         private readonly HeroService _heroService;
@@ -36,13 +36,7 @@ namespace Controllers.HeroControllers
         {
             _started = true;
         }
-
-        public void OnLostGame()
-        {
-            _started = false;
-        }
-
-        public void OnWinGame()
+        public void OnFinishGame(bool gameWin)
         {
             _started = false;
         }

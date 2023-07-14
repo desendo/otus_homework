@@ -1,8 +1,8 @@
-﻿using Common.Atomic.Actions;
-using Common.Atomic.Values;
+﻿using Common.Atomic.Values;
 
 namespace Models.Components
 {
+    //todo инкапсулировать модель
     public sealed class Component_Clip
     {
         public AtomicVariable<int> ShotsLeft { get; }

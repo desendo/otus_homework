@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Controllers.HeroControllers
 {
-    public class RotateHeroController : IGameLoadedListener, IStartGameListener, ILostGameListener, IWinGameListener, IUpdate
+    public class RotateHeroController : IGameLoadedListener, IStartGameListener, IFinishGameListener, IUpdate
     {
         private readonly InputService _inputService;
         private readonly HeroService _heroService;
@@ -51,13 +51,7 @@ namespace Controllers.HeroControllers
             _camera = Camera.main;
             _started = true;
         }
-
-        public void OnLostGame()
-        {
-            _started = false;
-        }
-
-        public void OnWinGame()
+        public void OnFinishGame(bool gameWin)
         {
             _started = false;
         }

@@ -6,14 +6,12 @@ public interface IGameLoadedListener
 {
     public void OnGameLoaded(bool isLoaded);
 }
-public interface IWinGameListener
+
+public interface IFinishGameListener
 {
-    public void OnWinGame();
+    public void OnFinishGame(bool gameWin);
 }
-public interface ILostGameListener
-{
-    public void OnLostGame();
-}
+
 
 public interface IUpdate
 {

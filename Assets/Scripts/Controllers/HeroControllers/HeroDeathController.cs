@@ -6,7 +6,7 @@ using Signals;
 
 namespace Controllers.HeroControllers
 {
-    public class HeroDeathController : IStartGameListener, ILostGameListener, IWinGameListener
+    public class HeroDeathController : IStartGameListener, IFinishGameListener
     {
         private readonly SignalBusService _signalBusService;
         private readonly HeroService _heroService;
@@ -30,12 +30,8 @@ namespace Controllers.HeroControllers
             _signalBusService.Fire(new GameOverRequest());
         }
 
-        public void OnLostGame()
-        {
-            _sub?.Dispose();
-        }
 
-        public void OnWinGame()
+        public void OnFinishGame(bool gameWin)
         {
             _sub?.Dispose();
         }

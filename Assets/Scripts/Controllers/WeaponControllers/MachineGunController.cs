@@ -20,7 +20,7 @@ namespace Controllers.WeaponControllers
             var pivot = weapon.Get<Component_Pivot>();
             var bulletSpeed = weapon.Get<Component_Speed>().Speed;
 
-            var randomAngle = UnityEngine.Random.Range(-dispersion.Angle.Value, dispersion.Angle.Value);
+            var randomAngle = UnityEngine.Random.Range(-dispersion.Angle, dispersion.Angle);
             var randomized = Quaternion.Euler(0f, randomAngle, 0f) * pivot.Direction;
             var damage = weapon.Get<Component_Damage>().Damage.Value;
 

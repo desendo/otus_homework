@@ -10,10 +10,8 @@ namespace Models.Entities
     public class HeroEntityMono : EntityMono
     {
         [SerializeField] private Transform _shootPoint;
-        [SerializeField] private Rigidbody _rigidbody;
-        private readonly HeroModel _heroModel = new HeroModel();
+        [SerializeField] private HeroModel _heroModel;
         private IUpdateProvider _updateProvider;
-
 
         [Inject]
         public void Construct(IUpdateProvider updateProvider)
@@ -29,7 +27,7 @@ namespace Models.Entities
         private void Awake()
         {
             var animator = GetComponentInChildren<Animator>();
-            _heroModel.Construct(transform, animator,  _updateProvider, _rigidbody);
+            _heroModel.Construct(_updateProvider);
 
             Add(new Component_ObservedMove(_heroModel.Core.MoveModel.OnMoveDir,
                 _heroModel.Core.MoveModel.MoveRequested, _heroModel.Core.MoveModel.ResultVelocity));

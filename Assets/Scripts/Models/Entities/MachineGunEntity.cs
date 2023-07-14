@@ -9,7 +9,7 @@ namespace Models.Entities
 {
     public class MachineGunEntity : Entity, IWeapon
     {
-        private readonly MachineGunModelCore _core = new MachineGunModelCore();
+        private readonly MachineGunModel _core = new MachineGunModel();
         private readonly Transform _shootTransform;
         public WeaponType WeaponType { get; }
 
@@ -32,8 +32,8 @@ namespace Models.Entities
             Add(new Component_OnAttack(_core.AttackRequested));
             Add(new Component_Speed(_core.BulletSpeed));
             Add(new Component_Damage(_core.Damage));
-            Add(new Component_Reload(_core.ReloadModel.OnReload, _core.ReloadModel.ReloadStarted,
-                _core.ReloadModel.ReloadTimer, _core.ReloadModel.ReloadDelay));
+            Add(new Component_Reload(_core.ReloadMechanics.OnReload, _core.ReloadMechanics.ReloadStarted,
+                _core.ReloadMechanics.ReloadTimer, _core.ReloadMechanics.ReloadDelay));
             Add(new Component_SetActive(_core.Activate));
             Add(new Component_MachineGunInstaller(_core));
         }

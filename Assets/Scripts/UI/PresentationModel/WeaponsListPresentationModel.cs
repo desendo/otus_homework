@@ -3,7 +3,6 @@ using Common.Atomic.Actions;
 using Models.Components;
 using Models.Entities;
 using Services;
-using UnityEngine;
 
 namespace UI.PresentationModel
 {
@@ -24,8 +23,9 @@ namespace UI.PresentationModel
             var damage = obj.Get<Component_Damage>();
             var active = obj.Get<Component_IsActive>();
             obj.TryGet<Component_Burst>(out var burst);
+            var burstCount = burst?.Count ?? 0;
             var pm = new WeaponPresentationModel(clip.ShotsLeft, clip.ClipSize,
-                reload.ReloadTimerNormalized, damage.Damage, active.IsActive, burst?.Count);
+                reload.ReloadTimerNormalized, damage.Damage, active.IsActive, burstCount);
 
             var info = obj.Get<Component_Info>();
             info.Name.OnChanged.Subscribe(x => pm.Name.Value = x);

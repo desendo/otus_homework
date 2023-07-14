@@ -23,7 +23,6 @@ namespace Services
         public AtomicVariable<IEntity> HeroEntity { get; } = new AtomicVariable<IEntity>();
         public AtomicVariable<IWeapon> CurrentWeaponEntity { get; private set; } = new AtomicVariable<IWeapon>();
         public AtomicEvent<IWeapon> OnWeaponCollected { get; private set; } = new AtomicEvent<IWeapon>();
-        public AtomicEvent<IWeapon> OnWeaponDropped { get; private set; } = new AtomicEvent<IWeapon>();
         public AtomicEvent OnWeaponsClear { get; private set; } = new AtomicEvent();
 
         public readonly List<IWeapon> CollectedWeapons = new List<IWeapon>();
@@ -123,7 +122,7 @@ namespace Services
                 }
             }
 
-            throw new Exception("no config " + (WeaponType.Riffle));
+            throw new Exception("no config " + (weaponConfig?.Type));
         }
 
         public void Clear()

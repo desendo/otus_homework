@@ -19,9 +19,9 @@ namespace Controllers.WeaponControllers
             var burst = weapon.Get<Component_Burst>();
             var pivot = weapon.Get<Component_Pivot>();
             var bulletSpeed = weapon.Get<Component_Speed>().Speed;
-            for (int i = 0; i < burst.Count.Value; i++)
+            for (int i = 0; i < burst.Count; i++)
             {
-                var randomAngle = UnityEngine.Random.Range(-burst.Angle.Value, burst.Angle.Value);
+                var randomAngle = UnityEngine.Random.Range(-burst.Angle, burst.Angle);
                 var randomized = Quaternion.Euler(0f, randomAngle, 0f) * pivot.Direction;
                 var damage = weapon.Get<Component_Damage>().Damage.Value;
 

@@ -16,7 +16,6 @@ namespace Common.Atomic.Values
             }
         }
 
-
         private T value;
 
         public AtomicVariable()
@@ -28,12 +27,5 @@ namespace Common.Atomic.Values
         {
             this.value = value;
         }
-
-#if UNITY_EDITOR
-        private void OnValueChanged(T val)
-        {
-            this.OnChanged?.Invoke(val);
-        }
-#endif
     }
 }

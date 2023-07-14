@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Models.Declarative.Weapons
 {
-    public class AttackDelayModel
+    public class AttackDelay_Mechanics
     {
         public readonly AtomicVariable<float> AttackDelayValue = new AtomicVariable<float>();
         public readonly AtomicVariable<float> AttackDelayTimer = new AtomicVariable<float>();

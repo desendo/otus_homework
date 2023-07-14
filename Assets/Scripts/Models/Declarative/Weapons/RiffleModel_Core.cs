@@ -6,9 +6,9 @@ namespace Models.Declarative.Weapons
 {
     public class RiffleModelCore : WeaponModelCoreAbstract
     {
-        public readonly ReloadModel ReloadModel = new ReloadModel();
+        public readonly Reload_Mechanics ReloadMechanics = new Reload_Mechanics();
         public readonly ClipModel ClipModel = new ClipModel();
-        public readonly AttackDelayModel AttackDelayModel = new AttackDelayModel();
+        public readonly AttackDelay_Mechanics AttackDelayMechanics = new AttackDelay_Mechanics();
 
 
         public readonly AtomicVariable<float> BulletSpeed = new AtomicVariable<float>();
@@ -17,34 +17,34 @@ namespace Models.Declarative.Weapons
         private IDisposable _updateSub;
 
 
-        public void Construct(IUpdateProvider updateProvider)
+        public void Construct()
         {
             Activate.Subscribe(isActive =>
             {
                 IsActive.Value = isActive;
                 if(!isActive)
-                    ReloadModel.CancelReload();
+                    ReloadMechanics.CancelReload();
             });
-            _updateProvider = updateProvider;
-            _updateSub = _updateProvider.OnUpdate.Subscribe(Update);
-            ReloadModel.Construct(ClipModel);
-            AttackDelayModel.Construct(this);
-
+            ReloadMechanics.Construct(ClipModel);
+            AttackDelayMechanics.Construct(this);
         }
-
-        private void Update(float dt)
+        public void Construct_Mechanics(IUpdateProvider updateProvider)
         {
-            if(!IsActive.Value)
-                return;
+            _updateSub = updateProvider.OnUpdate.Subscribe(dt =>
+            {
+                if(!IsActive.Value)
+                    return;
 
-            ReloadModel.Update(dt);
-            AttackDelayModel.Update(dt);
+                ReloadMechanics.Update(dt);
+                AttackDelayMechanics.Update(dt);
 
+            });
         }
+
 
         protected override void TryAttack()
         {
-            if (AttackReady.Value && ClipModel.ShotsLeft.Value > 0 && !ReloadModel.IsReloading.Value)
+            if (AttackReady.Value && ClipModel.ShotsLeft.Value > 0 && !ReloadMechanics.IsReloading.Value)
             {
                 AttackRequested.Invoke();
                 AttackReady.Value = false;

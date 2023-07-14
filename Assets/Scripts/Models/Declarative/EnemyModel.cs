@@ -6,17 +6,17 @@ using UnityEngine;
 
 namespace Models.Declarative
 {
-    public class EnemyModel : IDisposable
+    [Serializable]
+    public class EnemyModel : MonoBehaviour, IDisposable
     {
-        public readonly EnemyModelCore Core = new EnemyModelCore();
-        public readonly EnemyModelVisual Visual = new EnemyModelVisual();
+        public EnemyModelCore Core = new EnemyModelCore();
+        [SerializeField]
+        public EnemyModelVisual Visual;
 
-        public void Construct(Transform rootTransform, Animator animator, IUpdateProvider updateProvider,
-            Rigidbody rigidbody, Collider hitCollider, AnimationEventListener animationEventListener,
-            CollisionSensor weaponCollisionSensor)
+        public void Construct(IUpdateProvider updateProvider)
         {
             Core.Construct(updateProvider);
-            Visual.Construct(Core, animator, updateProvider, rigidbody, hitCollider, animationEventListener, weaponCollisionSensor);
+            Visual.Construct(Core, updateProvider);
         }
 
         public void Dispose()

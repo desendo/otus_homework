@@ -4,7 +4,7 @@ using Services;
 namespace Controllers
 {
     //тут почти ецс система
-    public class EnemyAttackController: IUpdate, IStartGameListener, IWinGameListener, ILostGameListener
+    public class EnemyAttackController: IUpdate, IStartGameListener, IFinishGameListener
     {
         private readonly EnemyService _enemyService;
         private readonly HeroService _heroService;
@@ -47,12 +47,7 @@ namespace Controllers
 
         }
 
-        public void OnWinGame()
-        {
-            _gameStarted = false;
-        }
-
-        public void OnLostGame()
+        public void OnFinishGame(bool gameWin)
         {
             _gameStarted = false;
         }

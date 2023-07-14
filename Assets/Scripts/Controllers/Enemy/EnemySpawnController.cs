@@ -9,7 +9,7 @@ using View;
 
 namespace Controllers
 {
-    public class EnemySpawnController: IStartGameListener, ILostGameListener, IWinGameListener, IUpdate
+    public class EnemySpawnController: IStartGameListener, IFinishGameListener, IUpdate
     {
         private readonly LevelBounds _levelBounds;
         private readonly EnemyService _enemyService;
@@ -18,7 +18,7 @@ namespace Controllers
 
         private readonly Timer _spawnTimer;
         private readonly DependencyContainer _dependencyContainer;
-        private HeroService _heroService;
+        private readonly HeroService _heroService;
         private float _radius = 10f;
         private float _radiusWidth = 5f;
 
@@ -42,12 +42,7 @@ namespace Controllers
             _spawnTimer.Reset();
         }
 
-        public void OnLostGame()
-        {
-            _spawnEnabled = false;
-        }
-
-        public void OnWinGame()
+        public void OnFinishGame(bool isWin)
         {
             _spawnEnabled = false;
         }
@@ -82,7 +77,6 @@ namespace Controllers
                     break;
                 }
             }
-
         }
     }
 }

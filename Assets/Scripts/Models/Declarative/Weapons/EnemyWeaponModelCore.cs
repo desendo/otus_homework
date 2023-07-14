@@ -9,7 +9,7 @@ namespace Models.Declarative.Weapons
     public class EnemyWeaponModelCore : WeaponModelCoreAbstract
     {
         public readonly AtomicVariable<float> MaxRange = new AtomicVariable<float>();
-        public readonly AttackDelayModel AttackDelayModel = new AttackDelayModel();
+        public readonly AttackDelay_Mechanics AttackDelayMechanics = new AttackDelay_Mechanics();
 
         private IUpdateProvider _updateProvider;
         private IDisposable _updateSub;
@@ -26,7 +26,7 @@ namespace Models.Declarative.Weapons
                 AttackReady.Value = true;
 
             });
-            AttackDelayModel.Construct(this);
+            AttackDelayMechanics.Construct(this);
         }
 
         private void Update(float dt)
@@ -34,7 +34,7 @@ namespace Models.Declarative.Weapons
             if(!IsActive.Value)
                 return;
 
-            AttackDelayModel.Update(dt);
+            AttackDelayMechanics.Update(dt);
         }
 
         public void DoHit(IEntity entity)
