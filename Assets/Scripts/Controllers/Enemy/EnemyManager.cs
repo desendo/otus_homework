@@ -9,7 +9,7 @@ using View;
 
 namespace Controllers
 {
-    public class EnemySpawnController: IStartGameListener, IFinishGameListener, IUpdate
+    public class EnemyManager: IStartGameListener, IFinishGameListener, IUpdate
     {
         private readonly LevelBounds _levelBounds;
         private readonly EnemyService _enemyService;
@@ -18,14 +18,14 @@ namespace Controllers
 
         private readonly Timer _spawnTimer;
         private readonly DependencyContainer _dependencyContainer;
-        private readonly HeroService _heroService;
+        private readonly HeroManager _heroManager;
         private float _radius = 10f;
         private float _radiusWidth = 5f;
 
-        public EnemySpawnController(LevelBounds levelBounds, EnemyService enemyService, DependencyContainer dependencyContainer,
-            EnemyPool enemyPool, GameConfig gameConfig, HeroService heroService)
+        public EnemyManager(LevelBounds levelBounds, EnemyService enemyService, DependencyContainer dependencyContainer,
+            EnemyPool enemyPool, GameConfig gameConfig, HeroManager heroManager)
         {
-            _heroService = heroService;
+            _heroManager = heroManager;
             _dependencyContainer = dependencyContainer;
             _levelBounds = levelBounds;
             _enemyService = enemyService;
@@ -61,7 +61,7 @@ namespace Controllers
             if(_enemyService.TotalSpawned.Value >= _enemyService.KillGoal.Value)
                 return;
 
-            var heroPos = _heroService.HeroEntity.Value.Get<Component_Transform>().RootTransform.position;
+            var heroPos = _heroManager.HeroEntity.Value.Get<Component_Transform>().RootTransform.position;
             var instance = _enemyPool.Spawn(entity=>_dependencyContainer.Inject(entity));
 
             while (true)

@@ -29,7 +29,7 @@ namespace Managers
         {
             foreach (var spawnedBullet in _spawnedBullets)
             {
-                var deltaMove = spawnedBullet.Get<Component_Move>().Velocity.Value * dt;
+                var deltaMove = spawnedBullet.Get<Component_Move>().Velocity * dt;
                 spawnedBullet.Get<Component_Transform>().Translate(deltaMove);
                 spawnedBullet.Get<Component_Finish>().TimeLeft.Value -= dt;
             }

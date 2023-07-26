@@ -10,10 +10,10 @@ namespace UI.PresentationModel
     {
         public readonly AtomicEvent OnChange = new AtomicEvent();
         public readonly List<WeaponPresentationModel> WeaponPresentationModels = new List<WeaponPresentationModel>();
-        public WeaponsListPresentationModel(HeroService heroService)
+        public WeaponsListPresentationModel(HeroManager heroManager)
         {
-            heroService.OnWeaponCollected.Subscribe(OnWeaponAdd);
-            heroService.OnWeaponsClear.Subscribe(Clear);
+            heroManager.OnWeaponCollected.Subscribe(OnWeaponAdd);
+            heroManager.OnWeaponsClear.Subscribe(Clear);
         }
 
         private void OnWeaponAdd(IWeapon obj)

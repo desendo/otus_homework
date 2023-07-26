@@ -9,7 +9,7 @@ namespace Models.Declarative
 {
     public class EnemyModelCore : IDisposable
     {
-        public readonly LifeModel LifeModel = new LifeModel();
+        public readonly Life Life = new Life();
         public readonly EnemyWeaponModelCore Weapon = new EnemyWeaponModelCore();
 
         public readonly AtomicVariable<float> Speed = new AtomicVariable<float>();
@@ -21,19 +21,19 @@ namespace Models.Declarative
 
         public void Construct(IUpdateProvider updateProvider)
         {
-            LifeModel.Construct();
-            LifeModel.OnDeath.Subscribe(()=>IsActive.Value = false).AddTo(_subs);
+            Life.Construct();
+            Life.OnDeath.Subscribe(()=>IsActive.Value = false).AddTo(_subs);
             Weapon.Construct(updateProvider);
             Weapon.AttackReady.OnChanged.Subscribe(isReady =>
             {
                 CurrentSpeedMultiplier.Value = isReady ? 1f : TargetSpeedMultiplierOnHits.Value;
             }).AddTo(_subs);
-            Weapon.Activate.Invoke(true);
+            Weapon.Activate(true);
         }
 
         public void Dispose()
         {
-            LifeModel.Dispose();
+            Life.Dispose();
             Weapon.Dispose();
             _subs.Dispose();
         }

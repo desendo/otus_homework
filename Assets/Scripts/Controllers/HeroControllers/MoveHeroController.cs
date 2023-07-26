@@ -8,14 +8,14 @@ namespace Controllers.HeroControllers
     public class MoveHeroController : IGameLoadedListener, IStartGameListener, IFinishGameListener, IFixedUpdate
     {
         private readonly InputService _inputService;
-        private readonly HeroService _heroService;
+        private readonly HeroManager _heroManager;
         private bool _loaded;
         private bool _started;
 
-        public MoveHeroController(InputService inputService, HeroService heroService)
+        public MoveHeroController(InputService inputService, HeroManager heroManager)
         {
             _inputService = inputService;
-            _heroService = heroService;
+            _heroManager = heroManager;
         }
 
         public void FixedUpdate(float dt)
@@ -23,7 +23,7 @@ namespace Controllers.HeroControllers
             if (!_loaded || !_started) return;
 
             var dir = (Vector3)_inputService.MoveDirection.normalized;
-            var componentMove = _heroService.HeroEntity.Value.Get<Component_ObservedMove>();
+            var componentMove = _heroManager.HeroEntity.Value.Get<Component_ObservedMove>();
             dir = new Vector3(dir.x, 0, dir.y);
             componentMove.Move(dir);
         }

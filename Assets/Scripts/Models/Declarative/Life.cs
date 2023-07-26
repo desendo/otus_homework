@@ -4,7 +4,7 @@ using Common.Atomic.Values;
 
 namespace Models.Declarative
 {
-    public class LifeModel : IDisposable
+    public class Life : IDisposable
     {
         public readonly AtomicEvent<int> OnTakeDamage = new AtomicEvent<int>();
         public readonly AtomicVariable<int> HitPoints = new AtomicVariable<int>();

@@ -7,7 +7,7 @@ namespace Models.Components
     {
         private readonly AtomicVariable<float> _moveModelSpeed;
         private readonly AtomicVariable<int> _healthMax;
-        private AtomicVariable<float> _reloadSpeedMultiplier;
+        private readonly AtomicVariable<float> _reloadSpeedMultiplier;
 
         public Component_EnemyInstaller(AtomicVariable<float> moveModelSpeed,
             AtomicVariable<int> healthMax, AtomicVariable<float> reloadSpeedMultiplier)

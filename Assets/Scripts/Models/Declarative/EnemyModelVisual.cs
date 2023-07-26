@@ -31,7 +31,7 @@ namespace Models.Declarative
 
         public void Construct(EnemyModelCore core, IUpdateProvider updateProvider)
         {
-            var isDead = core.LifeModel.IsDead;
+            var isDead = core.Life.IsDead;
             _animator.ResetTrigger(death);
 
             _weaponCollisionSensor.gameObject.SetActive(false);

@@ -2,7 +2,6 @@
 
 namespace Models.Components
 {
-    //todo инкапсулировать модель
     public sealed class Component_Clip
     {
         public AtomicVariable<int> ShotsLeft { get; }

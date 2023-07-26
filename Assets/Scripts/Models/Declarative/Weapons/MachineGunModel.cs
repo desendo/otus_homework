@@ -27,14 +27,16 @@ namespace Models.Declarative.Weapons
             _updateSub = _updateProvider.OnUpdate.Subscribe(Update);
             OnAttackContinue = new AtomicAction(() =>_continueShoot = true);
             OnAttackStop = new AtomicAction(() =>_continueShoot = false);
-            Activate.Subscribe( isActive =>
-            {
-                IsActive.Value = isActive;
-                if(!isActive)
-                    ReloadMechanics.CancelReload();
-            });
+
             ReloadMechanics.Construct(ClipModel);
             AttackDelayMechanics.Construct(this);
+        }
+
+        public override void Activate(bool value)
+        {
+            IsActive.Value = value;
+            if(!value)
+                ReloadMechanics.CancelReload();
         }
 
         private void Update(float dt)
@@ -47,10 +49,10 @@ namespace Models.Declarative.Weapons
             AttackDelayMechanics.Update(dt);
 
              if(_continueShoot)
-                 TryAttack();
+                 Attack();
         }
 
-        protected override void TryAttack()
+        public override void Attack()
         {
             if (AttackReady.Value && ClipModel.ShotsLeft.Value > 0 && !ReloadMechanics.IsReloading.Value)
             {

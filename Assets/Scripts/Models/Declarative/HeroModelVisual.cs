@@ -38,7 +38,7 @@ namespace Models.Declarative
                     _reloadAnimationTime = animationClip.length;
             }
 
-            var isDead = core.LifeModel.IsDead;
+            var isDead = core.Life.IsDead;
             core.AttackModel.OnReloadStarted.Subscribe(reloadTime =>
             {
                 var speed =  _reloadAnimationTime / reloadTime;

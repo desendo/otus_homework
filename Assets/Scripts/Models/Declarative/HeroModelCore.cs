@@ -4,20 +4,20 @@ namespace Models.Declarative
 {
     public class HeroModelCore : IDisposable
     {
-        public readonly LifeModel LifeModel = new LifeModel();
+        public readonly Life Life = new Life();
         public readonly MoveModel MoveModel = new MoveModel();
         public readonly AttackModel AttackModel = new AttackModel();
 
         public void Construct()
         {
-            LifeModel.Construct();
+            Life.Construct();
             MoveModel.Construct();
             AttackModel.Construct();
         }
 
         public void Dispose()
         {
-            LifeModel.Dispose();
+            Life.Dispose();
             MoveModel.Dispose();
             AttackModel.Dispose();
         }

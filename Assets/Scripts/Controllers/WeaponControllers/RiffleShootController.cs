@@ -8,7 +8,7 @@ namespace Controllers.WeaponControllers
 {
     public class RiffleShootController : WeaponShootControllerBase
     {
-        public RiffleShootController(HeroService heroService, IBulletSpawner bulletSpawner) : base(heroService, bulletSpawner)
+        public RiffleShootController(HeroManager heroManager, IBulletSpawner bulletSpawner) : base(heroManager, bulletSpawner)
         {
         }
 

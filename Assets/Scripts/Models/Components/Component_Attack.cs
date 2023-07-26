@@ -1,15 +1,16 @@
-﻿using Common.Atomic.Actions;
+﻿using System;
+using Common.Atomic.Actions;
 using UnityEngine;
 
 namespace Models.Components
 {
     public sealed class Component_Attack
     {
-        private readonly AtomicAction _attack;
+        private readonly Action _attack;
         private readonly AtomicAction _attackContinue;
         private readonly AtomicAction _stopAttack;
 
-        public Component_Attack(AtomicAction attack, AtomicAction stopAttack = null, AtomicAction attackContinue = null)
+        public Component_Attack(Action attack, AtomicAction stopAttack = null, AtomicAction attackContinue = null)
         {
             _attack = attack;
             _attackContinue = attackContinue;

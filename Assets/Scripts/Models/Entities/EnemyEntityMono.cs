@@ -25,16 +25,16 @@ namespace Models.Entities
         private void Awake()
         {
             Add(new Component_Speed(_model.Core.Speed, _model.Core.CurrentSpeedMultiplier));
-            Add(new Component_Death(_model.Core.LifeModel.OnDeath, this));
+            Add(new Component_Death(_model.Core.Life.OnDeath, this));
             Add(new Component_IsActive(_model.Core.IsActive));
-            Add(new Component_Attack(_model.Core.Weapon.OnAttack));
-            Add(new Component_TakeDamage(_model.Core.LifeModel.OnTakeDamage));
+            Add(new Component_Attack(_model.Core.Weapon.Attack));
+            Add(new Component_TakeDamage(_model.Core.Life.OnTakeDamage));
             Add(new Component_Transform(_model.Visual.RootTransform));
-            Add(new Component_Health(_model.Core.LifeModel.HitPoints, _model.Core.LifeModel.MaxHitPoints));
+            Add(new Component_Health(_model.Core.Life.HitPoints, _model.Core.Life.MaxHitPoints));
             Add(new Component_WeaponRange(_model.Core.Weapon.MaxRange));
             Add(new Component_Rigidbody(_model.Visual.RigidBody));
 
-            Add(new Component_EnemyInstaller(_model.Core.Speed, _model.Core.LifeModel.MaxHitPoints, _model.Core.TargetSpeedMultiplierOnHits));
+            Add(new Component_EnemyInstaller(_model.Core.Speed, _model.Core.Life.MaxHitPoints, _model.Core.TargetSpeedMultiplierOnHits));
             Add(new Component_ZombieHandsInstaller(_model.Core.Weapon));
         }
 

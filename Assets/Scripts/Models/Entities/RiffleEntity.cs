@@ -1,5 +1,4 @@
-﻿using Common.Entities;
-using Config;
+﻿using Config;
 using GameManager;
 using Models.Components;
 using Models.Declarative.Weapons;
@@ -7,32 +6,34 @@ using UnityEngine;
 
 namespace Models.Entities
 {
-    public class RiffleEntity : Entity, IWeapon
+    public class RiffleEntity : WeaponEntityBase
     {
-        private readonly RiffleModelCore _core = new RiffleModelCore();
-        private readonly Transform _shootTransform;
-        public WeaponType WeaponType { get; }
+        private RiffleModelCore _core;
 
         public RiffleEntity(IUpdateProvider updateProvider, Transform shootTransform, WeaponType weaponType)
+            : base(updateProvider, shootTransform, weaponType)
         {
-            WeaponType = weaponType;
-            _shootTransform = shootTransform;
+        }
+
+        public void BindModel(RiffleModelCore modelCore)
+        {
+            _core = modelCore;
             _core.Construct();
-            _core.Construct_Mechanics(updateProvider);
+            _core.Construct_Mechanics(UpdateProvider);
             AddComponents();
         }
 
         private void AddComponents()
         {
             Add(new Component_Info(_core.Name));
-            Add(new Component_Attack(_core.OnAttack));
+            Add(new Component_Attack(_core.Attack));
             Add(new Component_IsActive(_core.IsActive));
             Add(new Component_Clip(_core.ClipModel.ClipSize, _core.ClipModel.ShotsLeft));
-            Add(new Component_Pivot(_shootTransform));
+            Add(new Component_Pivot(ShootTransform));
             Add(new Component_OnAttack(_core.AttackRequested));
             Add(new Component_Speed(_core.BulletSpeed));
             Add(new Component_Damage(_core.Damage));
-            Add(new Component_Reload(_core.ReloadMechanics.OnReload, _core.ReloadMechanics.ReloadStarted,
+            Add(new Component_Reload(_core.ReloadMechanics.Reload, _core.ReloadMechanics.ReloadStarted,
                 _core.ReloadMechanics.ReloadTimer, _core.ReloadMechanics.ReloadDelay));
             Add(new Component_SetActive(_core.Activate));
             Add(new Component_RiffleInstaller(_core));

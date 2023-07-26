@@ -6,20 +6,20 @@ namespace Controllers
 {
     public class CameraFollowController : IStartGameListener, IFinishGameListener, ILateUpdate
     {
-        private readonly HeroService _heroService;
+        private readonly HeroManager _heroManager;
         private bool _follow;
         private Transform _targetTransform;
         private Transform _cameraTransform;
         private Camera _camera;
 
-        public CameraFollowController(HeroService heroService)
+        public CameraFollowController(HeroManager heroManager)
         {
-            _heroService = heroService;
+            _heroManager = heroManager;
         }
 
         public void OnStartGame()
         {
-            _targetTransform = _heroService.HeroEntity.Value.Get<Component_Transform>().RootTransform;
+            _targetTransform = _heroManager.HeroEntity.Value.Get<Component_Transform>().RootTransform;
             _camera = Camera.main;
             _cameraTransform = _camera.transform;
             _follow = true;

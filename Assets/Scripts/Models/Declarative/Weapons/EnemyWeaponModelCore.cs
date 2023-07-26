@@ -13,20 +13,20 @@ namespace Models.Declarative.Weapons
 
         private IUpdateProvider _updateProvider;
         private IDisposable _updateSub;
-        private IDisposable _activateSub;
 
 
         public void Construct(IUpdateProvider updateProvider)
         {
             _updateProvider = updateProvider;
             _updateSub = _updateProvider.OnUpdate.Subscribe(Update);
-            _activateSub = Activate.Subscribe(isActive =>
-            {
-                IsActive.Value = isActive;
-                AttackReady.Value = true;
 
-            });
             AttackDelayMechanics.Construct(this);
+        }
+
+        public override void Activate(bool value)
+        {
+            IsActive.Value = value;
+            AttackReady.Value = true;
         }
 
         private void Update(float dt)
@@ -42,7 +42,7 @@ namespace Models.Declarative.Weapons
             entity.Get<Component_TakeDamage>().DoDamage(Damage.Value);
         }
 
-        protected override void TryAttack()
+        public override void Attack()
         {
             if (AttackReady.Value)
             {
@@ -54,7 +54,6 @@ namespace Models.Declarative.Weapons
         public override void Dispose()
         {
             _updateSub?.Dispose();
-            _activateSub?.Dispose();
         }
     }
 }

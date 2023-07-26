@@ -9,11 +9,11 @@ namespace Controllers
     {
         private readonly EnemyService _enemyService;
         private bool _gameStarted;
-        private readonly HeroService _heroService;
+        private readonly HeroManager _heroManager;
 
-        public EnemyMoveController(EnemyService enemyService, HeroService heroService)
+        public EnemyMoveController(EnemyService enemyService, HeroManager heroManager)
         {
-            _heroService = heroService;
+            _heroManager = heroManager;
             _enemyService = enemyService;
         }
 
@@ -23,7 +23,7 @@ namespace Controllers
             if(!_gameStarted)
                 return;
 
-            var heroPos = _heroService.HeroEntity.Value.Get<Component_Transform>().RootTransform.position;
+            var heroPos = _heroManager.HeroEntity.Value.Get<Component_Transform>().RootTransform.position;
             foreach (var enemy in _enemyService.Units)
             {
                 var isActive = enemy.Get<Component_IsActive>().IsActive.Value;

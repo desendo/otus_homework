@@ -1,4 +1,5 @@
-﻿using Common.Atomic.Actions;
+﻿using System;
+using Common.Atomic.Actions;
 using Common.Atomic.Values;
 
 namespace Models.Components
@@ -6,12 +7,13 @@ namespace Models.Components
 {
     public sealed class Component_Reload
     {
-        private readonly AtomicAction _reload;
+        private readonly Action _reload;
         public AtomicEvent<float> ReloadStart { get; }
         public AtomicVariable<float> ReloadTimerNormalized { get; } = new AtomicVariable<float>();
 
 
-        public Component_Reload(AtomicAction reload, AtomicEvent<float> reloadStart, AtomicVariable<float> reloadTimer, AtomicVariable<float> reloadTime)
+        public Component_Reload(Action reload,
+            AtomicEvent<float> reloadStart, AtomicVariable<float> reloadTimer, AtomicVariable<float> reloadTime)
         {
             _reload = reload;
             ReloadStart = reloadStart;

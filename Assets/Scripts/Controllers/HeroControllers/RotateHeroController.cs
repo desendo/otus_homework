@@ -8,24 +8,24 @@ namespace Controllers.HeroControllers
     public class RotateHeroController : IGameLoadedListener, IStartGameListener, IFinishGameListener, IUpdate
     {
         private readonly InputService _inputService;
-        private readonly HeroService _heroService;
+        private readonly HeroManager _heroManager;
         private bool _loaded;
         private bool _started;
         private Camera _camera;
 
-        public RotateHeroController(InputService inputService, HeroService heroService)
+        public RotateHeroController(InputService inputService, HeroManager heroManager)
         {
             _inputService = inputService;
-            _heroService = heroService;
+            _heroManager = heroManager;
         }
 
         public void Update(float dt)
         {
             if (!_loaded || !_started) return;
 
-            var root = _heroService.HeroEntity.Value.Get<Component_Transform>().RootTransform;
-            var rotationSpeedValue = _heroService.HeroEntity.Value.Get<Component_Rotate>().RotationSpeed.Value;
-            var attackPivotTransform = _heroService.HeroEntity.Value.Get<Component_AttackPivot>().AttackPoint;
+            var root = _heroManager.HeroEntity.Value.Get<Component_Transform>().RootTransform;
+            var rotationSpeedValue = _heroManager.HeroEntity.Value.Get<Component_Rotate>().RotationSpeed;
+            var attackPivotTransform = _heroManager.HeroEntity.Value.Get<Component_AttackPivot>().AttackPoint;
 
             var height = new Vector3(0,attackPivotTransform.position.y,0);
             var position = root.position;

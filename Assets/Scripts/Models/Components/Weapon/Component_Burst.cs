@@ -7,7 +7,7 @@ namespace Models.Components
         public float Angle { get; private set; }
         public int Count { get; private set; }
 
-        public Component_Burst(AtomicVariable<float> angle, AtomicVariable<int> count)
+        public Component_Burst(IAtomicVariable<float> angle, IAtomicVariable<int> count)
         {
             angle.OnChanged.Subscribe(x => Angle = angle.Value);
             count.OnChanged.Subscribe(x => Count = count.Value);

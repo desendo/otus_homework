@@ -6,30 +6,30 @@ namespace Controllers.HeroControllers
 {
     public class HeroMoveEngine: IStartGameListener, IFinishGameListener
     {
-        private readonly HeroService _heroService;
+        private readonly HeroManager _heroManager;
 
-        public HeroMoveEngine(HeroService heroService)
+        public HeroMoveEngine(HeroManager heroManager)
         {
-            _heroService = heroService;
+            _heroManager = heroManager;
         }
 
         public void OnStartGame()
         {
-            var entity = _heroService.HeroEntity.Value;
+            var entity = _heroManager.HeroEntity.Value;
             entity.Get<Component_ObservedMove>().MoveRequested.Subscribe(OnMoveRequested);
         }
         private void OnMoveRequested(Vector3 moveStep)
         {
             var translateDelta = moveStep;
             //модификаторы скорости передвижения
-            _heroService.HeroEntity.Value.Get<Component_ObservedMove>().SetVelocity(translateDelta); 
+            _heroManager.HeroEntity.Value.Get<Component_ObservedMove>().SetVelocity(translateDelta); 
             //_heroService.HeroEntity.Value.Get<Component_Transform>().Translate(translateDelta);
-            _heroService.HeroEntity.Value.Get<Component_Rigidbody>().SetVelocity(translateDelta);
+            _heroManager.HeroEntity.Value.Get<Component_Rigidbody>().SetVelocity(translateDelta);
         }
 
         public void OnFinishGame(bool gameWin)
         {
-            _heroService.HeroEntity.Value.Get<Component_ObservedMove>().MoveRequested.UnSubscribe(OnMoveRequested);
+            _heroManager.HeroEntity.Value.Get<Component_ObservedMove>().MoveRequested.UnSubscribe(OnMoveRequested);
         }
     }
 }

@@ -12,7 +12,6 @@ namespace Models.Declarative.Weapons
         public readonly Burst Burst = new Burst();
         public readonly AttackDelay_Mechanics AttackDelayMechanics = new AttackDelay_Mechanics();
 
-
         public readonly AtomicVariable<float> ShootTimer = new AtomicVariable<float>();
         public readonly AtomicVariable<float> BulletSpeed = new AtomicVariable<float>();
 
@@ -24,15 +23,17 @@ namespace Models.Declarative.Weapons
         {
             _updateProvider = updateProvider;
             _updateSub = _updateProvider.OnUpdate.Subscribe(Update);
-            Activate.Subscribe(isActive =>
-            {
-                IsActive.Value = isActive;
-                if(!isActive)
-                    ReloadMechanics.CancelReload();
-            });
+
             ReloadMechanics.Construct(ClipModel);
             AttackDelayMechanics.Construct(this);
 
+        }
+
+        public override void Activate(bool value)
+        {
+            IsActive.Value = value;
+            if(!value)
+                ReloadMechanics.CancelReload();
         }
 
         private void Update(float dt)
@@ -45,7 +46,7 @@ namespace Models.Declarative.Weapons
 
         }
 
-        protected override void TryAttack()
+        public override void Attack()
         {
             if (AttackReady.Value && ClipModel.ShotsLeft.Value > 0 && !ReloadMechanics.IsReloading.Value)
             {

@@ -11,7 +11,7 @@ namespace Controllers.WeaponControllers
     {
         protected override WeaponType WeaponType => WeaponType.MachineGun;
 
-        public MachineGunController(HeroService heroService, IBulletSpawner bulletSpawner) : base(heroService, bulletSpawner)
+        public MachineGunController(HeroManager heroManager, IBulletSpawner bulletSpawner) : base(heroManager, bulletSpawner)
         {
         }
         protected override void HandleShoot(IEntity weapon)

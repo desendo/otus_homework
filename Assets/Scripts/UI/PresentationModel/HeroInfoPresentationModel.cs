@@ -13,9 +13,9 @@ namespace UI.PresentationModel
         public AtomicVariable<int> Max { get; } = new AtomicVariable<int>();
 
         private readonly List<IDisposable> _subs = new List<IDisposable>();
-        public HeroInfoPresentationModel(HeroService heroService)
+        public HeroInfoPresentationModel(HeroManager heroManager)
         {
-            heroService.HeroEntity.OnChanged.Subscribe(OnHero);
+            heroManager.HeroEntity.OnChanged.Subscribe(OnHero);
         }
 
         private void OnHero(IEntity obj)

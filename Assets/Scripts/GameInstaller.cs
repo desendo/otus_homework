@@ -50,7 +50,7 @@ public class GameInstaller : MonoBehaviour
 
         //services
         _container.Bind<InputService>();
-        _container.Bind<HeroService>();
+        _container.Bind<HeroManager>();
         _container.Bind<EnemyService>();
         _container.Bind<EffectsService>();
         _container.Bind<SignalBusService>();
@@ -65,7 +65,7 @@ public class GameInstaller : MonoBehaviour
         _container.Bind<CameraFollowController>();
         _container.Bind<CameraAngleController>();
             //enemy
-        _container.Bind<EnemySpawnController>();
+        _container.Bind<EnemyManager>();
         _container.Bind<EnemyDeathCountController>();
         _container.Bind<EnemyMoveController>();
         _container.Bind<EnemyAttackController>();

@@ -9,20 +9,20 @@ namespace Controllers.HeroControllers
     public class HeroDeathController : IStartGameListener, IFinishGameListener
     {
         private readonly SignalBusService _signalBusService;
-        private readonly HeroService _heroService;
+        private readonly HeroManager _heroManager;
         private IDisposable _sub;
 
-        public HeroDeathController(SignalBusService signalBusService, HeroService heroService)
+        public HeroDeathController(SignalBusService signalBusService, HeroManager heroManager)
         {
             _signalBusService = signalBusService;
-            _heroService = heroService;
+            _heroManager = heroManager;
         }
 
 
         public void OnStartGame()
         {
             _sub?.Dispose();
-            _sub = _heroService.HeroEntity.Value.Get<Component_Death>().OnDeath.Subscribe(OnDeath);
+            _sub = _heroManager.HeroEntity.Value.Get<Component_Death>().OnDeath.Subscribe(OnDeath);
         }
 
         private void OnDeath(IEntity obj)

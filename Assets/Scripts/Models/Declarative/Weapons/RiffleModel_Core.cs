@@ -19,15 +19,18 @@ namespace Models.Declarative.Weapons
 
         public void Construct()
         {
-            Activate.Subscribe(isActive =>
-            {
-                IsActive.Value = isActive;
-                if(!isActive)
-                    ReloadMechanics.CancelReload();
-            });
+
             ReloadMechanics.Construct(ClipModel);
             AttackDelayMechanics.Construct(this);
         }
+
+        public override void Activate(bool value)
+        {
+            IsActive.Value = value;
+            if(!value)
+                ReloadMechanics.CancelReload();
+        }
+
         public void Construct_Mechanics(IUpdateProvider updateProvider)
         {
             _updateSub = updateProvider.OnUpdate.Subscribe(dt =>
@@ -42,7 +45,7 @@ namespace Models.Declarative.Weapons
         }
 
 
-        protected override void TryAttack()
+        public override void Attack()
         {
             if (AttackReady.Value && ClipModel.ShotsLeft.Value > 0 && !ReloadMechanics.IsReloading.Value)
             {

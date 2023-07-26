@@ -15,10 +15,10 @@ namespace Controllers.WeaponControllers
 
         protected abstract WeaponType WeaponType { get; }
 
-        protected WeaponShootControllerBase(HeroService heroService, IBulletSpawner bulletSpawner)
+        protected WeaponShootControllerBase(HeroManager heroManager, IBulletSpawner bulletSpawner)
         {
             BulletSpawner = bulletSpawner;
-            heroService.CurrentWeaponEntity.OnChanged.Subscribe(OnWeaponChanged);
+            heroManager.CurrentWeaponEntity.OnChanged.Subscribe(OnWeaponChanged);
         }
 
         private void OnWeaponChanged(IWeapon obj)

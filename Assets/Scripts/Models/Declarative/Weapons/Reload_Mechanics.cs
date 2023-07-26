@@ -8,19 +8,15 @@ namespace Models.Declarative.Weapons
     {
         public readonly AtomicVariable<float> ReloadDelay = new AtomicVariable<float>();
         public readonly AtomicVariable<float> ReloadTimer = new AtomicVariable<float>();
-        public readonly AtomicAction OnReload;
         public readonly AtomicEvent<float> ReloadStarted = new AtomicEvent<float>();
         public readonly AtomicVariable<bool> IsReloading = new AtomicVariable<bool>();
         private ClipModel _clipModel;
         private bool _constructed;
 
-        public Reload_Mechanics()
+        public void Reload()
         {
-            OnReload = new AtomicAction(()=>
-            {
-                IsReloading.Value = true;
-                ReloadStarted.Invoke(ReloadDelay.Value);
-            });
+            IsReloading.Value = true;
+            ReloadStarted.Invoke(ReloadDelay.Value);
         }
 
         public void Construct(ClipModel clipModel)
@@ -46,7 +42,7 @@ namespace Models.Declarative.Weapons
             }
 
             if (_clipModel.ShotsLeft.Value <= 0 && !IsReloading.Value)
-                OnReload.Invoke();
+                Reload();
         }
 
         public void Dispose()

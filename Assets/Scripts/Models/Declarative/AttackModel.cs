@@ -6,7 +6,10 @@ namespace Models.Declarative
 {
     public class AttackModel : IDisposable
     {
-        public AtomicAction Attack { get; }
+        public void Attack()
+        {
+        }
+
         public AtomicEvent<float> OnReloadStarted { get; } = new AtomicEvent<float>();
         public AtomicEvent OnAttackStart { get; } = new AtomicEvent();
 

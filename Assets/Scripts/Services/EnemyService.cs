@@ -38,7 +38,7 @@ namespace Services
             {
                 OnDeath.Invoke(x);
             });
-            instance.Get<Component_IsActive>().IsActive.Value = true;
+            instance.Get<Component_SetActive>().SetActive(true);
 
             TotalSpawned.Value++;
         }

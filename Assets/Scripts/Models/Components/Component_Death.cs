@@ -6,7 +6,7 @@ namespace Models.Components
 {
     public sealed class Component_Death
     {
-        public AtomicEvent<IEntity> OnDeath = new AtomicEvent<IEntity>();
+        public readonly AtomicEvent<IEntity> OnDeath = new AtomicEvent<IEntity>();
         private Action<IEntity> _onDeath;
 
         public Component_Death(AtomicEvent onDeath, IEntity entity)

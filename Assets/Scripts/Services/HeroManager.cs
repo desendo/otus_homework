@@ -9,13 +9,14 @@ using DependencyInjection;
 using DependencyInjection.Util;
 using GameManager;
 using Models.Components;
+using Models.Declarative.Weapons;
 using Models.Entities;
 using UnityEngine;
 using Object = System.Object;
 
 namespace Services
 {
-    public class HeroService : ISpawner
+    public class HeroManager : ISpawner
     {
         private readonly GameConfig _gameConfig;
         private readonly VisualConfig _visualConfig;
@@ -30,7 +31,7 @@ namespace Services
         private IDisposable _reloadSubscribe;
         private IDisposable _shotSubscribe;
 
-        public HeroService(GameConfig gameConfig, VisualConfig visualConfig,
+        public HeroManager(GameConfig gameConfig, VisualConfig visualConfig,
             DependencyContainer dependencyContainer, IUpdateProvider updateProvider)
         {
             _updateProvider = updateProvider;
@@ -100,25 +101,31 @@ namespace Services
                 if (weaponConfig.Type == WeaponType.Riffle)
                 {
                     var attackPoint = HeroEntity.Value.Get<Component_AttackPivot>().AttackPoint;
-                    var weapon = new RiffleEntity(_updateProvider, attackPoint, weaponConfig.Type);
-                    weapon.Get<IComponent_WeaponInstaller>().Setup(weaponConfig.Parameters);
-                    return weapon;
+                    var weaponEntity = new RiffleEntity(_updateProvider, attackPoint, weaponConfig.Type);
+                    var weaponModel = new RiffleModelCore();
+                    weaponEntity.BindModel(weaponModel);
+                    weaponEntity.Get<IComponent_WeaponInstaller>().Setup(weaponConfig.Parameters);
+                    return weaponEntity;
                 }
 
                 if (weaponConfig.Type == WeaponType.Shotgun)
                 {
                     var attackPoint = HeroEntity.Value.Get<Component_AttackPivot>().AttackPoint;
-                    var weapon = new ShotGunEntity(_updateProvider, attackPoint, weaponConfig.Type);
-                    weapon.Get<IComponent_WeaponInstaller>().Setup(weaponConfig.Parameters);
-                    return weapon;
+                    var weaponEntity = new ShotGunEntity(_updateProvider, attackPoint, weaponConfig.Type);
+                    var weaponModel = new ShotgunModelCore();
+                    weaponEntity.BindModel(weaponModel);
+                    weaponEntity.Get<IComponent_WeaponInstaller>().Setup(weaponConfig.Parameters);
+                    return weaponEntity;
                 }
 
                 if (weaponConfig.Type == WeaponType.MachineGun)
                 {
                     var attackPoint = HeroEntity.Value.Get<Component_AttackPivot>().AttackPoint;
-                    var weapon = new MachineGunEntity(_updateProvider, attackPoint, weaponConfig.Type);
-                    weapon.Get<IComponent_WeaponInstaller>().Setup(weaponConfig.Parameters);
-                    return weapon;
+                    var weaponEntity = new MachineGunEntity(_updateProvider, attackPoint, weaponConfig.Type);
+                    var weaponModel = new MachineGunModel();
+                    weaponEntity.BindModel(weaponModel);
+                    weaponEntity.Get<IComponent_WeaponInstaller>().Setup(weaponConfig.Parameters);
+                    return weaponEntity;
                 }
             }
 
