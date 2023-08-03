@@ -33,6 +33,7 @@ namespace Models.Entities
             Add(new Component_Health(_model.Core.Life.HitPoints, _model.Core.Life.MaxHitPoints));
             Add(new Component_WeaponRange(_model.Core.Weapon.MaxRange));
             Add(new Component_Rigidbody(_model.Visual.RigidBody));
+            Add(new Component_SetActive(_model.Core.SetActive));
 
             Add(new Component_EnemyInstaller(_model.Core.Speed, _model.Core.Life.MaxHitPoints, _model.Core.TargetSpeedMultiplierOnHits));
             Add(new Component_ZombieHandsInstaller(_model.Core.Weapon));

@@ -37,5 +37,10 @@ namespace Models.Declarative
             Weapon.Dispose();
             _subs.Dispose();
         }
+
+        public void SetActive(bool obj)
+        {
+            IsActive.Value = obj;
+        }
     }
 }

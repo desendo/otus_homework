@@ -49,7 +49,7 @@ namespace Managers
             instance.Get<Component_Collision>().OnCollision.Subscribe(OnHit);
             instance.Get<Component_Finish>().OnFinish.Subscribe(DisposeBullet);
 
-            instance.Get<Component_Direction>().Direction.Value = direction;
+            instance.Get<Component_Direction>().SetDirection(direction);
             instance.Get<Component_Speed>().Speed = speed;
             instance.Get<Component_Damage>().Damage.Value = damage;
 

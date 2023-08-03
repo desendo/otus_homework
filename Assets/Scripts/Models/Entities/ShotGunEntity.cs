@@ -15,6 +15,7 @@ namespace Models.Entities
         public ShotGunEntity(IUpdateProvider updateProvider, Transform shootTransform, WeaponType weaponConfigType) 
             : base( updateProvider, shootTransform, weaponConfigType)
         {
+            _shootTransform = shootTransform;
         }
 
         public void BindModel(ShotgunModelCore model)
