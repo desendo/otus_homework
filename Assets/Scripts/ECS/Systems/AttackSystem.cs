@@ -1,8 +1,8 @@
 ﻿using DependencyInjection;
 using ECS.Components;
 using Leopotam.EcsLite;
-using Pool;
 using UnityEngine;
+using Views;
 
 namespace ECS.Systems
 {
@@ -19,14 +19,7 @@ namespace ECS.Systems
         private EcsPool<CWeapon> _cWeaponPool;
         private EcsPool<CView> _cViewPool;
         private EcsPool<CDamage> _cDamagePool;
-
-        private ProjectilePool _projectilePool;
-
-        [Inject]
-        public void Construct(ProjectilePool projectilePool)
-        {
-            _projectilePool = projectilePool;
-        }
+        private ProjectileView _prefab;
 
         public void Init(IEcsSystems systems)
         {
@@ -41,6 +34,7 @@ namespace ECS.Systems
             _cWeaponPool = _world.GetPool<CWeapon>();
             _possibleTargetFilter = _world.Filter<CTeam>().Inc<CHealth>().Inc<CPosition>().End();
             _targetSearcherFilter = _world.Filter<CWeapon>().Inc<CMove>().Inc<CPosition>().Exc<CTarget>().End();
+            _prefab = Resources.Load<ProjectileView>("Projectile");
         }
         public void Run(IEcsSystems systems)
         {
@@ -101,7 +95,7 @@ namespace ECS.Systems
             cPosition.Direction = direction;
             cPosition.Position = position;
 
-            var view = _projectilePool.Spawn();
+            var view = GameObject.Instantiate(_prefab);
 
             cView.Transform = view.transform;
             cView.View = view;
@@ -118,7 +112,7 @@ namespace ECS.Systems
 
             cTeam.Team = team;
             view.SetEntity(_world.PackEntityWithWorld(entity));
-            view.SetDisposeAction(()=>_projectilePool.Unspawn(view));
+            view.SetDisposeAction(()=>Object.Destroy(view.gameObject));
             view.SetTeam(team);
         }
     }

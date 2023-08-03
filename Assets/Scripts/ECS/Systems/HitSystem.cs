@@ -1,6 +1,5 @@
 ﻿using DependencyInjection;
 using ECS.Components;
-using Effects;
 using Leopotam.EcsLite;
 
 namespace ECS.Systems
@@ -16,14 +15,9 @@ namespace ECS.Systems
         private EcsPool<CPosition> _cPositionPool;
         private EcsPool<CHit> _cHitPool;
 
-        private EffectsService _effectsService;
         private EcsFilter _hitFilter;
 
-        [Inject]
-        public void Construct(EffectsService effectsService)
-        {
-            _effectsService = effectsService;
-        }
+
 
         public void Init(IEcsSystems systems)
         {
@@ -66,7 +60,6 @@ namespace ECS.Systems
                             {
                                 var cView = _cViewPool.Get(other);
                                 var pos = cView.Transform.position;
-                                _effectsService.ShowExplosionEffect(pos);
                             }
 
 
@@ -79,7 +72,6 @@ namespace ECS.Systems
                         if (_cViewPool.Has(first))
                             _cViewPool.Get(first).View.Dispose();
                         _world.DelEntity(first);
-                        _effectsService.ShowHitEffect(cPos.Position, cPos.Direction);
                     }
 
                 }
