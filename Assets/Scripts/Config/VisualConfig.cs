@@ -1,5 +1,5 @@
 ﻿using System;
-using Common.Entities;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Config
@@ -7,7 +7,7 @@ namespace Config
     [CreateAssetMenu(fileName = "VisualConfig", menuName = "Config/New VisualConfig")]
     public sealed class VisualConfig : ScriptableObject
     {
-        public EntityMono PlayerPrefab;
+        public List<SpriteEntry> SpriteEntries;
     }
     [Serializable]
     public class SpriteEntry

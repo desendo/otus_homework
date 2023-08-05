@@ -8,42 +8,47 @@ namespace Config
     [CreateAssetMenu(fileName = "GameConfig", menuName = "Config/New GameConfig")]
     public sealed class GameConfig : ScriptableObject
     {
-        public List<PlayerWeapon> Weapons;
-        public int PlayerHealth;
-        public float PlayerMoveSpeed;
-        public int PlayerRotationSpeed;
-        public float ZombieSpawnInterval;
-        public int KillGoal;
-        public int ZombieHealth;
-        public float ZombieMoveSpeed;
-        public float ZombieMoveSpeedReloadMultiplier;
+        public List<RewardConfig> Rewards;
+        public List<ChestConfig> ChestConfigs;
+
     }
 
     [System.Serializable]
-    public class PlayerWeapon
+    public class RewardConfig
     {
         public string Id;
-        public WeaponType Type;
-        public List<Parameter> Parameters;
+        public RewardType Type;
+        public int Value;
     }
-    [System.Serializable]
 
-    public class Parameter
-    {
-        public string Id;
-        public string Value;
-    }
-    public enum WeaponType
+    public enum RewardType
     {
         None = 0,
-        Riffle = 2,
-        Shotgun = 3,
-        MachineGun = 4,
-        Flamer = 5,
-        RocketLauncher = 6,
-        GrenadeLauncher = 7,
-        Laser = 8,
-        ZombieHands = 9,
+        Gold = 1,
+        Gems = 2,
+        Wood = 3,
+        Cache = 4,
+        BuildBoost = 5,
+
+    }
+
+    [System.Serializable]
+    public class ChestConfig
+    {
+        public string Id;
+        public string Name;
+        public List<RewardIdWeight> RewardIdWeights;
+
+        public int MaxRewards;
+        public int MinRewards;
+        public float Time;
+
+        [System.Serializable]
+        public class RewardIdWeight
+        {
+            public string RewardId;
+            public int Weight;
+        }
     }
 
 }

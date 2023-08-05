@@ -12,82 +12,71 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10f65847b3c9485b95a0fe53b46da80c, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: 
-  Weapons:
-  - Id: w1
+  Rewards:
+  - Id: gold_100
+    Type: 1
+    Value: 100
+  - Id: gems_10
     Type: 2
-    Parameters:
-    - Id: ClipCapacity_int
-      Value: 7
-    - Id: Damage_int
-      Value: 5
-    - Id: Delay_float
-      Value: 0
-    - Id: ReloadTime_float
-      Value: 2
-    - Id: RotationSpeedMultiplier_float
-      Value: 1
-    - Id: BulletSpeed_float
-      Value: 15
-    - Id: Name_string
-      Value: "\u0412\u0438\u043D\u0442\u043E\u0432\u043A\u0430"
-  - Id: w2
+    Value: 10
+  - Id: gems_100
+    Type: 2
+    Value: 100
+  - Id: wood_7
     Type: 3
-    Parameters:
-    - Id: ClipCapacity_int
-      Value: 2
-    - Id: Damage_int
-      Value: 2
-    - Id: Delay_float
-      Value: 0,1
-    - Id: ReloadTime_float
-      Value: 1
-    - Id: RotationSpeedMultiplier_float
-      Value: 0,8
-    - Id: RotationSpeedMultiplier_float
-      Value: 0,8
-    - Id: BulletSpeed_float
-      Value: 20
-    - Id: BurstAngle_float
-      Value: 10
-    - Id: BurstCount_int
-      Value: 10
-    - Id: Name_string
-      Value: "\u0414\u0432\u0443\u0441\u0442\u0432\u043E\u043B\u043A\u0430"
-  - Id: w3
+    Value: 7
+  - Id: wood_700
+    Type: 3
+    Value: 700
+  - Id: cache_1000
     Type: 4
-    Parameters:
-    - Id: ClipCapacity_int
-      Value: 50
-    - Id: Damage_int
-      Value: 2
-    - Id: Delay_float
-      Value: 0,1
-    - Id: ReloadTime_float
-      Value: 5
-    - Id: RotationSpeedMultiplier_float
-      Value: 1
-    - Id: BulletSpeed_float
-      Value: 12
-    - Id: Name_string
-      Value: "\u041F\u0443\u043B\u0435\u043C\u0435\u0442"
-    - Id: DisperseAngle_float
-      Value: 5
-  - Id: e1
-    Type: 9
-    Parameters:
-    - Id: Damage_int
-      Value: 1
-    - Id: Delay_float
-      Value: 1
-    - Id: Name_string
-      Value: "\u0420\u0443\u043A\u0438 \u0437\u043E\u043C\u0431\u044F\u0440\u044B"
-    - Id: MaxRange_float
-      Value: 0,8
-  PlayerHealth: 10
-  PlayerMoveSpeed: 2.2
-  PlayerRotationSpeed: 2000
-  ZombieSpawnInterval: 1
-  KillGoal: 100
-  ZombieHealth: 12
-  ZombieMoveSpeed: 1.8
-  ZombieMoveSpeedReloadMultiplier: 0.1
+    Value: 1000
+  - Id: cache_2000
+    Type: 4
+    Value: 2000
+  - Id: build_boost_60
+    Type: 5
+    Value: 60
+  ChestConfigs:
+  - Id: gold
+    Name: Gold chest
+    RewardIdWeights:
+    - RewardId: cache_2000
+      Weight: 5
+    - RewardId: gold_100
+      Weight: 5
+    - RewardId: wood_7
+      Weight: 1
+    - RewardId: gems_10
+      Weight: 1
+    - RewardId: build_boost_60
+      Weight: 1
+    MaxRewards: 5
+    MinRewards: 3
+    Time: 25
+  - Id: steel
+    Name: Steel chest
+    RewardIdWeights:
+    - RewardId: cache_1000
+      Weight: 5
+    - RewardId: gold_100
+      Weight: 5
+    - RewardId: wood_7
+      Weight: 1
+    - RewardId: gems_10
+      Weight: 1
+    MaxRewards: 3
+    MinRewards: 2
+    Time: 130
+  - Id: wooden
+    Name: Wooden chest
+    RewardIdWeights:
+    - RewardId: gold_100
+      Weight: 5
+    - RewardId: wood_7
+      Weight: 4
+    - RewardId: gems_10
+      Weight: 3
+    MaxRewards: 2
+    MinRewards: 1
+    Time: 416
