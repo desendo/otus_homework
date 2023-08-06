@@ -26,38 +26,41 @@ public class GiveChestRewardController
     {
         if (chestTimer.IsSetUp && chestTimer.RewardReady)
         {
-            var rewardIdsToGive = new List<string>();
 
             var config = _gameConfig.ChestConfigs.FirstOrDefault(x => x.Id == chestTimer.ChestId);
 
             if (config != null)
             {
-                var rewardCount = Random.Range(config.MinRewards, config.MaxRewards + 1);
-                var rewardsLeft = config.RewardIdWeights.ToList();
-                for (int i = 0; i < rewardCount; i++)
-                {
-                    if (rewardsLeft.Count > 0)
-                    {
-                        float totalWeight = rewardsLeft.Sum(x => x.Weight);
-                        var randomWeight = Random.value * totalWeight;
-                        var sum = 0;
-                        foreach (var reward in rewardsLeft)
-                        {
-                            sum += reward.Weight;
-                            if (!(sum >= randomWeight)) continue;
-
-                            rewardsLeft.Remove(reward);
-                            rewardIdsToGive.Add(reward.RewardId);
-                            break;
-
-                        }
-                    }
-                }
+                var rewardIdsToGive = new List<string>();
+                GenerateRewards(config, rewardIdsToGive);
+                GiveRewards(rewardIdsToGive);
             }
 
-            GiveRewards(rewardIdsToGive);
-
             chestTimer.ResetTimer();
+        }
+    }
+
+    private static void GenerateRewards(ChestConfig config, List<string> rewardIdsToGive)
+    {
+        var rewardCount = Random.Range(config.MinRewards, config.MaxRewards + 1);
+        var rewardsLeft = config.RewardIdWeights.ToList();
+        for (int i = 0; i < rewardCount; i++)
+        {
+            if (rewardsLeft.Count > 0)
+            {
+                float totalWeight = rewardsLeft.Sum(x => x.Weight);
+                var randomWeight = Random.value * totalWeight;
+                var sum = 0;
+                foreach (var reward in rewardsLeft)
+                {
+                    sum += reward.Weight;
+                    if (!(sum >= randomWeight)) continue;
+
+                    rewardsLeft.Remove(reward);
+                    rewardIdsToGive.Add(reward.RewardId);
+                    break;
+                }
+            }
         }
     }
 
@@ -65,7 +68,9 @@ public class GiveChestRewardController
     {
         foreach (var s in rewardIdsToGive)
         {
-            Debug.Log("give reward "+s);
+            var rewardConfig = _gameConfig.Rewards.FirstOrDefault(x => x.Id == s);
+            if(rewardConfig != null)
+                Debug.Log($"{rewardConfig.Id} - {rewardConfig.Type}:{rewardConfig.Value}");
         }
     }
 }
