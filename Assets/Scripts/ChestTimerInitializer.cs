@@ -6,20 +6,19 @@ using Config;
 using DependencyInjection;
 using UnityEngine;
 
-public class ChestTimerInitializer : MonoBehaviour
+public class ChestTimerInitializer
 {
-    [SerializeField] private List<ChestTimer> _timers;
-
     [Inject]
-    public void Construct(GameConfig gameConfig, VisualConfig visualConfig)
+    public void Construct(GameConfig gameConfig, VisualConfig visualConfig,  List<ChestTimer> timers)
     {
-        var offlineTime = 0f;
+
+        var offlineDeltaTime = 0f;
         if (PlayerPrefs.HasKey("SavedTime"))
         {
             var time = DateTime.Parse(PlayerPrefs.GetString("SavedTime"), CultureInfo.InvariantCulture);
-            offlineTime = (float)(DateTime.Now - time).TotalSeconds;
+            offlineDeltaTime = (float)(DateTime.Now - time).TotalSeconds;
         }
-        foreach (var chestTimer in _timers)
+        foreach (var chestTimer in timers)
         {
             chestTimer.gameObject.SetActive(false);
             var config = gameConfig.ChestConfigs.FirstOrDefault(x => x.Id == chestTimer.ChestId);
@@ -31,11 +30,8 @@ public class ChestTimerInitializer : MonoBehaviour
                 if (PlayerPrefs.HasKey(config.Id))
                     left = PlayerPrefs.GetFloat(config.Id);
                 chestTimer.SetupTimer(config.Time, left);
-                chestTimer.AddTime(offlineTime);
-
+                chestTimer.AddTime(offlineDeltaTime);
             }
-
-
 
             if (spriteEntry != null)
             {

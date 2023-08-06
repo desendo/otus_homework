@@ -12,5 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d459174ef5db4b3da63ed490425cb457, type: 3}
   m_Name: VisualConfig
   m_EditorClassIdentifier: 
-  PlayerPrefab: {fileID: 1244872004048453473, guid: d86f3bcb4c78acc479179793ad30b7a7,
-    type: 3}
+  SpriteEntries:
+  - Id: steel
+    Sprite: {fileID: 21300000, guid: 3d961a9fba0ca774cb4615517ba5c759, type: 3}
+  - Id: wooden
+    Sprite: {fileID: 21300000, guid: 72acb49c29a5df44f848ddf1a0550110, type: 3}
+  - Id: gold
+    Sprite: {fileID: 21300000, guid: 061785587ca5b02489585b39008b8be9, type: 3}

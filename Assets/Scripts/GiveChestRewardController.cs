@@ -4,33 +4,32 @@ using Config;
 using DependencyInjection;
 using UnityEngine;
 
-public class GiveChestRewardController : MonoBehaviour
+public class GiveChestRewardController
 {
-    [SerializeField] private List<ChestTimer> _timers;
+
     private GameConfig _gameConfig;
+    private List<ChestTimer> _timers;
 
     [Inject]
-    public void Construct(GameConfig gameConfig)
+    public void Construct(GameConfig gameConfig, List<ChestTimer> timers)
     {
+        _timers = timers;
         _gameConfig = gameConfig;
-    }
-
-    private void Start()
-    {
         foreach (var chestTimer in _timers)
         {
-            chestTimer.OnClick += ChestTimer;
+            chestTimer.OnClick += ProcessClick;
         }
     }
 
-    private void ChestTimer(ChestTimer chestTimer)
+
+    private void ProcessClick(ChestTimer chestTimer)
     {
         if (chestTimer.IsSetUp && chestTimer.RewardReady)
         {
-            List<string> rewardIdsToGive = new List<string>();
+            var rewardIdsToGive = new List<string>();
 
             var config = _gameConfig.ChestConfigs.FirstOrDefault(x => x.Id == chestTimer.ChestId);
-            
+
             if (config != null)
             {
                 var rewardCount = Random.Range(config.MinRewards, config.MaxRewards + 1);
@@ -42,22 +41,18 @@ public class GiveChestRewardController : MonoBehaviour
                         float totalWeight = rewardsLeft.Sum(x => x.Weight);
                         var randomWeight = Random.value * totalWeight;
                         var sum = 0;
-                        string rewardToAdd = null;
                         foreach (var reward in rewardsLeft)
                         {
                             sum += reward.Weight;
-                            if (sum >= randomWeight)
-                            {
-                                rewardToAdd = reward.RewardId;
-                                rewardsLeft.Remove(reward);
-                                rewardIdsToGive.Add(rewardToAdd);
-                                break;
-                            }
+                            if (!(sum >= randomWeight)) continue;
+
+                            rewardsLeft.Remove(reward);
+                            rewardIdsToGive.Add(reward.RewardId);
+                            break;
 
                         }
                     }
                 }
-                
             }
 
             GiveRewards(rewardIdsToGive);

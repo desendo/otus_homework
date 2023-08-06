@@ -29,8 +29,3 @@ public interface IInit
 {
     public void Init();
 }
-public interface ISpawner
-{
-    void Spawn();
-    void Clear();
-}

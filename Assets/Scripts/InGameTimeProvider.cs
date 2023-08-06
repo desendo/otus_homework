@@ -1,16 +1,28 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
+using DependencyInjection;
 
-public class InGameTimeProvider : MonoBehaviour
+
+public class InGameTimeProvider : IUpdate
 {
-    [SerializeField] private List<ChestTimer> _timers;
+    private List<ChestTimer> _timers;
 
-    private void Update()
+    [Inject]
+    public void Construct(List<ChestTimer> timers)
+    {
+        _timers = timers;
+    }
+
+    public void Update(float dt)
     {
         foreach (var chestTimer in _timers)
         {
             if(chestTimer.IsSetUp)
-                chestTimer.AddTime(Time.deltaTime);
+                chestTimer.AddTime(dt);
         }
+    }
+
+    public void Init()
+    {
+
     }
 }

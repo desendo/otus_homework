@@ -97,43 +97,41 @@ namespace DependencyInjection
         }
         private class Cache
         {
-            private readonly Dictionary<Type, List<object>> _objectsByInterfaces = new Dictionary<Type, List<object>>();
-            private readonly Dictionary<Type, object> _objectsByTypes = new Dictionary<Type, object>();
+            private readonly Dictionary<Type, List<object>> _objectsByTypes = new Dictionary<Type, List<object>>();
             public void Add(object target)
             {
                 var type = target.GetType();
                 var interfaces = type.GetInterfaces();
                 if (!_objectsByTypes.ContainsKey(type))
-                    _objectsByTypes[type] = target;
-                else
-                    Debug.LogWarning($"{type} is already bound to {target.GetType()} ");
+                {
+                    _objectsByTypes.Add(type,new List<object>());
+                }
+                _objectsByTypes[type].Add(target);
 
                 foreach (var i in interfaces)
                 {
-                    if (!_objectsByInterfaces.ContainsKey(i))
+                    if (!_objectsByTypes.ContainsKey(i))
                     {
-                        _objectsByInterfaces.Add(i, new List<object>());
+                        _objectsByTypes.Add(i, new List<object>());
                     }
 
-                    if (_objectsByInterfaces[i].Contains(target))
+                    if (_objectsByTypes[i].Contains(target))
                     {
                         Debug.LogWarning($"{target.GetType()} already add to {i} list");
                         continue;
                     }
                     else
                     {
-                        _objectsByInterfaces[i].Add(target);
+                        _objectsByTypes[i].Add(target);
                     }
                 }
             }
 
+            
             public object Get(Type type)
             {
-                if (_objectsByTypes.TryGetValue(type, out var obj))
-                {
-                    return obj;
-                }
-                if (_objectsByInterfaces.TryGetValue(type, out var list))
+
+                if (_objectsByTypes.TryGetValue(type, out var list))
                 {
                     if (list.Count == 1)
                         return list[0];
@@ -145,9 +143,9 @@ namespace DependencyInjection
 
             public object GetList(Type type)
             {
-                if (_objectsByInterfaces.ContainsKey(type))
+                if (_objectsByTypes.ContainsKey(type))
                 {
-                    var list = _objectsByInterfaces[type];
+                    var list = _objectsByTypes[type];
                     return list;
                 }
 
