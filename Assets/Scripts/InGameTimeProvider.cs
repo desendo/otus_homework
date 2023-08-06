@@ -21,8 +21,4 @@ public class InGameTimeProvider : IUpdate
         }
     }
 
-    public void Init()
-    {
-
-    }
 }
