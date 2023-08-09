@@ -6,6 +6,7 @@ using DependencyInjection;
 using Effects;
 using GameManager;
 using Input;
+using ItemInventory;
 using Managers;
 using Pool;
 using Services;
@@ -22,7 +23,9 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private BulletPool _bulletPool;
     [SerializeField] private EnemyPool _enemyPool;
     [SerializeField] private HitEffectPool _hitEffectPool;
+    [SerializeField] private InventoryItemViewPool _inventoryItemViewPool;
     [SerializeField] private LevelBounds _levelBounds;
+    [SerializeField] private HeroInstaller _heroInstaller;
     private DependencyContainer _container;
 
     private void Start()
@@ -47,6 +50,7 @@ public class GameInstaller : MonoBehaviour
         _container.Add(_bulletPool);
         _container.Add(_enemyPool);
         _container.Add(_hitEffectPool);
+        _container.Add(_inventoryItemViewPool);
 
         //services
         _container.Bind<InputService>();
@@ -54,6 +58,7 @@ public class GameInstaller : MonoBehaviour
         _container.Bind<EnemyService>();
         _container.Bind<EffectsService>();
         _container.Bind<SignalBusService>();
+        _container.Bind<Inventory>();
 
         //managers
         _container.Bind<BulletManager>();
@@ -85,11 +90,16 @@ public class GameInstaller : MonoBehaviour
         _container.Bind<WeaponsListPresentationModel>();
         _container.Bind<HeroInfoPresentationModel>();
         _container.Bind<KillsPresentationModel>();
+        _container.Bind<InventoryPresentationModel>();
 
         //state and update managers
         _container.Bind<GameStateManager>();
         _container.Inject(_updateManager);
+
         SearchAndInject();
+
+        _container.Inject(_heroInstaller);
+        _heroInstaller.Install();
 
     }
     private void SearchAndInject()

@@ -68,7 +68,7 @@ namespace Services
             CollectedWeapons.Add(machineGunWeapon);
             OnWeaponCollected.Invoke(machineGunWeapon);
 
-            CurrentWeaponEntity.Value = riffleWeapon;
+            //CurrentWeaponEntity.Value = riffleWeapon;
         }
 
         private void OnWeaponChange(IWeapon weapon)

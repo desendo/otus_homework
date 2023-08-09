@@ -5,13 +5,13 @@ namespace Common.Entities
 {
     public class Entity : IEntity
     {
-        private readonly List<object> components = new List<object>();
+        private readonly List<object> _components = new List<object>();
 
         public T Get<T>()
         {
-            for (int i = 0, count = this.components.Count; i < count; i++)
+            for (int i = 0, count = _components.Count; i < count; i++)
             {
-                var component = this.components[i];
+                var component = _components[i];
                 if (component is T result)
                 {
                     return result;
@@ -23,9 +23,9 @@ namespace Common.Entities
 
         public bool TryGet<T>(out T result)
         {
-            for (int i = 0, count = this.components.Count; i < count; i++)
+            for (int i = 0, count = this._components.Count; i < count; i++)
             {
-                var component = this.components[i];
+                var component = this._components[i];
                 if (component is T tComponent)
                 {
                     result = tComponent;
@@ -39,17 +39,16 @@ namespace Common.Entities
 
         public void Add(object component)
         {
-            this.components.Add(component);
+            this._components.Add(component);
         }
 
         public void Remove(object component)
         {
-            this.components.Remove(component);
+            this._components.Remove(component);
         }
 
         public virtual void Dispose()
         {
-            throw new System.NotImplementedException();
         }
     }
 }
