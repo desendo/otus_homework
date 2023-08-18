@@ -10,8 +10,8 @@ namespace Models.Entities
     {
         private RiffleModelCore _core;
 
-        public RiffleEntity(IUpdateProvider updateProvider, Transform shootTransform, WeaponType weaponType)
-            : base(updateProvider, shootTransform, weaponType)
+        public RiffleEntity(IUpdateProvider updateProvider, Transform shootTransform, WeaponType weaponType, string id)
+            : base(updateProvider, shootTransform, weaponType, id)
         {
         }
 

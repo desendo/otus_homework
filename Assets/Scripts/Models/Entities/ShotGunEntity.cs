@@ -12,8 +12,8 @@ namespace Models.Entities
         private readonly Transform _shootTransform;
 
 
-        public ShotGunEntity(IUpdateProvider updateProvider, Transform shootTransform, WeaponType weaponConfigType) 
-            : base( updateProvider, shootTransform, weaponConfigType)
+        public ShotGunEntity(IUpdateProvider updateProvider, Transform shootTransform, WeaponType weaponConfigType, string id) 
+            : base( updateProvider, shootTransform, weaponConfigType, id)
         {
             _shootTransform = shootTransform;
         }

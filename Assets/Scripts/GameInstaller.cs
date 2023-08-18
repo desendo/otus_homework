@@ -7,6 +7,7 @@ using Effects;
 using GameManager;
 using Input;
 using ItemInventory;
+using ItemInventory.Controllers;
 using Managers;
 using Pool;
 using Services;
@@ -25,7 +26,7 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private HitEffectPool _hitEffectPool;
     [SerializeField] private InventoryItemViewPool _inventoryItemViewPool;
     [SerializeField] private LevelBounds _levelBounds;
-    [SerializeField] private HeroInstaller _heroInstaller;
+    [SerializeField] private InventoryInstaller _inventoryInstaller;
     private DependencyContainer _container;
 
     private void Start()
@@ -54,14 +55,16 @@ public class GameInstaller : MonoBehaviour
 
         //services
         _container.Bind<InputService>();
-        _container.Bind<HeroManager>();
         _container.Bind<EnemyService>();
         _container.Bind<EffectsService>();
         _container.Bind<SignalBusService>();
         _container.Bind<Inventory>();
+        _container.Bind<HeroService>();
+        _container.Bind<HeroSlotsService>();
 
         //managers
         _container.Bind<BulletManager>();
+        _container.Bind<WeaponManager>();
 
         //controllers
             //game
@@ -85,21 +88,26 @@ public class GameInstaller : MonoBehaviour
         _container.Bind<MachineGunController>();
         _container.Bind<SwitchWeaponController>();
         _container.Bind<HeroDeathController>();
+        
 
         //pm
         _container.Bind<WeaponsListPresentationModel>();
         _container.Bind<HeroInfoPresentationModel>();
         _container.Bind<KillsPresentationModel>();
         _container.Bind<InventoryPresentationModel>();
-
+        _container.Bind<HeroItemSlotsPresentationModel>();
+        
+        //pmControllers
+        _container.Bind<ItemSetToSlotService>();
+        //installers
+        _container.Bind<HeroSlotsInstaller>();
+        _container.Bind(_inventoryInstaller);
         //state and update managers
         _container.Bind<GameStateManager>();
         _container.Inject(_updateManager);
 
         SearchAndInject();
 
-        _container.Inject(_heroInstaller);
-        _heroInstaller.Install();
 
     }
     private void SearchAndInject()

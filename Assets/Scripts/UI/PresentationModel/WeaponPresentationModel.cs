@@ -11,11 +11,13 @@ namespace UI.PresentationModel
         public AtomicVariable<bool> IsReloading = new AtomicVariable<bool>();
         public readonly AtomicVariable<bool> IsActive = new AtomicVariable<bool>();
         public readonly AtomicVariable<string> Shots = new AtomicVariable<string>();
+        public string Id { get; set; }
 
-        public WeaponPresentationModel(AtomicVariable<int> shotsLeft, AtomicVariable<int> clipSize,
+        public WeaponPresentationModel(string id, AtomicVariable<int> shotsLeft, AtomicVariable<int> clipSize,
             AtomicVariable<float> reloadTimerNormalized, AtomicVariable<int> damage, AtomicVariable<bool> isActive,
             int shotMult = 0)
         {
+            Id = id;
             reloadTimerNormalized.OnChanged.Subscribe(x => ReloadProgress.Value = x);
             damage.OnChanged.Subscribe(x =>
             {
@@ -30,5 +32,6 @@ namespace UI.PresentationModel
             IsActive.Value = isActive.Value;
             isActive.OnChanged.Subscribe(x => IsActive.Value = x);
         }
+
     }
 }

@@ -7,22 +7,24 @@ namespace Controllers
     public class EnemyAttackController: IUpdate, IStartGameListener, IFinishGameListener
     {
         private readonly EnemyService _enemyService;
-        private readonly HeroManager _heroManager;
+        private readonly WeaponManager _weaponManager;
         private bool _gameStarted;
+        private HeroService _heroService;
 
-        public EnemyAttackController(EnemyService enemyService, HeroManager heroManager)
+        public EnemyAttackController(EnemyService enemyService, WeaponManager weaponManager, HeroService heroService)
         {
+            _heroService = heroService;
             _enemyService = enemyService;
-            _heroManager = heroManager;
+            _weaponManager = weaponManager;
         }
 
 
         public void Update(float dt)
         {
-            if(!_gameStarted || _heroManager.HeroEntity.Value == null)
+            if(!_gameStarted || _heroService.HeroEntity.Value == null)
                 return;
 
-            var heroPos = _heroManager.HeroEntity.Value.Get<Component_Transform>().RootTransform.position;
+            var heroPos = _heroService.HeroEntity.Value.Get<Component_Transform>().RootTransform.position;
 
             foreach (var unit in _enemyService.Units)
             {

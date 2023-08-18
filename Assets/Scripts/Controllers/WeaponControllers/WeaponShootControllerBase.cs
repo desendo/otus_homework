@@ -15,16 +15,16 @@ namespace Controllers.WeaponControllers
 
         protected abstract WeaponType WeaponType { get; }
 
-        protected WeaponShootControllerBase(HeroManager heroManager, IBulletSpawner bulletSpawner)
+        protected WeaponShootControllerBase(WeaponManager weaponManager, IBulletSpawner bulletSpawner)
         {
             BulletSpawner = bulletSpawner;
-            heroManager.CurrentWeaponEntity.OnChanged.Subscribe(OnWeaponChanged);
+            weaponManager.CurrentWeaponEntity.OnChanged.Subscribe(OnWeaponChanged);
         }
 
         private void OnWeaponChanged(IWeapon obj)
         {
             _shootRequested?.Dispose();
-            if (obj.WeaponType == WeaponType)
+            if (obj?.WeaponType == WeaponType)
             {
                 _shootRequested = obj.Get<Component_OnAttack>().OnAttack.Subscribe(() =>
                 {

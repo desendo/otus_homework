@@ -87,7 +87,7 @@ MonoBehaviour:
   PlayerMoveSpeed: 2.2
   PlayerRotationSpeed: 2000
   ZombieSpawnInterval: 1
-  KillGoal: 100
+  KillGoal: 1
   ZombieHealth: 12
-  ZombieMoveSpeed: 1.8
+  ZombieMoveSpeed: 0.01
   ZombieMoveSpeedReloadMultiplier: 0.1

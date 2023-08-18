@@ -6,24 +6,24 @@ namespace Controllers.HeroControllers
     public class SwitchWeaponController
     {
         private readonly InputService _inputService;
-        private readonly HeroManager _heroManager;
+        private readonly WeaponManager _weaponManager;
         private bool _loaded;
         private bool _started;
 
-        public SwitchWeaponController(InputService inputService, HeroManager heroManager)
+        public SwitchWeaponController(InputService inputService, WeaponManager weaponManager)
         {
             _inputService = inputService;
-            _heroManager = heroManager;
+            _weaponManager = weaponManager;
             inputService.DigitPressed.Subscribe(OnDigitPressed);
         }
 
         private void OnDigitPressed(int obj)
         {
-            var count = _heroManager.CollectedWeapons.Count;
+            var count = _weaponManager.CollectedWeapons.Count;
             if(obj > count)
                 return;
 
-            _heroManager.SetWeaponSelected(obj - 1);
+            _weaponManager.SetWeaponSelected(obj - 1);
         }
     }
 }

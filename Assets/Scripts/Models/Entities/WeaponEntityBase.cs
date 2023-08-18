@@ -11,8 +11,11 @@ namespace Models.Entities
         protected readonly Transform ShootTransform;
 
         public WeaponType WeaponType { get; }
-        protected WeaponEntityBase(IUpdateProvider updateProvider, Transform shootTransform, WeaponType weaponType)
+        public string Id { get; }
+
+        protected WeaponEntityBase(IUpdateProvider updateProvider, Transform shootTransform, WeaponType weaponType, string id)
         {
+            Id = id;
             WeaponType = weaponType;
             ShootTransform = shootTransform;
             UpdateProvider = updateProvider;

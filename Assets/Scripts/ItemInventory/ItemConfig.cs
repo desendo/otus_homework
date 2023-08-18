@@ -12,35 +12,22 @@ namespace ItemInventory
         [SerializeField] public Sprite Sprite;
         [SerializeField] public string Name;
         [SerializeField] public string Description;
-        [SerializeField] public InventoryItemFlags InventoryItemFlags;
-        public List<ScriptableObject> Parameters;
+        public List<PropertyConfig> Parameters;
+
+        public Item CreateItem()
+        {
+            var item = new Item(Id, Name, Description, Sprite, Parameters);
+            
+            return item;
+        }
 
     }
 
-    
-    public abstract class Container<T> : ScriptableObject
+    public abstract class PropertyConfig : ScriptableObject
     {
-        public List<T> List;
+        public abstract object CreateComponent();
     }
 
-    public class EffectsContainer : Container<EffectConfig>
-    {
-    }
-
-    public class ItemPropertyConfig : ScriptableObject
-    {
-
-    }
-    public class ItemSlotConfig : ScriptableObject
-    {
-        public SlotFlags SlotFlags;
-    }
-    public class EffectConfig : ScriptableObject
-    {
-        public string Id;
-        public string Value;
-        public EffectFlags ApplyCondition;
-    }
 
     [Flags]
     public enum EffectFlags
@@ -50,12 +37,14 @@ namespace ItemInventory
         Inventory = 2,
 
     }
-    public enum SlotFlags
+    public enum SlotType
     {
         None = 0,
         Hand = 1,
         Legs = 2,
         Body = 4,
+        Amulet = 5,
+        Ring = 6,
 
     }
     [Flags]

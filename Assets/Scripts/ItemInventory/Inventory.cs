@@ -20,18 +20,32 @@ namespace ItemInventory
         public void AddItem(Item item)
         {
             _items.Add(item);
+            _onAdd.Invoke(item);
         }
-        public void RemoveItem(Item item)
-        {
-            if(_items.Contains(item))
-                _items.Add(item);
-        }
+
         public void RemoveItem(string itemId)
         {
             var item = _items.FirstOrDefault(x => x.Id == itemId);
             if (item != null)
             {
-                _items.Add(item);
+                _items.Remove(item);
+                _onRemove.Invoke(item);
+            }
+        }
+        public void RemoveItem(Item item)
+        {
+            if (item != null && _items.Contains(item))
+            {
+                _items.Remove(item);
+                _onRemove.Invoke(item);
+            }
+        }
+        public void Clear()
+        {
+            var cache = _items.ToList();
+            foreach (var item in cache)
+            {
+                RemoveItem(item);
             }
         }
     }

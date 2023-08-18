@@ -23,15 +23,28 @@ namespace ItemInventory.UI
         private bool _isDragging;
         private RectTransform _rectTransform;
         private Vector3 _lastPosition;
+        private ItemPresentationModel _pm;
+        private Image _image;
+        private Vector3 _savedPosition;
+        private Transform _savedParent;
+        private Transform _dragContainer;
+        private bool _inSlot;
 
         private void Awake()
         {
             _rectTransform = GetComponent<RectTransform>();
+            _image = GetComponent<Image>();
         }
 
-        public void Setup(ItemPresentationModel pm)
+        public void Setup(ItemPresentationModel pm, Transform dragContainer)
         {
             HideDescription();
+            _dragContainer = dragContainer;
+            _pm = pm;
+            _count.text = pm.Count.Value;
+            _name.text = pm.Name.Value;
+            _icon.sprite = pm.Icon.Value;
+            _metaInfo.text = pm.Description.Value;
         }
 
         private void Update()
@@ -77,19 +90,39 @@ namespace ItemInventory.UI
         {
             _isDragging = true;
             _rectTransform.position += (Vector3)eventData.delta;
-
+            _image.raycastTarget = false;
         }
 
         public void OnBeginDrag(PointerEventData eventData)
         {
             HideDescription();
+            _savedPosition = transform.position;
+            _savedParent = transform.parent;
+            _image.raycastTarget = false;
             _lastPosition = _rectTransform.position;
+            _rectTransform.SetParent(_dragContainer);
+            _pm.SetDragging(true);
 
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
+            _image.raycastTarget = true;
             _isDragging = false;
+            if(!_inSlot)
+                ResetTransform();
+            _pm.SetDragging(false);
+        }
+
+        public void ResetTransform()
+        {
+            transform.position = _savedPosition;
+            transform.SetParent(_savedParent);
+        }
+
+        public void SetIsInSlot(bool inSlot)
+        {
+            _inSlot = inSlot;
         }
     }
 }

@@ -6,20 +6,20 @@ namespace Controllers.HeroControllers
 {
     public class HeroAttackController : IGameLoadedListener, IStartGameListener, IFinishGameListener
     {
-        private readonly HeroManager _heroManager;
+        private readonly WeaponManager _weaponManager;
         private bool _loaded;
         private bool _started;
 
-        public HeroAttackController(InputService inputService, HeroManager heroManager)
+        public HeroAttackController(InputService inputService, WeaponManager weaponManager)
         {
-            _heroManager = heroManager;
+            _weaponManager = weaponManager;
             inputService.FireState.Subscribe(HandleFireState);
             inputService.ReloadPressed.Subscribe(HandleReloadRequest);
         }
 
         private void HandleReloadRequest()
         {
-            _heroManager.CurrentWeaponEntity.Value?.Get<Component_Reload>().Reload();
+            _weaponManager.CurrentWeaponEntity.Value?.Get<Component_Reload>().Reload();
 
         }
         private void HandleFireState(FireState fireState)
@@ -27,11 +27,11 @@ namespace Controllers.HeroControllers
             if (!_loaded || !_started) return;
 
             if(fireState == FireState.Released || fireState == FireState.None)
-                _heroManager.CurrentWeaponEntity.Value?.Get<Component_Attack>().StopAttack();
+                _weaponManager.CurrentWeaponEntity.Value?.Get<Component_Attack>().StopAttack();
             else if(fireState == FireState.Pressed)
-                _heroManager.CurrentWeaponEntity.Value?.Get<Component_Attack>().Attack();
+                _weaponManager.CurrentWeaponEntity.Value?.Get<Component_Attack>().Attack();
             else if(fireState == FireState.IsPressing)
-                _heroManager.CurrentWeaponEntity.Value?.Get<Component_Attack>().ContinueAttack();
+                _weaponManager.CurrentWeaponEntity.Value?.Get<Component_Attack>().ContinueAttack();
         }
 
         public void OnGameLoaded(bool isLoaded)

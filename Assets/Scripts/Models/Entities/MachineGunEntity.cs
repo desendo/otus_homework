@@ -11,7 +11,8 @@ namespace Models.Entities
     {
         private MachineGunModel _core;
 
-        public MachineGunEntity(IUpdateProvider updateProvider, Transform shootTransform, WeaponType weaponType) : base(updateProvider, shootTransform, weaponType)
+        public MachineGunEntity(IUpdateProvider updateProvider, Transform shootTransform, WeaponType weaponType, string id)
+            : base(updateProvider, shootTransform, weaponType, id)
         {
 
         }
