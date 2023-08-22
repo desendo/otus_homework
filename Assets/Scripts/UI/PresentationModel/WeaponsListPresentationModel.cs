@@ -11,10 +11,10 @@ namespace UI.PresentationModel
 {
     public sealed class WeaponsListPresentationModel
     {
-        public List<IDisposable> _subs = new List<IDisposable>();
+        private readonly List<IDisposable> _subs = new List<IDisposable>();
         public readonly AtomicEvent OnChange = new AtomicEvent();
         public readonly List<WeaponPresentationModel> WeaponPresentationModels = new List<WeaponPresentationModel>();
-        private WeaponManager _weaponManager;
+        private readonly WeaponManager _weaponManager;
 
         public WeaponsListPresentationModel(WeaponManager weaponManager)
         {
@@ -49,7 +49,7 @@ namespace UI.PresentationModel
             {
                 OnWeaponAdd(w);
             }
-            
+            OnChange.Invoke();
         }
 
         private void Clear()

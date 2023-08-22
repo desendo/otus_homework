@@ -4,14 +4,14 @@ namespace Models.Components
 {
     public sealed class Component_TakeDamage
     {
-        private readonly AtomicEvent<int> _onTakeDamage;
+        private readonly AtomicEvent<float> _onTakeDamage;
 
-        public Component_TakeDamage(AtomicEvent<int> onTakeDamage)
+        public Component_TakeDamage(AtomicEvent<float> onTakeDamage)
         {
             _onTakeDamage = onTakeDamage;
         }
 
-        public void DoDamage(int val)
+        public void DoDamage(float val)
         {
             _onTakeDamage.Invoke(val);
         }

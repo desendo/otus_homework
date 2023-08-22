@@ -8,9 +8,12 @@ using GameManager;
 using Input;
 using ItemInventory;
 using ItemInventory.Controllers;
+using ItemInventory.UI;
+using ItemInventory.UI.PresentationModel;
 using Managers;
 using Pool;
 using Services;
+using Services.Effects;
 using Signals;
 using UI.PresentationModel;
 using UnityEngine;
@@ -65,6 +68,9 @@ public class GameInstaller : MonoBehaviour
         //managers
         _container.Bind<BulletManager>();
         _container.Bind<WeaponManager>();
+        _container.Bind<WeaponEffectManager>();
+
+        _container.Bind<EffectManager>();
 
         //controllers
             //game
@@ -88,8 +94,9 @@ public class GameInstaller : MonoBehaviour
         _container.Bind<MachineGunController>();
         _container.Bind<SwitchWeaponController>();
         _container.Bind<HeroDeathController>();
-        
 
+
+        //item effects
         //pm
         _container.Bind<WeaponsListPresentationModel>();
         _container.Bind<HeroInfoPresentationModel>();
@@ -97,8 +104,8 @@ public class GameInstaller : MonoBehaviour
         _container.Bind<InventoryPresentationModel>();
         _container.Bind<HeroItemSlotsPresentationModel>();
         
-        //pmControllers
-        _container.Bind<ItemSetToSlotService>();
+        _container.Bind<ItemSetToSlotController>();
+        _container.Bind<SlotItemEffectController>();
         //installers
         _container.Bind<HeroSlotsInstaller>();
         _container.Bind(_inventoryInstaller);

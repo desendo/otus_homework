@@ -17,7 +17,7 @@ namespace ItemInventory
         public Item CreateItem()
         {
             var item = new Item(Id, Name, Description, Sprite, Parameters);
-            
+
             return item;
         }
 
@@ -28,15 +28,6 @@ namespace ItemInventory
         public abstract object CreateComponent();
     }
 
-
-    [Flags]
-    public enum EffectFlags
-    {
-        None = 0,
-        Wear = 1,
-        Inventory = 2,
-
-    }
     public enum SlotType
     {
         None = 0,
@@ -47,14 +38,5 @@ namespace ItemInventory
         Ring = 6,
 
     }
-    [Flags]
-    public enum InventoryItemFlags
-    {
-        None = 0, //0
-        Stackable = 1, //01
-        Consumable = 2, //10
-        CanEquip = 4, //100
-        EquippedEffect = 8, //1000
-        InventoryEffect = 16 //1000
-    }
+
 }

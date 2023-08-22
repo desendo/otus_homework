@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Common.Atomic.Actions;
 using Common.Atomic.Values;
 using Common.Entities;
 using Config;
 using DependencyInjection;
 using DependencyInjection.Util;
 using GameManager;
+using ItemInventory.Config;
 using Models.Components;
-using Models.Declarative.Weapons;
 using Models.Entities;
+using Services.Effects;
 using UnityEngine;
 
 namespace Services
 {
-    public class HeroService : ISpawner
+    public class HeroService : ISpawner, IEffectContainer
     {
         private readonly GameConfig _gameConfig;
         private readonly VisualConfig _visualConfig;
@@ -55,5 +54,17 @@ namespace Services
             }
         }
 
+        public void AddEffect(Effect effect)
+        {
+            if(HeroEntity.Value == null)
+                return;
+
+        }
+
+        public void RemoveEffect(Effect effect)
+        {
+            if(HeroEntity.Value == null)
+                return;
+        }
     }
 }

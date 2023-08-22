@@ -17,8 +17,8 @@ namespace Pool
         public override InventoryItemView Spawn(Action<InventoryItemView> callbackBeforeAwake = null)
         {
             var view = base.Spawn(x => _di.Inject(x));
-
             return view;
         }
+
     }
 }

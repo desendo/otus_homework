@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ReactiveExtension;
+using UnityEngine;
 
 namespace ItemInventory
 {
@@ -12,15 +13,13 @@ namespace ItemInventory
 
         public IReadOnlyEvent<Item> OnAdd => _onAdd;
         public IReadOnlyEvent<Item> OnRemove => _onRemove;
-        public IReadOnlyList<Item> GetItems()
-        {
-            return _items;
-        }
+        public IReadOnlyList<Item> Items => _items;
 
         public void AddItem(Item item)
         {
             _items.Add(item);
             _onAdd.Invoke(item);
+
         }
 
         public void RemoveItem(string itemId)
@@ -31,6 +30,7 @@ namespace ItemInventory
                 _items.Remove(item);
                 _onRemove.Invoke(item);
             }
+
         }
         public void RemoveItem(Item item)
         {
@@ -39,6 +39,7 @@ namespace ItemInventory
                 _items.Remove(item);
                 _onRemove.Invoke(item);
             }
+
         }
         public void Clear()
         {

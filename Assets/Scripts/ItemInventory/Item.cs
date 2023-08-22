@@ -18,7 +18,6 @@ namespace ItemInventory
             Description = description;
             Icon = icon;
             scriptableObjects?.ForEach(x=> Add(x.CreateComponent()));
-
         }
     }
 }

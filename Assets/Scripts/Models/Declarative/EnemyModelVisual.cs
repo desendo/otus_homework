@@ -65,7 +65,7 @@ namespace Models.Declarative
             updateProvider.OnLateUpdate.Subscribe(() => {
                 if (isDead.Value)
                 {
-                    _animator.SetBool(death, true);
+                    _animator.SetTrigger(death);
                     return;
                 }
                 _animator.SetFloat(speed, _rigidbody.velocity.sqrMagnitude);
@@ -76,6 +76,9 @@ namespace Models.Declarative
         public void Dispose()
         {
             _subs.Dispose();
+            _animator.ResetTrigger(attack);
+            _animator.ResetTrigger(death);
+
         }
     }
 }

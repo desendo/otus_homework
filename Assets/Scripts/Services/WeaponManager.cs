@@ -12,73 +12,72 @@ using ItemInventory.Components;
 using Models.Components;
 using Models.Declarative.Weapons;
 using Models.Entities;
+using ReactiveExtension;
 
 namespace Services
 {
     public class WeaponManager
     {
-        private readonly DependencyContainer _dependencyContainer;
         private readonly GameConfig _gameConfig;
-        private readonly HeroService _heroService;
         private readonly Inventory _inventory;
         private readonly IUpdateProvider _updateProvider;
-        private readonly VisualConfig _visualConfig;
         private IEntity _heroEntity;
         private IDisposable _reloadSubscribe;
         private IDisposable _shotSubscribe;
 
         public AtomicVariable<IWeapon> CurrentWeaponEntity { get; } = new AtomicVariable<IWeapon>();
-        public AtomicEvent<IWeapon> OnWeaponCollected { get; } = new AtomicEvent<IWeapon>();
-        public AtomicEvent<IWeapon> OnWeaponRemoved { get; } = new AtomicEvent<IWeapon>();
+        public Event<IWeapon> OnWeaponCollected { get; } = new Event<IWeapon>();
+        public Event<IWeapon> OnWeaponRemoved { get; } = new Event<IWeapon>();
         public AtomicEvent OnWeaponsClear { get; } = new AtomicEvent();
+
         public readonly List<IWeapon> CollectedWeapons = new List<IWeapon>();
 
-        public WeaponManager(GameConfig gameConfig, VisualConfig visualConfig,
-            DependencyContainer dependencyContainer, IUpdateProvider updateProvider, Inventory inventory,
+        public WeaponManager(GameConfig gameConfig, IUpdateProvider updateProvider, HeroSlotsService heroSlotsService,
             HeroService heroService)
         {
-            _heroService = heroService;
             _updateProvider = updateProvider;
-            _dependencyContainer = dependencyContainer;
             _gameConfig = gameConfig;
-            _visualConfig = visualConfig;
-            _inventory = inventory;
-            _heroEntity = _heroService.HeroEntity.Value;
-            _heroService.HeroEntity.OnChanged.Subscribe(entity => _heroEntity = entity);
-            _inventory.OnAdd.Subscribe(OnItemAdd);
-            _inventory.OnRemove.Subscribe(OnItemRemove);
+            _heroEntity = heroService.HeroEntity.Value;
+            heroService.HeroEntity.OnChanged.Subscribe(entity => _heroEntity = entity);
+            heroSlotsService.WeaponIdUnEquip.Subscribe(OnWeaponUnEquip);
+            heroSlotsService.WeaponIdEquip.Subscribe(OnWeaponEquip);
             CurrentWeaponEntity.OnChanged.Subscribe(OnWeaponChange);
+
         }
 
-
-        private void OnItemRemove(Item obj)
+        private void OnWeaponEquip(string weaponId)
         {
-            var weaponComponent = obj.Get<ItemComponent_Weapon>();
-            if (weaponComponent != null)
+            var weapon = CollectedWeapons.FirstOrDefault(x => x.Id == weaponId);
+            if (weapon == null)
             {
-                var weapon = CollectedWeapons.FirstOrDefault(x => x.Id == weaponComponent.WeaponId);
+                AddWeaponFromId(weaponId);
+                SetWeaponSelected(CollectedWeapons.Count - 1);
+            }
+        }
+
+        private void OnWeaponUnEquip(string weaponId)
+        {
+            var weapon = CollectedWeapons.FirstOrDefault(x => x.Id == weaponId);
+            if (weapon != null)
+            {
                 CollectedWeapons.Remove(weapon);
                 OnWeaponRemoved.Invoke(weapon);
+                if (CollectedWeapons.Count == 0)
+                    CurrentWeaponEntity.Value = null;
+                else
+                    SetWeaponSelected(CollectedWeapons.Count - 1);
             }
-
-            if (CollectedWeapons.Count == 0)
-                CurrentWeaponEntity.Value = null;
         }
 
-        private void OnItemAdd(Item obj)
+        private void AddWeaponFromId(string id)
         {
-            var weaponComponent = obj.Get<ItemComponent_Weapon>();
-            if (weaponComponent != null)
-            {
-                var weaponConfig = _gameConfig.Weapons
-                    .FirstOrDefault(x => x.Id == weaponComponent.WeaponId);
+            var weaponConfig = _gameConfig.Weapons
+                .FirstOrDefault(x => x.Id == id);
 
-                var weapon = CreateWeapon(weaponConfig);
-                CollectedWeapons.Add(weapon);
-                OnWeaponCollected.Invoke(weapon);
-            }
+            var weapon = CreateWeapon(weaponConfig);
+            CollectedWeapons.Add(weapon);
+            OnWeaponCollected.Invoke(weapon);
         }
-
 
         private void OnWeaponChange(IWeapon weapon)
         {
@@ -145,18 +144,5 @@ namespace Services
         {
             CurrentWeaponEntity.Value = CollectedWeapons[i];
         }
-
-        /*
-        public void OnStartGame()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnFinishGame(bool gameWin)
-        {
-            foreach (var collectedWeapon in CollectedWeapons) collectedWeapon.Dispose();
-            CollectedWeapons.Clear();
-            OnWeaponsClear.Invoke();
-        }*/
     }
 }

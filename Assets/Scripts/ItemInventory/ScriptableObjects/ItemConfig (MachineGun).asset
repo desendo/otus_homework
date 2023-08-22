@@ -18,3 +18,4 @@ MonoBehaviour:
   Description: Machine gun
   Parameters:
   - {fileID: 11400000, guid: 9169030493dcdfc46bed7a879a17e2dc, type: 2}
+  - {fileID: 11400000, guid: 7d52e370901dbd140997234953900481, type: 2}

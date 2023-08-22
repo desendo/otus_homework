@@ -32,7 +32,8 @@ namespace Models.Entities
             Add(new Component_Pivot(ShootTransform));
             Add(new Component_OnAttack(_core.AttackRequested));
             Add(new Component_Speed(_core.BulletSpeed));
-            Add(new Component_Damage(_core.Damage));
+            Add(new Component_Damage(_core.Damage, _core.DamageMultiplier));
+            Add(new Component_DamageMultiplier(_core.DamageMultiplier));
             Add(new Component_Reload(_core.ReloadMechanics.Reload, _core.ReloadMechanics.ReloadStarted,
                 _core.ReloadMechanics.ReloadTimer, _core.ReloadMechanics.ReloadDelay));
             Add(new Component_SetActive(_core.Activate));

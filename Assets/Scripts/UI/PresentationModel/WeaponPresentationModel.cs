@@ -14,7 +14,7 @@ namespace UI.PresentationModel
         public string Id { get; set; }
 
         public WeaponPresentationModel(string id, AtomicVariable<int> shotsLeft, AtomicVariable<int> clipSize,
-            AtomicVariable<float> reloadTimerNormalized, AtomicVariable<int> damage, AtomicVariable<bool> isActive,
+            AtomicVariable<float> reloadTimerNormalized, AtomicVariable<float> damage, AtomicVariable<bool> isActive,
             int shotMult = 0)
         {
             Id = id;
@@ -24,7 +24,7 @@ namespace UI.PresentationModel
                 Damage.Value = shotMult == 0 ? $"Damage: {x}" : $"Damage: {x}x{shotMult}";
             });
 
-            Damage.Value = shotMult == 0 ? $"Damage: {damage.Value}" : $"Damage: {damage.Value}x{shotMult}";
+            Damage.Value = shotMult == 0 ? $"Damage: {damage.Value}" : $"Damage: {damage.Value:F1}x{shotMult}";
             shotsLeft.OnChanged.Subscribe(x => Shots.Value = $"{shotsLeft.Value}/{clipSize.Value}");
             clipSize.OnChanged.Subscribe(x => Shots.Value = $"{shotsLeft.Value}/{clipSize.Value}");
             Shots.Value = $"{shotsLeft.Value}/{clipSize.Value}";

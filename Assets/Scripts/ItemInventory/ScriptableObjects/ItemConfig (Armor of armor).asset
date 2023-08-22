@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b4ff23de0514e388b3a318a3b409142, type: 3}
+  m_Name: ItemConfig (Armor of armor)
+  m_EditorClassIdentifier: 
+  Id: armor_1
+  Sprite: {fileID: 21300000, guid: b1b84da6ac2fc20439fc5dd94641253b, type: 3}
+  Name: Armor of armor
+  Description: armor -1 damage
+  Parameters:
+  - {fileID: 11400000, guid: 600e6e25fd0134849929b664dbfd2fb1, type: 2}
+  - {fileID: 11400000, guid: d51e0b8ab1320fa49be615e3c729717f, type: 2}

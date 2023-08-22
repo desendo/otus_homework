@@ -9,7 +9,7 @@ namespace Managers
 {
     public interface IBulletSpawner
     {
-        EntityMono FireBullet(Vector3 position, Vector3 direction, float speed, int damage);
+        EntityMono FireBullet(Vector3 position, Vector3 direction, float speed, float damage);
     }
 
     public class BulletManager : IFixedUpdate, IBulletSpawner
@@ -41,7 +41,7 @@ namespace Managers
             _removeBullets.Clear();
         }
 
-        public EntityMono FireBullet(Vector3 position, Vector3 direction, float speed, int damage)
+        public EntityMono FireBullet(Vector3 position, Vector3 direction, float speed, float damage)
         {
             var instance = _bulletPool.Spawn();
             _spawnedBullets.Add(instance);

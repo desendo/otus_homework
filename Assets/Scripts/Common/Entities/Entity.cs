@@ -23,9 +23,9 @@ namespace Common.Entities
 
         public bool TryGet<T>(out T result)
         {
-            for (int i = 0, count = this._components.Count; i < count; i++)
+            for (int i = 0, count = _components.Count; i < count; i++)
             {
-                var component = this._components[i];
+                var component = _components[i];
                 if (component is T tComponent)
                 {
                     result = tComponent;

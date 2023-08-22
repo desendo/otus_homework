@@ -97,7 +97,7 @@ MonoBehaviour:
   _name: {fileID: 960500718884088141}
   _metaInfo: {fileID: 960500720406670158}
   _count: {fileID: 960500720469755157}
-  _descriptionContainer: {fileID: 960500719358368471}
+  _descriptionContainer: {fileID: 960500719358368459}
 --- !u!1 &960500718862888119
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,7 +320,7 @@ GameObject:
   - component: {fileID: 960500719358368458}
   - component: {fileID: 960500719358368468}
   - component: {fileID: 960500719358368469}
-  - component: {fileID: 960500719358368471}
+  - component: {fileID: 7298055056361424704}
   m_Layer: 5
   m_Name: Descr
   m_TagString: Untagged
@@ -387,18 +387,17 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!225 &960500719358368471
-CanvasGroup:
+--- !u!210 &7298055056361424704
+SortingGroup:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 960500719358368459}
   m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 0
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
+  m_SortingLayerID: -318238847
+  m_SortingLayer: 1
+  m_SortingOrder: 1
 --- !u!1 &960500720406670156
 GameObject:
   m_ObjectHideFlags: 0

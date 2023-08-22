@@ -1,53 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using ItemInventory;
+﻿using System.Collections.Generic;
 using ReactiveExtension;
-using Signals;
-using UnityEngine;
+using UI.PresentationModel;
 
-namespace UI.PresentationModel
+namespace ItemInventory.UI.PresentationModel
 {
-    public class ItemPresentationModel
-    {
-        public Reactive<string> Name = new Reactive<string>();
-        public Reactive<string> Count = new Reactive<string>();
-        public Reactive<string> Description = new Reactive<string>();
-        public Reactive<Sprite> Icon = new Reactive<Sprite>();
-        public Item Item { get; }
-
-        private readonly Reactive<Item> _onItemDrag;
-
-        public ItemPresentationModel(Item item, Reactive<Item> onItemDrag)
-        {
-            Icon.Value = item.Icon;
-            Count.Value = "";
-            Description.Value = item.Description;
-            Name.Value = item.Name;
-            Item = item;
-            _onItemDrag = onItemDrag;
-        }
-
-        public void SetDragging(bool isDragging)
-        {
-            _onItemDrag.Value = isDragging ? Item : null;
-        }
-    }
-
     public class InventoryPresentationModel
     {
         public readonly Event<ItemPresentationModel> OnAdd = new Event<ItemPresentationModel>();
         public readonly Event<ItemPresentationModel> OnRemove = new Event<ItemPresentationModel>();
         public IReadOnlyList<ItemPresentationModel> ItemPms => _itemPresentationModels;
-        public readonly Reactive<Item> ItemDrag = new Reactive<Item>();
-
         private readonly List<ItemPresentationModel> _itemPresentationModels = new List<ItemPresentationModel>();
 
         public InventoryPresentationModel(Inventory inventory)
         {
-            var items = inventory.GetItems();
-            foreach (var item in items)
+            foreach (var item in inventory.Items)
             {
-                var itemPm = new ItemPresentationModel(item, ItemDrag);
+                var itemPm = new ItemPresentationModel(item);
                 _itemPresentationModels.Add(itemPm);
                 OnAdd.Invoke(itemPm);
             }
@@ -58,7 +26,7 @@ namespace UI.PresentationModel
 
         private void ProcessOnAdd(Item item)
         {
-            var itemPm = new ItemPresentationModel(item, ItemDrag);
+            var itemPm = new ItemPresentationModel(item);
             _itemPresentationModels.Add(itemPm);
             OnAdd.Invoke(itemPm);
         }

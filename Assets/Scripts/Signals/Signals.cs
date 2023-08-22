@@ -8,17 +8,22 @@ namespace Signals
     }
     internal readonly struct SetItemToSlotRequest
     {
-        public ItemSlot Slot { get; }
-        public Action Success { get; }
-        public Action Fail { get; }
+        public string SlotId { get; }
+        public string ItemId { get; }
 
-
-
-        public SetItemToSlotRequest(ItemSlot slot, Action success, Action fail)
+        public SetItemToSlotRequest(string slotId, string itemId)
         {
-            Slot = slot;
-            Success = success;
-            Fail = fail;
+            SlotId = slotId;
+            ItemId = itemId;
+        }
+    }
+    internal readonly struct SetItemToInventory
+    {
+        public string ItemId { get; }
+
+        public SetItemToInventory( string itemId)
+        {
+            ItemId = itemId;
         }
     }
     internal struct GameWinRequest

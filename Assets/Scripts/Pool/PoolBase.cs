@@ -42,7 +42,7 @@ namespace Pool
             throw new Exception($"no {typeof(T)} in pool");
         }
 
-        public void Unspawn(T instance)
+        public virtual void Unspawn(T instance)
         {
             instance.transform.SetParent(_container);
 

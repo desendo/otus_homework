@@ -10,12 +10,10 @@ namespace Models.Declarative.Weapons
         public readonly ClipModel ClipModel = new ClipModel();
         public readonly AttackDelay_Mechanics AttackDelayMechanics = new AttackDelay_Mechanics();
 
-
         public readonly AtomicVariable<float> BulletSpeed = new AtomicVariable<float>();
 
         private IUpdateProvider _updateProvider;
         private IDisposable _updateSub;
-
 
         public void Construct()
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using TMPro;
 using UI.PresentationModel;
 using UnityEngine;
@@ -15,47 +16,50 @@ namespace ItemInventory.UI
         [SerializeField] private TMP_Text _name;
         [SerializeField] private TMP_Text _metaInfo;
         [SerializeField] private TMP_Text _count;
-        [SerializeField] private CanvasGroup _descriptionContainer;
+        [SerializeField] private GameObject _descriptionContainer;
+
         private float _timer;
         private bool _hover;
-        private readonly float _hoverDelay = 0.5f;
+        private const float HoverDelay = 0.5f;
+
         private readonly List<IDisposable> _subs = new List<IDisposable>();
-        private bool _isDragging;
         private RectTransform _rectTransform;
-        private Vector3 _lastPosition;
-        private ItemPresentationModel _pm;
         private Image _image;
         private Vector3 _savedPosition;
         private Transform _savedParent;
-        private Transform _dragContainer;
-        private bool _inSlot;
+        private string _id;
+        private Transform _dragTransform;
 
+        public string Id => _id;
         private void Awake()
         {
             _rectTransform = GetComponent<RectTransform>();
             _image = GetComponent<Image>();
         }
 
-        public void Setup(ItemPresentationModel pm, Transform dragContainer)
+        public void Setup(ItemPresentationModel pm)
         {
-            HideDescription();
-            _dragContainer = dragContainer;
-            _pm = pm;
             _count.text = pm.Count.Value;
             _name.text = pm.Name.Value;
             _icon.sprite = pm.Icon.Value;
             _metaInfo.text = pm.Description.Value;
+            _id = pm.Id;
+            _image.raycastTarget = true;
         }
 
         private void Update()
         {
-            if (_hover && !_isDragging)
+            if (_hover)
             {
                 _timer += Time.deltaTime;
-                if (_timer > _hoverDelay)
+                if (_timer > HoverDelay)
                 {
                     ShowDescription();
                 }
+            }
+            else
+            {
+                HideDescription();
             }
         }
 
@@ -70,27 +74,24 @@ namespace ItemInventory.UI
             _hover = false;
             _timer = 0;
             HideDescription();
-
         }
 
 
         void ShowDescription()
         {
-            _descriptionContainer.alpha = 1f;
-            _descriptionContainer.gameObject.SetActive(true);
+            _descriptionContainer.SetActive(true);
         }
 
         void HideDescription()
         {
-            _descriptionContainer.alpha = 0f;
-            _descriptionContainer.gameObject.SetActive(false);
+            _descriptionContainer.SetActive(false);
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            _isDragging = true;
             _rectTransform.position += (Vector3)eventData.delta;
             _image.raycastTarget = false;
+            transform.SetParent(_dragTransform);
         }
 
         public void OnBeginDrag(PointerEventData eventData)
@@ -99,30 +100,28 @@ namespace ItemInventory.UI
             _savedPosition = transform.position;
             _savedParent = transform.parent;
             _image.raycastTarget = false;
-            _lastPosition = _rectTransform.position;
-            _rectTransform.SetParent(_dragContainer);
-            _pm.SetDragging(true);
-
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
             _image.raycastTarget = true;
-            _isDragging = false;
-            if(!_inSlot)
-                ResetTransform();
-            _pm.SetDragging(false);
+            ResetTransform();
         }
 
-        public void ResetTransform()
+        private void ResetTransform()
         {
             transform.position = _savedPosition;
-            transform.SetParent(_savedParent);
+            SetParent(_savedParent);
         }
 
-        public void SetIsInSlot(bool inSlot)
+        public void SetDragContainer(Transform dragTransform)
         {
-            _inSlot = inSlot;
+            _dragTransform = dragTransform;
+        }
+
+        public void SetParent(Transform holder)
+        {
+            transform.SetParent(holder);
         }
     }
 }

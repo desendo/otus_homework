@@ -18,3 +18,4 @@ MonoBehaviour:
   Description: Zombie hunting riffle
   Parameters:
   - {fileID: 11400000, guid: ceecfe2165b83d5428077ff1a3b024f2, type: 2}
+  - {fileID: 11400000, guid: 7d52e370901dbd140997234953900481, type: 2}

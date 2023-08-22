@@ -18,3 +18,4 @@ MonoBehaviour:
   Description: 2-barrels shotgun
   Parameters:
   - {fileID: 11400000, guid: 547e26294404bc14296412fee7d2e367, type: 2}
+  - {fileID: 11400000, guid: 7d52e370901dbd140997234953900481, type: 2}

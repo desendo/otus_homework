@@ -12,7 +12,7 @@ namespace Models.Declarative
         [SerializeField] private CollisionSensor _collisionSensor;
         [SerializeField] private float _lifeTime;
         public readonly AtomicVariable<Vector3> Direction = new AtomicVariable<Vector3>();
-        public readonly AtomicVariable<int> Damage = new AtomicVariable<int>();
+        public readonly AtomicVariable<float> Damage = new AtomicVariable<float>();
         public readonly AtomicVariable<float> Lifetime = new AtomicVariable<float>();
         public readonly AtomicVariable<float> Speed = new AtomicVariable<float>();
         public readonly AtomicEvent OnActivate = new AtomicEvent();
