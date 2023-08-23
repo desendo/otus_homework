@@ -8,10 +8,10 @@ namespace Models.Components
     {
         private readonly AtomicVariable<float> _moveModelSpeed;
         private readonly AtomicVariable<float> _moveModelRotationSpeed;
-        private readonly AtomicVariable<int> _healthMax;
+        private readonly AtomicVariable<float> _healthMax;
 
         public Component_HeroInstaller(AtomicVariable<float> moveModelSpeed, AtomicVariable<float> moveModelRotationSpeed,
-            AtomicVariable<int> healthMax)
+            AtomicVariable<float> healthMax)
         {
             _healthMax = healthMax;
             _moveModelSpeed = moveModelSpeed;

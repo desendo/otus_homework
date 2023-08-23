@@ -1,7 +1,8 @@
-﻿using Config;
+﻿using System.Globalization;
+using Config;
 using Models.Declarative.Weapons;
 
-namespace Models.Components
+namespace Models.Components.Weapon
 {
     public class Component_ZombieHandsInstaller : Component_WeaponInstallerAbstract
     {
@@ -15,11 +16,17 @@ namespace Models.Components
         {
             if (p.Id == "Delay_float")
             {
-                _core.AttackDelayMechanics.AttackDelayValue.Value = float.Parse(p.Value);
+                if (float.TryParse(p.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var value))
+                {
+                    _core.AttackDelayMechanics.AttackDelayValue.Value = value;
+                }
             }
             if (p.Id == "MaxRange_float")
             {
-                _core.MaxRange.Value = float.Parse(p.Value);
+                if (float.TryParse(p.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var value))
+                {
+                    _core.MaxRange.Value = value;
+                }
             }
         }
     }

@@ -18,7 +18,7 @@ MonoBehaviour:
     Parameters:
     - Id: ClipCapacity_int
       Value: 7
-    - Id: Damage_int
+    - Id: Damage_float
       Value: 5
     - Id: Delay_float
       Value: 0
@@ -35,16 +35,16 @@ MonoBehaviour:
     Parameters:
     - Id: ClipCapacity_int
       Value: 2
-    - Id: Damage_int
+    - Id: Damage_float
       Value: 2
     - Id: Delay_float
-      Value: 0,1
+      Value: 0.1
     - Id: ReloadTime_float
       Value: 1
     - Id: RotationSpeedMultiplier_float
-      Value: 0,8
+      Value: 0.8
     - Id: RotationSpeedMultiplier_float
-      Value: 0,8
+      Value: 0.8
     - Id: BulletSpeed_float
       Value: 20
     - Id: BurstAngle_float
@@ -58,10 +58,10 @@ MonoBehaviour:
     Parameters:
     - Id: ClipCapacity_int
       Value: 50
-    - Id: Damage_int
+    - Id: Damage_float
       Value: 2
     - Id: Delay_float
-      Value: 0,1
+      Value: 0.1
     - Id: ReloadTime_float
       Value: 5
     - Id: RotationSpeedMultiplier_float
@@ -75,19 +75,19 @@ MonoBehaviour:
   - Id: e1
     Type: 9
     Parameters:
-    - Id: Damage_int
-      Value: 1
+    - Id: Damage_float
+      Value: 5
     - Id: Delay_float
       Value: 1
     - Id: Name_string
       Value: "\u0420\u0443\u043A\u0438 \u0437\u043E\u043C\u0431\u044F\u0440\u044B"
     - Id: MaxRange_float
-      Value: 0,8
-  PlayerHealth: 10
+      Value: 0.8
+  PlayerHealth: 50
   PlayerMoveSpeed: 2.2
   PlayerRotationSpeed: 2000
-  ZombieSpawnInterval: 1
-  KillGoal: 1
-  ZombieHealth: 12
-  ZombieMoveSpeed: 0.01
+  ZombieSpawnInterval: 2
+  KillGoal: 10
+  ZombieHealth: 30
+  ZombieMoveSpeed: 0.5
   ZombieMoveSpeedReloadMultiplier: 0.1

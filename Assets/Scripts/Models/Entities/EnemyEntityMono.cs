@@ -5,6 +5,7 @@ using DependencyInjection;
 using GameManager;
 using GameObjectsComponents;
 using Models.Components;
+using Models.Components.Weapon;
 using Models.Declarative;
 using Pool;
 using UnityEngine;

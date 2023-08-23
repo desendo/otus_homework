@@ -12,6 +12,7 @@ namespace Models.Declarative
         public readonly AtomicVariable<bool> IsMoving = new AtomicVariable<bool>();
         public readonly AtomicVariable<Vector3> ResultVelocity = new AtomicVariable<Vector3>();
         public readonly AtomicVariable<float> Speed = new AtomicVariable<float>();
+        public readonly AtomicVariable<float> SpeedMult = new AtomicVariable<float>(1f);
         public readonly AtomicVariable<float> RotationSpeed = new AtomicVariable<float>();
         private IDisposable _onMoveSub;
         private IDisposable _velocitySub;
@@ -20,8 +21,8 @@ namespace Models.Declarative
         {
             _onMoveSub = OnMoveDir.Subscribe(dir =>
             {
-                var delta = dir * Speed.Value;
-                MoveRequested.Invoke(dir * Speed.Value);
+                var delta = dir * (Speed.Value * SpeedMult.Value);
+                MoveRequested.Invoke(delta);
                 IsMoving.Value = delta.sqrMagnitude > float.Epsilon;
             });
             _velocitySub = ResultVelocity.OnChanged.Subscribe(x =>

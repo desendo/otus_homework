@@ -9,10 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e51c036055d5430295c959434496e08a, type: 3}
-  m_Name: ItemEffectConfig (Weapon Damage)
+  m_Script: {fileID: 11500000, guid: cae8d6f82f9b432fa446f77abf81d3de, type: 3}
+  m_Name: SlotItemConfig_Legs
   m_EditorClassIdentifier: 
-  _effects:
-  - Type: 2
-    ApplyType: 2
-    Value: 1.5
+  _slotType: 2

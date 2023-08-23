@@ -9,8 +9,8 @@ namespace UI.PresentationModel
 {
     public class HeroInfoPresentationModel
     {
-        public AtomicVariable<int> Current { get; } = new AtomicVariable<int>();
-        public AtomicVariable<int> Max { get; } = new AtomicVariable<int>();
+        public AtomicVariable<float> Current { get; } = new AtomicVariable<float>();
+        public AtomicVariable<float> Max { get; } = new AtomicVariable<float>();
 
         private readonly List<IDisposable> _subs = new List<IDisposable>();
         public HeroInfoPresentationModel(HeroService heroService)

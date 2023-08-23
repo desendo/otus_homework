@@ -7,8 +7,11 @@ namespace Models.Declarative
     public class Life : IDisposable
     {
         public readonly AtomicEvent<float> OnTakeDamage = new AtomicEvent<float>();
-        public readonly AtomicVariable<int> HitPoints = new AtomicVariable<int>();
-        public readonly AtomicVariable<int> MaxHitPoints = new AtomicVariable<int>();
+        public readonly AtomicVariable<float> DamageMultiplier = new AtomicVariable<float>(1f);
+        public readonly AtomicVariable<float> DamageReducer = new AtomicVariable<float>(0f);
+        public readonly AtomicVariable<float> HitPoints = new AtomicVariable<float>();
+        public readonly AtomicVariable<float> MaxHitPoints = new AtomicVariable<float>();
+        public readonly AtomicVariable<float> EvasionChance = new AtomicVariable<float>();
         public readonly AtomicVariable<bool> IsDead = new AtomicVariable<bool>();
         public readonly AtomicEvent OnDeath = new AtomicEvent();
         private IDisposable _onTakeDamage;
@@ -18,10 +21,16 @@ namespace Models.Declarative
         {
             _onTakeDamage = OnTakeDamage.Subscribe(damage =>
             {
-                var targetHP = HitPoints.Value - damage;
+                if(UnityEngine.Random.value <= EvasionChance.Value)
+                    return;
+
+                var targetDamage = damage * DamageMultiplier.Value - DamageReducer.Value;
+                if (targetDamage < 0f)
+                    targetDamage = 0f;
+                var targetHP = HitPoints.Value - targetDamage;
                 if (targetHP < 0)
                     targetHP = 0;
-                HitPoints.Value = (int)targetHP;
+                HitPoints.Value = targetHP;
 
             });
             _onHitPointsChanged = HitPoints.OnChanged.Subscribe(hitPoints =>

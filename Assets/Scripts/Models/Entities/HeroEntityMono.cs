@@ -2,6 +2,7 @@
 using DependencyInjection;
 using GameManager;
 using Models.Components;
+using Models.Components.Weapon;
 using Models.Declarative;
 using UnityEngine;
 
@@ -41,6 +42,7 @@ namespace Models.Entities
             Add(new Component_TakeDamage(_heroModel.Core.Life.OnTakeDamage));
             Add(new Component_OnAttack(_heroModel.Core.AttackModel.OnAttackStart));
             Add(new Component_IsReloading(_heroModel.Core.AttackModel.OnReloadStarted));
+            Add(new Component_Effector(_heroModel.Core.HeroEffectModel));
             Add(new Component_HeroInstaller(_heroModel.Core.MoveModel.Speed,
                 _heroModel.Core.MoveModel.RotationSpeed, _heroModel.Core.Life.MaxHitPoints));
         }

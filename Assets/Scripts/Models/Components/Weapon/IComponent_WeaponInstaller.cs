@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using Config;
 using Models.Declarative.Weapons;
 
@@ -22,11 +23,11 @@ namespace Models.Components
             foreach (var p in parameters)
             {
                 if(p.Id.Contains("float"))
-                    p.Value = p.Value.Replace('.', ',');
+                    p.Value = p.Value.Replace(',', '.');
 
-                if (p.Id == "Damage_int")
+                if (p.Id == "Damage_float")
                 {
-                    if (int.TryParse(p.Value, out var val))
+                    if(float.TryParse(p.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var val))
                         _core.Damage.Value = val;
                 }
                 else if (p.Id == "Name_string")

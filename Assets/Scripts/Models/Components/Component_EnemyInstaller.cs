@@ -6,11 +6,11 @@ namespace Models.Components
     public sealed class Component_EnemyInstaller
     {
         private readonly AtomicVariable<float> _moveModelSpeed;
-        private readonly AtomicVariable<int> _healthMax;
+        private readonly AtomicVariable<float> _healthMax;
         private readonly AtomicVariable<float> _reloadSpeedMultiplier;
 
         public Component_EnemyInstaller(AtomicVariable<float> moveModelSpeed,
-            AtomicVariable<int> healthMax, AtomicVariable<float> reloadSpeedMultiplier)
+            AtomicVariable<float> healthMax, AtomicVariable<float> reloadSpeedMultiplier)
         {
             _healthMax = healthMax;
             _moveModelSpeed = moveModelSpeed;

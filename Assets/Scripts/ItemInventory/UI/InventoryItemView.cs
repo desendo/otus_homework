@@ -123,5 +123,10 @@ namespace ItemInventory.UI
         {
             transform.SetParent(holder);
         }
+
+        private void OnEnable()
+        {
+            HideDescription();
+        }
     }
 }

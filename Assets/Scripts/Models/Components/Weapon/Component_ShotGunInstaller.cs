@@ -1,4 +1,5 @@
-﻿using Config;
+﻿using System.Globalization;
+using Config;
 using Models.Declarative.Weapons;
 
 namespace Models.Components
@@ -21,19 +22,25 @@ namespace Models.Components
             }
             else if (p.Id == "Delay_float")
             {
-                _core.AttackDelayMechanics.AttackDelayValue.Value = float.Parse(p.Value);
+                if (float.TryParse(p.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var value))
+                {
+                    _core.AttackDelayMechanics.AttackDelayValue.Value = value;
+                }
             }
             else if (p.Id == "ReloadTime_float")
             {
-                _core.ReloadMechanics.ReloadDelay.Value = float.Parse(p.Value);
+                if (float.TryParse(p.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var value))
+                    _core.ReloadMechanics.ReloadDelay.Value = value;
             }
             else if (p.Id == "BulletSpeed_float")
             {
-                _core.BulletSpeed.Value = float.Parse(p.Value);
+                if (float.TryParse(p.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var value))
+                    _core.BulletSpeed.Value = value;
             }
             else if (p.Id == "BurstAngle_float")
             {
-                _core.Burst.BurstAngle.Value = float.Parse(p.Value);
+                if (float.TryParse(p.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var value))
+                    _core.Burst.BurstAngle.Value = value;
             }
             else if (p.Id == "BurstCount_int")
             {

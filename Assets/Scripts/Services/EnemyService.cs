@@ -6,6 +6,7 @@ using Common.Atomic.Values;
 using Common.Entities;
 using Config;
 using Models.Components;
+using Models.Components.Weapon;
 using Models.Entities;
 using UnityEngine;
 

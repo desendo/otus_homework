@@ -22,21 +22,22 @@ namespace Models.Components
             }
             else if (p.Id == "Delay_float")
             {
-                if (float.TryParse(p.Value, out var val))
+                if(float.TryParse(p.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var val))
                     _core.AttackDelayMechanics.AttackDelayValue.Value = val;
             }
             else if (p.Id == "ReloadTime_float")
             {
-                _core.ReloadMechanics.ReloadDelay.Value = float.Parse(p.Value);
+                if(float.TryParse(p.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var val))
+                    _core.ReloadMechanics.ReloadDelay.Value = val;
             }
             else if (p.Id == "DisperseAngle_float")
             {
-                if (float.TryParse(p.Value, out var val))
+                if(float.TryParse(p.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var val))
                     _core.DisperseAngle.Value = val;
             }
             else if (p.Id == "BulletSpeed_float")
             {
-                if (float.TryParse(p.Value, out var val))
+                if(float.TryParse(p.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var val))
                     _core.BulletSpeed.Value = val;
             }
         }

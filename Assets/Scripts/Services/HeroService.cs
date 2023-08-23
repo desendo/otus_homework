@@ -8,6 +8,7 @@ using DependencyInjection.Util;
 using GameManager;
 using ItemInventory.Config;
 using Models.Components;
+using Models.Components.Weapon;
 using Models.Entities;
 using Services.Effects;
 using UnityEngine;
@@ -56,15 +57,12 @@ namespace Services
 
         public void AddEffect(Effect effect)
         {
-            if(HeroEntity.Value == null)
-                return;
-
+            HeroEntity.Value?.Get<Component_Effector>().AddEffect(effect);
         }
 
         public void RemoveEffect(Effect effect)
         {
-            if(HeroEntity.Value == null)
-                return;
+            HeroEntity.Value?.Get<Component_Effector>().RemoveEffect(effect);
         }
     }
 }

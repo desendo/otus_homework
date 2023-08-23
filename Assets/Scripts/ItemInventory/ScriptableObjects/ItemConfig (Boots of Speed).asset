@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b4ff23de0514e388b3a318a3b409142, type: 3}
-  m_Name: ItemConfig (Armor of armor)
+  m_Name: ItemConfig (Boots of Speed)
   m_EditorClassIdentifier: 
-  Id: armor_1
-  Sprite: {fileID: 21300000, guid: b1b84da6ac2fc20439fc5dd94641253b, type: 3}
-  Name: Armor of armor
-  Description: armor -2 damage
+  Id: boots
+  Sprite: {fileID: 21300000, guid: a404b48ab2675e148acae6a4bedbd496, type: 3}
+  Name: Boots
+  Description: Boots of speed 140%
   Parameters:
-  - {fileID: 11400000, guid: 600e6e25fd0134849929b664dbfd2fb1, type: 2}
-  - {fileID: 11400000, guid: d51e0b8ab1320fa49be615e3c729717f, type: 2}
+  - {fileID: 11400000, guid: d629aecfb360b164ab362c1f8573e87e, type: 2}
+  - {fileID: 11400000, guid: e3cff7f4171f62440b9c3c63ceff0f40, type: 2}
